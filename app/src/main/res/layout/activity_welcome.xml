@@ -6,12 +6,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".WelcomeActivity">
+    tools:context=".WelcomeActivity"
+    android:background="@android:color/background_light">
 
     <TextView
-        android:text="This is a placeholder for a more thorough intro"
-        android:layout_width="wrap_content"
+        android:text="@string/intro_string"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textSize="30sp" />
 
     <Button
@@ -20,7 +22,12 @@
         android:text="Continue"
         android:id="@+id/continueButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="40sp"
+        android:paddingTop="20sp"
+        android:paddingRight="40sp"
+        android:paddingBottom="20sp"
+        android:textStyle="bold"
+        android:typeface="normal" />
 
 </RelativeLayout>

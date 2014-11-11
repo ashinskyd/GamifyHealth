@@ -1,18 +1,40 @@
-<LinearLayout
+<RelativeLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:showDividers="none">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Check All relevant activities"
+        android:text="Check All relevant activities: "
         android:id="@+id/textView"
-        android:textSize="20sp" />
+        android:textSize="25sp"
+        android:paddingTop="10sp"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+
+         />
 
     <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/activityListView"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="15dp" />
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/activityListView" />
-</LinearLayout>
+        android:text="Continue"
+        android:id="@+id/continueButton2"
+        android:typeface="normal"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="40sp"
+        android:paddingTop="20sp"
+        android:paddingRight="40sp"
+        android:paddingBottom="20sp"/>
+</RelativeLayout>

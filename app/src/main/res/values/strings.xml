@@ -5,5 +5,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_select_activities">SelectActivities</string>
-
+    <string name="intro_string">Welcome to our App. This screen serves as a placeholder for future instructions</string>
 </resources>
