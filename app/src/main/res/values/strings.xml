@@ -6,4 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_select_activities">SelectActivities</string>
     <string name="intro_string">Welcome to our App. This screen serves as a placeholder for future instructions</string>
+    <string name="title_activity_current_activity_level">CurrentActivityLevel</string>
+
 </resources>

@@ -21,7 +21,10 @@ public class WelcomeActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getBaseContext(),SelectActivities.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
+                overridePendingTransition(0,0);
             }
         });
 

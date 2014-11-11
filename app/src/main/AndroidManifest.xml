@@ -5,11 +5,11 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-
+        android:label="Gamify"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".WelcomeActivity"
-            android:label="Welcome!" >
+            android:label="GamifyHealth" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,6 +19,14 @@
         <activity
             android:name=".SelectActivities"
             android:label="SelectActivities" >
+        </activity>
+        <activity
+            android:name=".CurrentActivityLevel"
+            android:label="@string/title_activity_current_activity_level"
+            android:parentActivityName=".SelectActivities" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cs400.gamifyhealth.SelectActivities" />
         </activity>
     </application>
 
