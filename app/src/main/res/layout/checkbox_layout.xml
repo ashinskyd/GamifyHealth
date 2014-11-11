@@ -7,7 +7,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:id="@+id/checkBox1" />
+        android:id="@+id/checkBox1"
+        android:textColor="@android:color/black" />
 
 
 

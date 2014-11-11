@@ -1,6 +1,7 @@
 package com.cs400.gamifyhealth;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +20,8 @@ public class WelcomeActivity extends Activity {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Declare an intent to the next activity
+                Intent i = new Intent(getBaseContext(),SelectActivities.class);
+                startActivity(i);
             }
         });
 
