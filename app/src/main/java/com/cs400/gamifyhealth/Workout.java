@@ -5,18 +5,12 @@ package com.cs400.gamifyhealth;
  */
 public class Workout {
     private String name;
-    private String time;
-    private int distance;
-    private int rate;
-    private int reps;
+    private int unit;
     private String type;
 
-    public Workout(String name, String time, int distance, int rate, int reps, String type) {
+    public Workout(String name, int unit, String type) {
         this.name = name;
-        this.time = time;
-        this.distance = distance;
-        this.rate = rate;
-        this.reps = reps;
+        this.unit = unit;
         this.type = type;
     }
 
@@ -24,19 +18,9 @@ public class Workout {
         return this.name;
     }
 
-    public String getTime() {
-        return this.time;
-    }
-
-    public int getDistance() {
-        return this.distance;
-    }
-
-    public int getRate() {
-        return this.rate;
-    }
-
     public String getType() {
         return this.type;
     }
+
+    public int getUnit() {return this.unit;}
 }
