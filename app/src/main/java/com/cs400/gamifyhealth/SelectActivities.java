@@ -59,18 +59,18 @@ public class SelectActivities extends Activity {
                             sb.append(activityItems.get(j).getName()).append("_REP").append(",");
 
                         }else if(dtaArray.contains(activityItems.get(j).getName())){
-                            //TODO: Need more specific DTA info based on slection
-                            sb.append(activityItems.get(j).getName()).append("_DTA").append(",");
-
+                            if(activityItems.get(j).getName().contains("Time")){
+                                sb.append(activityItems.get(j).getName()).append("_DTA_T").append(",");
+                            }else{
+                                sb.append(activityItems.get(j).getName()).append("_DTA_D").append(",");
+                            }
                         }else{
                             sb.append(activityItems.get(j).getName()).append("_TIM").append(",");
-
                         }
                     }
                 }
                 editor.putString("ACTIVITIES",sb.toString());
                 editor.commit();
-
                 i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
@@ -78,15 +78,20 @@ public class SelectActivities extends Activity {
             }
         });
         activityItems = new ArrayList<ActivityModel>();
-        activityItems.add(0, new ActivityModel("Running", false));
-        activityItems.add(1,new ActivityModel("Swimming",false));
-        activityItems.add(2,new ActivityModel("Crunches",false));
-        activityItems.add(3, new ActivityModel("Cycling", false));
-        activityItems.add(4,new ActivityModel("Pull-Ups",false));
-        activityItems.add(5,new ActivityModel("Dips",false));
-        activityItems.add(6,new ActivityModel("Push-Ups",false));
-        activityItems.add(7,new ActivityModel("Walking",false));
-        activityItems.add(7,new ActivityModel("Squats",false));
+        activityItems.add(new ActivityModel("Running (Time)", false));
+        activityItems.add(new ActivityModel("Running (Distance)", false));
+        activityItems.add(new ActivityModel("Swimming (Time)",false));
+        activityItems.add(new ActivityModel("Swimming (Distance)",false));
+        activityItems.add(new ActivityModel("Crunches",false));
+        activityItems.add(new ActivityModel("Cycling", false));
+        activityItems.add(new ActivityModel("Pull-Ups",false));
+        activityItems.add(new ActivityModel("Dips",false));
+        activityItems.add(new ActivityModel("Push-Ups",false));
+        activityItems.add(new ActivityModel("Walking",false));
+        activityItems.add(new ActivityModel("Squats",false));
+        activityItems.add(new ActivityModel("Soccer",false));
+        activityItems.add(new ActivityModel("Football",false));
+        activityItems.add(new ActivityModel("Squash",false));
         CheckBoxAdapter adapter = new CheckBoxAdapter(getApplicationContext(),R.layout.checkbox_layout,activityItems);
         activitiesListView.setAdapter(adapter);
     }
@@ -104,19 +109,18 @@ public class SelectActivities extends Activity {
             convertView = inflater.inflate(R.layout.checkbox_layout, parent, false);
             final CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox1);
             cb.setText(activityItems.get(position).getName());
+            cb.setChecked(activityItems.get(position).getIsChecked());
             cb.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     activityItems.get(position).setChecked(cb.isChecked());
-                    for(int i=0;i<activityItems.size();i++){
-                        Log.d("TAG","Item: "+activityItems.get(i).getName());
-                        Log.d("TAG","Value: "+activityItems.get(i).getIsChecked());
-                    }
+
                 }
             });
             return convertView;
         }
-        }
+    }
+
     private class ActivityModel{
         private String name;
         private boolean isChecked;

@@ -9,5 +9,5 @@
     <string name="title_activity_current_activity_level">CurrentActivityLevel</string>
     <string name="preference_file_key">com.cs400.gamifyhealth.PREFERENCE_FILE_KEY</string>
     <string name="activity_types_REP">Crunches,Pull-Ups,Push-Ups,Squats,Dips</string>
-    <string name="activity_types_DTA">Running,Walking,Swimming,Cycling</string>
+    <string name="activity_types_DTA">Running (Time),Running (Distance),Walking,Swimming,Cycling</string>
 </resources>

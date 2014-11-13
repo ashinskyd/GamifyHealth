@@ -12,6 +12,7 @@
         android:id="@+id/textView"
         android:textSize="25sp"
         android:paddingTop="10sp"
+        android:paddingBottom="30dp"
         android:gravity="center_horizontal"
         android:layout_alignParentTop="true"
 

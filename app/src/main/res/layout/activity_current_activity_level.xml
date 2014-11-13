@@ -1,8 +1,45 @@
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/container"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:showDividers="none">
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Times and Distances: "
+        android:textSize="25sp"
+        android:gravity="center_vertical"
+        android:id="@+id/textView"
+        android:paddingBottom="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarListView"
+        android:divider="@null"
+        android:dividerHeight="30dp"
+        android:layout_below="@+id/textView"
+        android:layout_above="@+id/continueButton2"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:id="@+id/continueButton2"
+        android:typeface="normal"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="40sp"
+        android:paddingTop="20sp"
+        android:paddingRight="40sp"
+        android:paddingBottom="20sp"
+        android:background="#ff7ac8cc"
+
+        />
+
+</RelativeLayout>
