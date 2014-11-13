@@ -52,6 +52,11 @@ public class SelectActivities extends Activity {
         activityItems.add(0,new ActivityModel("Running",false));
         activityItems.add(1,new ActivityModel("Swimming",false));
         activityItems.add(2,new ActivityModel("Crunches",false));
+        activityItems.add(3,new ActivityModel("Jogging",false));
+        activityItems.add(4,new ActivityModel("Jogging",false));
+        activityItems.add(5,new ActivityModel("Jogging",false));
+        activityItems.add(6,new ActivityModel("Jogging",false));
+        activityItems.add(7,new ActivityModel("Jogging",false));
         CheckBoxAdapter adapter = new CheckBoxAdapter(getApplicationContext(),R.layout.checkbox_layout,activityItems);
         activitiesListView.setAdapter(adapter);
     }

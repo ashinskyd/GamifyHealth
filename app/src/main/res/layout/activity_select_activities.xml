@@ -20,21 +20,24 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="@null"
         android:id="@+id/activityListView"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="15dp" />
+        />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Continue"
         android:id="@+id/continueButton2"
         android:typeface="normal"
         android:textStyle="bold"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:paddingLeft="40sp"
         android:paddingTop="20sp"
         android:paddingRight="40sp"
-        android:paddingBottom="20sp"/>
+        android:paddingBottom="20sp"
+        android:background="#ff7ac8cc"
+
+         />
 </RelativeLayout>

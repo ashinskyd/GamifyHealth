@@ -7,11 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
+        android:textSize="20dp"
         android:id="@+id/checkBox1"
-        android:textColor="@android:color/black"
+        android:textColor="#ff4ca6cc"
+        android:background="@drawable/card_draw"
+        android:layout_marginTop="20sp"
         android:layout_marginLeft="10sp"
-        android:layout_marginTop="10sp"
-        android:paddingRight="10sp" />
+        android:layout_marginRight="10sp"
+        android:paddingRight="100sp"
+        android:paddingBottom="15sp"/>
 
 
 
