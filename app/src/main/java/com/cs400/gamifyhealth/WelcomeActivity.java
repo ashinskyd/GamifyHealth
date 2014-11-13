@@ -27,6 +27,10 @@ public class WelcomeActivity extends Activity {
                 overridePendingTransition(0,0);
             }
         });
-
+        /*Workout w = new Workout("Running", 5, "DTA-D");
+        DBConnection datasource = new DBConnection(this);
+        datasource.open();
+        datasource.insertWorkout(w);
+        datasource.checkDB();*/
     }
 }
