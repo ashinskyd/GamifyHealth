@@ -7,5 +7,7 @@
     <string name="title_activity_select_activities">SelectActivities</string>
     <string name="intro_string">Welcome to our App. This screen serves as a placeholder for future instructions</string>
     <string name="title_activity_current_activity_level">CurrentActivityLevel</string>
-
+    <string name="preference_file_key">com.cs400.gamifyhealth.PREFERENCE_FILE_KEY</string>
+    <string name="activity_types_REP">Crunches,Pull-Ups,Push-Ups,Squats,Dips</string>
+    <string name="activity_types_DTA">Running,Walking,Swimming,Cycling</string>
 </resources>
