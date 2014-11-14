@@ -1,6 +1,8 @@
 package com.cs400.gamifyhealth;
+
 import android.content.Context;
-import android.database.sqlite.*;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Erin on 11/10/2014.
  */
