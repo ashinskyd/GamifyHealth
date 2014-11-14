@@ -74,9 +74,11 @@ public class GoalSetActivity extends Activity {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.seekbar_row, parent, false);
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
+
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
             title.setText(activitySet.get(position).split("_")[0]);
+
             if (activityLevelMap.get(activitySet.get(position))!= null) {
                 sb.setProgress(activityLevelMap.get(activitySet.get(position)));
             }
