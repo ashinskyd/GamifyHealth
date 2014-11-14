@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="@drawable/card_draw">
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Desired Goals: "
+        android:text="AAA"
         android:textColor="#ff4ca6cc"
         android:id="@+id/titleTextView"
-        android:layout_gravity="center_vertical"
-        android:textSize="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp" />
 
     <SeekBar
         android:layout_width="fill_parent"
@@ -22,35 +20,42 @@
         android:paddingRight="30dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:id="@+id/seekBar"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="16dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="64dp" />
+        android:id="@+id/seekBar" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/oldValueTextView"
-        android:layout_below="@+id/seekBar"
-        android:textSize="20dp"
-        android:layout_alignLeft="@+id/seekBar"
-        android:layout_alignStart="@+id/seekBar" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:layout_weight="10"
+            android:textSize="15dp"
+            android:gravity="left"
+            android:id="@+id/oldValuetextView" />
 
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_gravity="right"
-        android:id="@+id/progressTextView"
-        android:textSize="20dp"
-        android:layout_alignTop="@+id/oldtextView"
-        android:layout_alignEnd="@+id/seekBar"
-         />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:layout_weight="10"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:id="@+id/deltatextView" />
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/progressTextView"
+            android:layout_weight="10"
+            android:gravity="right"
+            android:textSize="15dp"
+            />
 
-</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

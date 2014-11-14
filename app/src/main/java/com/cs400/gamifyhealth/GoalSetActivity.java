@@ -3,6 +3,7 @@ package com.cs400.gamifyhealth;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,7 +52,7 @@ public class GoalSetActivity extends Activity {
                 activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
                 activityLevelMap.put(activitySetString[i],Integer.parseInt(activityStartValString[i]));
         }
-        mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row,activitySet);
+        mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row2,activitySet);
         mListView.setAdapter(mAdapter);
     }
 
@@ -72,20 +73,53 @@ public class GoalSetActivity extends Activity {
 
         public View getView(final int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.seekbar_row, parent, false);
+            convertView = inflater.inflate(R.layout.seekbar_row2, parent, false);
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
-
+            TextView oldValue = (TextView) convertView.findViewById(R.id.oldValuetextView);
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
+            final TextView delta = (TextView) convertView.findViewById(R.id.deltatextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
+            oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)));
+
+            if (activitySet.get(position).contains("_REP")) {
+                oldValue.setText(oldValue.getText().toString().concat(" Reps"));
+            } else if (activitySet.get(position).contains("_TIM")) {
+                oldValue.setText(oldValue.getText().toString().concat(" Hours"));
+            } else {
+                if (activitySet.get(position).contains("_DTA_T")) {
+                    oldValue.setText(oldValue.getText().toString().concat(" Hours"));
+                } else if (activitySet.get(position).contains("_DTA_D")) {
+                    oldValue.setText(oldValue.getText().toString().concat(" Miles"));
+                }
+            }
             title.setText(activitySet.get(position).split("_")[0]);
 
             if (activityLevelMap.get(activitySet.get(position))!= null) {
                 sb.setProgress(activityLevelMap.get(activitySet.get(position)));
             }
+            int delt = sb.getProgress()-activitySetLevels.get(position);
+            if (delt>=0){
+                delta.setText("+".concat(Integer.toString(delt)));
+                delta.setTextColor(Color.parseColor("#A4C739"));
+
+            }else{
+                delta.setText("-".concat(Integer.toString(delt)));
+                delta.setTextColor(Color.parseColor("#ff0000"));
+            }
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     activityLevelMap.put(activitySet.get(position), seekBar.getProgress());
+                    int delt = sb.getProgress()-activitySetLevels.get(position);
+                    if (delt>=0){
+                        delta.setText("+".concat(Integer.toString(delt)));
+                        delta.setTextColor(Color.parseColor("#A4C739"));
+
+                    }else{
+                        delta.setText("-".concat(Integer.toString(delt)));
+                        delta.setTextColor(Color.parseColor("#ff0000"));
+                    }
+
                     if (activitySet.get(position).contains("_REP")) {
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
                     } else if (activitySet.get(position).contains("_TIM")) {
