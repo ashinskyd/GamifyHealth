@@ -7,15 +7,11 @@ import android.database.sqlite.*;
 public class SQLiteHelper extends SQLiteOpenHelper{
 
 
-    public static final String TABLE_1 = "day";
-    public static final String COLUMN_ID = "id";
-    public static final String COLUMN_DATE = "date";
-
     private static final String DATABASE_NAME = "gamify.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String TABLE_2 = "workout";
-    public static final String W_WID = "wid";
+    public static final String W_DATE = "date";
     public static final String W_NAME = "name";
     public static final String W_TIME = "time";
     public static final String W_DIST = "distance";
@@ -25,13 +21,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
 
 
-    private static final String CREATE_DAY = "create table "
-            + TABLE_1 + "(" + COLUMN_ID
-            + " integer primary key autoincrement, " + COLUMN_DATE
-            + " text not null);";
-
     private static final String CREATE_WORK = "create table " + TABLE_2 +
-            "(" + W_WID + " int not null" +
+            "(" + W_DATE  + "text not null, " +
             W_NAME + " text not null, "
             + W_TIME + " int, "
             + W_DIST + " int, "
@@ -45,9 +36,10 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(CREATE_DAY);
+        sqLiteDatabase.execSQL("drop table if exists workout;");
         sqLiteDatabase.execSQL(CREATE_WORK);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
