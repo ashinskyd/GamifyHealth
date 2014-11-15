@@ -7,25 +7,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 
 public class SelectActivities extends Activity {
@@ -46,6 +38,8 @@ public class SelectActivities extends Activity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),CurrentActivityLevel.class );
+                final AlphaAnimation buttonClick = new AlphaAnimation(1F,0.8F);
+                view.startAnimation(buttonClick);
                 SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 StringBuilder sb = new StringBuilder();
@@ -57,7 +51,6 @@ public class SelectActivities extends Activity {
                     if (activityItems.get(j).getIsChecked()) {
                         if(repArray.contains(activityItems.get(j).getName())){
                             sb.append(activityItems.get(j).getName()).append("_REP").append(",");
-
                         }else if(dtaArray.contains(activityItems.get(j).getName())){
                             if(activityItems.get(j).getName().contains("Time")){
                                 sb.append(activityItems.get(j).getName()).append("_DTA_T").append(",");
@@ -74,7 +67,7 @@ public class SelectActivities extends Activity {
                 i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
-                overridePendingTransition(0,0);
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
         activityItems = new ArrayList<ActivityModel>();
@@ -92,10 +85,17 @@ public class SelectActivities extends Activity {
         activityItems.add(new ActivityModel("Soccer",false));
         activityItems.add(new ActivityModel("Football",false));
         activityItems.add(new ActivityModel("Squash",false));
+        activityItems.add(new ActivityModel("Cycling (Time)",false));
+        activityItems.add(new ActivityModel("Cycling (Distance)",false));
         CheckBoxAdapter adapter = new CheckBoxAdapter(getApplicationContext(),R.layout.checkbox_layout,activityItems);
         activitiesListView.setAdapter(adapter);
     }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+    }
 
     private class CheckBoxAdapter extends ArrayAdapter<ActivityModel>{
         private Context context;

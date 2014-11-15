@@ -18,8 +18,12 @@
         </activity>
         <activity
             android:name=".SelectActivities"
-            android:label="SelectActivities" >
-        </activity>
+            android:label="SelectActivities"
+            android:parentActivityName=".WelcomeActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.cs400.gamifyhealth.WelcomeActivity" />
+              </activity>
         <activity
             android:name=".CurrentActivityLevel"
             android:label="@string/title_activity_current_activity_level"
@@ -27,6 +31,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cs400.gamifyhealth.SelectActivities" />
+        </activity>
+        <activity
+            android:name=".GoalSetActivity"
+            android:label="@string/title_activity_goal_set"
+            android:parentActivityName=".CurrentActivityLevel" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cs400.gamifyhealth.CurrentActivityLevel" />
         </activity>
     </application>
 
