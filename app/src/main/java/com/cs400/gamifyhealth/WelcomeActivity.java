@@ -31,6 +31,7 @@ public class WelcomeActivity extends Activity {
         Workout w = new Workout("Running", 5, "DTA-D");
         DBConnection datasource = new DBConnection(this);
         datasource.open();
+        datasource.createTables();
         datasource.insertWorkout(w);
         datasource.checkDB();
     }

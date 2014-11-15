@@ -12,25 +12,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "gamify.db";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String TABLE_2 = "workout";
-    public static final String W_DATE = "date";
-    public static final String W_NAME = "name";
-    public static final String W_TIME = "time";
-    public static final String W_DIST = "distance";
-    public static final String W_RAT = "rate";
-    public static final String W_REP = "reps";
-    public static final String W_TYPE = "type";
-
-
-
-    private static final String CREATE_WORK = "create table " + TABLE_2 +
-            "(" + W_DATE  + "text not null, " +
-            W_NAME + " text not null, "
-            + W_TIME + " int, "
-            + W_DIST + " int, "
-            + W_RAT + " int, "
-            + W_REP + " int, "
-            + W_TYPE + " text not null);" ;
 
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,8 +19,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("drop table if exists workout;");
-        sqLiteDatabase.execSQL(CREATE_WORK);
     }
 
 
