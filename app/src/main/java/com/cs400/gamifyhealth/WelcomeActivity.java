@@ -40,6 +40,6 @@ public class WelcomeActivity extends Activity {
         datasource.checkDB();
         Goal g = new Goal("11-14-2014", "Running","DTA-D", 0, 10, 4 );
         //write try catch for thing
-        datasource.checkGoal(g);
+        //datasource.checkGoal(g);
     }
 }
