@@ -142,12 +142,12 @@ public class GoalSetActivity extends Activity {
                 }
             });
 
-            if (title.getText().toString().contains("_REP")) {
+            if (activitySet.get(position).contains("_REP")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-            } else if (title.getText().toString().contains("_TIM")) {
+            } else if (activitySet.get(position).contains("_TIM")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
             } else {
-                if (title.getText().toString().contains("_DTA_T")) {
+                if (activitySet.get(position).contains("_DTA_T")) {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
                 } else {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
