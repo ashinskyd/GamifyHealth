@@ -11,10 +11,14 @@ import android.database.SQLException;
 import android.database.sqlite.*;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Date;
 
 
 public class DBConnection{
@@ -85,6 +89,53 @@ public class DBConnection{
         values.put(W_TYPE,w.getType());
         long insertId = database.insert(TABLE_2, null,
                 values);
+    }
+
+    public boolean checkGoal(Goal g)throws ParseException{
+        int cursorChecks = 0;
+        String t = g.type;
+        Double goal = g.calculateCurrentGoal();
+        if (t == "REP") {
+            cursorChecks = 5;
+        }
+        else if (t == "TIM"){
+            cursorChecks = 2;
+        }
+        else if (t == "DTA-T"){
+            cursorChecks = 2;
+        }
+        else if (t == "DTA-R"){
+            cursorChecks = 4;
+        }
+        else if (t == "DTA-D"){
+            cursorChecks  = 3;
+        }
+        double sum = 0;
+        String startdate =  g.startDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Date d = sdf.parse(startdate);
+        GregorianCalendar start = new GregorianCalendar();
+        GregorianCalendar endDate = new GregorianCalendar();
+        start.setTime(d);
+        endDate.setTime(d);
+        Cursor cur = database.query("workout",
+                null, null, null, null, null, null);
+        cur.moveToFirst();
+        endDate.add(Calendar.DAY_OF_MONTH, 7);
+        while (cur.isAfterLast() == false) {
+            String tdate = cur.getString(0);
+            Date td = sdf.parse(tdate);
+            GregorianCalendar temp = new GregorianCalendar();
+            temp.setTime(td);
+            if (temp.compareTo(endDate) > 0){
+                if (temp.compareTo(start) < 0){
+                    sum = sum + cur.getInt(cursorChecks);
+                }
+            }
+            cur.moveToNext();
+        }
+        cur.close();
+        return true;
     }
 
     public void checkDB() {
