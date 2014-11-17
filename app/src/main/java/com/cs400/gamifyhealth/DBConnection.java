@@ -71,19 +71,19 @@ public class DBConnection{
         values.put(W_DATE, s);
         values.put(W_NAME, w.getName());
         String t = w.getType();
-        if (t == "REP") {
+        if (t.equals("REP")) {
             values.put(W_REP, w.getUnit());
         }
-        else if (t == "TIM"){
+        else if (t.equals("TIM")){
             values. put(W_TIME, w.getUnit());
         }
-        else if (t == "DTA-T"){
+        else if (t.equals("DTA-T")){
             values. put(W_TIME, w.getUnit());
         }
-        else if (t == "DTA-R"){
+        else if (t.equals("DTA-R")){
             values. put(W_RAT, w.getUnit());
         }
-        else if (t == "DTA-D"){
+        else if (t.equals("DTA-D")){
             values. put(W_DIST, w.getUnit());
         }
         values.put(W_TYPE,w.getType());
@@ -100,19 +100,19 @@ public class DBConnection{
         int cursorChecks = 0;
         String t = g.type;
         Double goal = g.calculateCurrentGoal();
-        if (t == "REP") {
+        if (t.equals("REP")){
             cursorChecks = 5;
         }
-        else if (t == "TIM"){
+        else if (t.equals("TIM")){
             cursorChecks = 2;
         }
-        else if (t == "DTA-T"){
+        else if (t.equals("DTA-T")){
             cursorChecks = 2;
         }
-        else if (t == "DTA-R"){
+        else if (t.equals("DTA-R")){
             cursorChecks = 4;
         }
-        else if (t == "DTA-D"){
+        else if (t.equals("DTA-D")){
             cursorChecks  = 3;
         }
         double sum = 0;
@@ -161,7 +161,7 @@ public class DBConnection{
 
         //if rate, get the average rate
         //yo
-        if (t == "DTA-R"){
+        if (t.equals("DTA-R")){
             sum = sum/count;
         }
         if (sum > goal){
