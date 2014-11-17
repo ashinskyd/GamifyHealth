@@ -87,11 +87,16 @@ public class DBConnection{
             values. put(W_DIST, w.getUnit());
         }
         values.put(W_TYPE,w.getType());
+        //if a line with the given type, name, and date values is already in the db
+        //return that line, add the amount in workout to other workout to create total
+        //raise flag (on ui end?) so user knows
         long insertId = database.insert(TABLE_2, null,
                 values);
     }
 
     public boolean checkGoal(Goal g)throws ParseException{
+        String[] allColumns = {W_DATE,W_NAME, W_TIME, W_DIST,
+                W_RAT, W_REP, W_TYPE};
         int cursorChecks = 0;
         String t = g.type;
         Double goal = g.calculateCurrentGoal();
@@ -113,30 +118,47 @@ public class DBConnection{
         double sum = 0;
         int count = 0;
         String startdate =  g.startDate;
+        System.out.println("goal date" + g.startDate);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date d = sdf.parse(startdate);
         GregorianCalendar start = new GregorianCalendar();
         GregorianCalendar endDate = new GregorianCalendar();
         start.setTime(d);
         endDate.setTime(d);
-        Cursor cur = database.query("workout",
-                null, null, null, null, null, null);
+        Cursor cur = database.query(TABLE_2,
+                allColumns, null, null, null, null, null);
         cur.moveToFirst();
         endDate.add(Calendar.DAY_OF_MONTH, 7);
+        System.out.println("endDate" + endDate.toString());
+        System.out.println("startDate" + startdate.toString());
+        //start date  = d
+
         while (cur.isAfterLast() == false) {
             String tdate = cur.getString(0);
+            System.out.println("we're parsing " + cur.getString(0));
             Date td = sdf.parse(tdate);
             GregorianCalendar temp = new GregorianCalendar();
             temp.setTime(td);
-            if (temp.compareTo(endDate) > 0){
-                if (temp.compareTo(start) < 0){
-                    sum = sum + cur.getInt(cursorChecks);
-                    count++;
+            System.out.println("temp" + temp.toString());
+            if (temp.before(endDate) == true){
+                System.out.println("YES");
+                //adjust for when they have the same date
+                if (temp.after(start) == true){
+                    System.out.println("YES2");
+                    System.out.println(g.name);
+                    System.out.println(cur.getString(1));
+                    if (cur.getString(1).equals(g.name)){
+                        sum = sum + cur.getInt(cursorChecks);
+                        count++;
+                    }
                 }
             }
             cur.moveToNext();
         }
         cur.close();
+        System.out.println("sum " + sum);
+        System.out.println(count);
+
         //if rate, get the average rate
         //yo
         if (t == "DTA-R"){
@@ -146,6 +168,7 @@ public class DBConnection{
             System.out.println("goal met");
             return true;
         }
+        System.out.println("GOAL NOT MET");
         return false;
     }
 
