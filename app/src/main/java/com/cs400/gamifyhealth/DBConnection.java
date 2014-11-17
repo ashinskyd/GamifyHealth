@@ -111,6 +111,7 @@ public class DBConnection{
             cursorChecks  = 3;
         }
         double sum = 0;
+        int count = 0;
         String startdate =  g.startDate;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date d = sdf.parse(startdate);
@@ -130,12 +131,21 @@ public class DBConnection{
             if (temp.compareTo(endDate) > 0){
                 if (temp.compareTo(start) < 0){
                     sum = sum + cur.getInt(cursorChecks);
+                    count++;
                 }
             }
             cur.moveToNext();
         }
         cur.close();
-        return true;
+        //if rate, get the average rate
+        if (t == "DTA-R"){
+            sum = sum/count;
+        }
+        if (sum > goal){
+            System.out.println("goal met");
+            return true;
+        }
+        return false;
     }
 
     public void checkDB() {
