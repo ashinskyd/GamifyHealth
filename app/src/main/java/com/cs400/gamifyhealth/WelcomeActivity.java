@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 
+import java.text.ParseException;
+
 
 public class WelcomeActivity extends Activity {
     private Button continueButton;
@@ -28,7 +30,7 @@ public class WelcomeActivity extends Activity {
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
-       /* Workout w = new Workout("Running", 5, "DTA-D");
+        Workout w = new Workout("Running", 5, "DTA-D");
         Workout d = new Workout("Walking", 10, "DTA-T");
         DBConnection datasource = new DBConnection(this);
         datasource.open();
@@ -38,9 +40,12 @@ public class WelcomeActivity extends Activity {
         datasource.insertWorkout(w);
         datasource.insertWorkout(d);
         datasource.checkDB();
-        Goal g = new Goal("11-14-2014", "Running","DTA-D", 0, 10, 4 );
+        Goal g = new Goal("2014-11-14", "Running","DTA-D", 0, 10, 4 );
         //write try catch for thing
-        //datasource.checkGoal(g);
-    */
+        try {
+            datasource.checkGoal(g);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

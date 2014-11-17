@@ -140,10 +140,10 @@ public class DBConnection{
             GregorianCalendar temp = new GregorianCalendar();
             temp.setTime(td);
             System.out.println("temp" + temp.toString());
-            if (temp.before(endDate) == true){
+            if (temp.before(endDate) == true|temp.compareTo(endDate) == 0){
                 System.out.println("YES");
                 //adjust for when they have the same date
-                if (temp.after(start) == true){
+                if (temp.after(start) == true| temp.compareTo(start) == 0){
                     System.out.println("YES2");
                     System.out.println(g.name);
                     System.out.println(cur.getString(1));
