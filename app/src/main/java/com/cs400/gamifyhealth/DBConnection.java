@@ -138,6 +138,7 @@ public class DBConnection{
         }
         cur.close();
         //if rate, get the average rate
+        //yo
         if (t == "DTA-R"){
             sum = sum/count;
         }
