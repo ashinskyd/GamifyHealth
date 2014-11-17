@@ -100,7 +100,8 @@ public class CurrentActivityLevel extends Activity {
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
-            title.setText(activityList.get(position).split("_")[0]);
+            String temp = activityList.get(position).split("_")[0];
+            title.setText(temp);
             if(currentLevel.get(activityList.get(position))!=null){
                 sb.setProgress(currentLevel.get(activityList.get(position)));
             }
@@ -131,12 +132,12 @@ public class CurrentActivityLevel extends Activity {
                 }
             });
 
-            if (title.getText().toString().contains("_REP")){
+            if (activityList.get(position).contains("_REP")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-            }else if (title.getText().toString().contains("_TIM")){
+            }else if (activityList.get(position).contains("_TIM")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
             }else{
-                if (title.getText().toString().contains("_DTA_T")){
+                if (activityList.get(position).contains("_DTA_T")){
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
                 }else{
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));

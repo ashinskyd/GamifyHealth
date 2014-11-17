@@ -33,7 +33,8 @@
             android:layout_weight="10"
             android:textSize="15dp"
             android:gravity="left"
-            android:id="@+id/oldValuetextView" />
+            android:id="@+id/oldValuetextView"
+            android:editable="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,10 +53,23 @@
             android:layout_gravity="center_horizontal"
             android:id="@+id/progressTextView"
             android:layout_weight="10"
-            android:gravity="right"
             android:textSize="15dp"
             />
 
     </LinearLayout>
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+
+        android:id="@+id/timeSeekBar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/timeTextView" />
+
 
 </LinearLayout>
