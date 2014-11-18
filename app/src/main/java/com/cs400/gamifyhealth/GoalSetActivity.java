@@ -21,6 +21,8 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -85,10 +87,10 @@ public class GoalSetActivity extends Activity {
        // mEditor.putString("ACTIVITIES",temp.toString());
         mEditor.putString("Activity_Goal_Levels", temp.toString());
         mEditor.putString("Goal_Time_Levels", S.toString());
-       // Log.d("TAG", "GOALS: " + temp.toString());
+
+      // / Log.d("TAG", "GOALS: " + temp.toString());
       //  Log.d("TAG", "time: " + S.toString());
         mEditor.commit();
-
     }
 
 

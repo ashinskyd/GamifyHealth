@@ -22,7 +22,7 @@ import java.util.Date;
 
 
 public class DBConnection{
-
+    //TODO: Implement rate so that rate is in Min/Mile so that rate goal is getting smaller
     private SQLiteHelper helper;
     private SQLiteDatabase database;
 
