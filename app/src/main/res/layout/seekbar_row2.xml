@@ -58,18 +58,14 @@
 
     </LinearLayout>
 
-    <SeekBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-
-        android:id="@+id/timeSeekBar" />
-
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/timeTextView" />
+        android:id="@+id/editText2"
+        android:hint="Enter Goal Duration (in Weeks): "
+
+        android:textColor="@android:color/black"
+        android:inputType="number" />
 
 
 </LinearLayout>

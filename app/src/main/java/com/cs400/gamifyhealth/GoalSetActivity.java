@@ -38,7 +38,7 @@ public class GoalSetActivity extends Activity {
     private ArrayList<String> activitySet;
     private ArrayList<Integer> activitySetLevels;
     private Map<String,Integer> goalLevelMap;
-    private Map<String,Integer> goalTimeMap;
+    private Map<String,EditText> goalTimeEditTextMap;
 
 
 
@@ -51,16 +51,14 @@ public class GoalSetActivity extends Activity {
         sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
         String[] activitySetString = sharedPrefs.getString("ACTIVITIES",null).split(",");
         String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
+        goalTimeEditTextMap = new HashMap<String, EditText>();
         activitySet = new ArrayList<String>();
         activitySetLevels = new ArrayList<Integer>();
         goalLevelMap = new HashMap<String, Integer>();
-        goalTimeMap = new HashMap<String, Integer>();
         for (int i=0; i<activitySetString.length; i++){
                 activitySet.add(i, activitySetString[i]);
                 activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
                 goalLevelMap.put(activitySetString[i],Integer.parseInt(activityStartValString[i]));
-            goalTimeMap.put(activitySetString[i],4);
-
         }
         mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row2,activitySet);
         mListView.setAdapter(mAdapter);
@@ -81,14 +79,14 @@ public class GoalSetActivity extends Activity {
             Map.Entry entry = (Map.Entry) entryIter.next();
             temp.append(( entry.getValue().toString()).concat(","));
             key = entry.getKey().toString();
-            S.append(goalTimeMap.get(key).toString().concat(","));
+            S.append(goalTimeEditTextMap.get(key).getText().toString().concat(","));
         }
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
        // mEditor.putString("ACTIVITIES",temp.toString());
         mEditor.putString("Activity_Goal_Levels", temp.toString());
         mEditor.putString("Goal_Time_Levels", S.toString());
-        Log.d("TAG", "GOALS: " + temp.toString());
-        Log.d("TAG", "time: " + S.toString());
+       // Log.d("TAG", "GOALS: " + temp.toString());
+      //  Log.d("TAG", "time: " + S.toString());
         mEditor.commit();
 
     }
@@ -105,10 +103,11 @@ public class GoalSetActivity extends Activity {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.seekbar_row2, parent, false);
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
-            final SeekBar sb2= (SeekBar) convertView.findViewById(R.id.timeSeekBar);
-            final TextView time = (TextView) convertView.findViewById(R.id.timeTextView);
-            time.setText("");
-            sb.setProgress(4);
+            EditText eT = (EditText) convertView.findViewById(R.id.editText2);
+            if (goalTimeEditTextMap.get(activitySet.get(position))!=null){
+                eT.setText(goalTimeEditTextMap.get(activitySet.get(position)).getText().toString());
+            }
+            goalTimeEditTextMap.put(activitySet.get(position),eT);
             TextView oldValue = (TextView) convertView.findViewById(R.id.oldValuetextView);
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView delta = (TextView) convertView.findViewById(R.id.deltatextView);
@@ -127,12 +126,8 @@ public class GoalSetActivity extends Activity {
                 }
             }
             title.setText(activitySet.get(position).split("_")[0]);
-            time.setText(goalTimeMap.get(activitySet.get(position)).toString().concat(" weeks"));
             if (goalLevelMap.get(activitySet.get(position))!= null) {
                 sb.setProgress(goalLevelMap.get(activitySet.get(position)));
-            }
-            if (goalTimeMap.get(activitySet.get(position))!= null) {
-                sb2.setProgress(goalTimeMap.get(activitySet.get(position)));
             }
             int delt = sb.getProgress()-activitySetLevels.get(position);
             if (delt>=0){
@@ -143,28 +138,6 @@ public class GoalSetActivity extends Activity {
                 delta.setText("-".concat(Integer.toString(delt)));
                 delta.setTextColor(Color.parseColor("#ff0000"));
             }
-           sb2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-               @Override
-               public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                   if (seekBar.getProgress()<=4){
-                       seekBar.setProgress(4);
-                   }
-                   time.setText(Integer.toString(seekBar.getProgress()).concat(" weeks"));
-                   goalTimeMap.put(activitySet.get(position), seekBar.getProgress());
-               }
-
-               @Override
-               public void onStartTrackingTouch(SeekBar seekBar) {
-
-               }
-
-               @Override
-               public void onStopTrackingTouch(SeekBar seekBar) {
-
-               }
-           });
-
-
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {

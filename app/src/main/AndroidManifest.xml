@@ -35,7 +35,8 @@
         <activity
             android:name=".GoalSetActivity"
             android:label="@string/title_activity_goal_set"
-            android:parentActivityName=".CurrentActivityLevel" >
+            android:parentActivityName=".CurrentActivityLevel"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cs400.gamifyhealth.CurrentActivityLevel" />
