@@ -34,7 +34,8 @@
             android:textSize="15dp"
             android:gravity="left"
             android:id="@+id/oldValuetextView"
-            android:editable="false" />
+            android:editable="false"
+            android:textColor="#ff4ca6cc"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,6 +55,7 @@
             android:id="@+id/progressTextView"
             android:layout_weight="10"
             android:textSize="15dp"
+            android:textColor="#ff4ca6cc"
             />
 
     </LinearLayout>

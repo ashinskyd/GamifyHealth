@@ -102,6 +102,7 @@ public class CurrentActivityLevel extends Activity {
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
             String temp = activityList.get(position).split("_")[0];
             title.setText(temp);
+            progress.setText("HI");
             if(currentLevel.get(activityList.get(position))!=null){
                 sb.setProgress(currentLevel.get(activityList.get(position)));
             }

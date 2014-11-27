@@ -29,5 +29,6 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/progressTextView"
         android:textSize="15dp"
-        />
+        android:textColor="#ff4ca6cc"
+         />
 </LinearLayout>
