@@ -84,7 +84,6 @@ public class GoalSetActivity extends Activity {
             S.append(goalTimeEditTextMap.get(key).getText().toString().concat(","));
         }
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
-       // mEditor.putString("ACTIVITIES",temp.toString());
         mEditor.putString("Activity_Goal_Levels", temp.toString());
         mEditor.putString("Goal_Time_Levels", S.toString());
 
@@ -143,6 +142,10 @@ public class GoalSetActivity extends Activity {
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    //TODO: Verfiy this
+                    if (seekBar.getProgress()<activitySetLevels.get(position)){
+                        sb.setProgress(activitySetLevels.get(position));
+                    }
                     goalLevelMap.put(activitySet.get(position), seekBar.getProgress());
                     int delt = sb.getProgress()-activitySetLevels.get(position);
                     if (delt>=0){
