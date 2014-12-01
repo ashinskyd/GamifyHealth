@@ -23,6 +23,7 @@ import java.util.Date;
 
 public class DBConnection{
     //TODO: Implement rate so that rate is in Min/Mile so that rate goal is getting smaller
+    //done
     private SQLiteHelper helper;
     private SQLiteDatabase database;
 
@@ -34,15 +35,6 @@ public class DBConnection{
     public static final String W_RAT = "rate";
     public static final String W_REP = "reps";
     public static final String W_TYPE = "type";
-
-    private static final String CREATE_WORK = "create table " + TABLE_2 +
-            "( " + W_DATE  + " text not null, " +
-            W_NAME + " text not null, "
-            + W_TIME + " int, "
-            + W_DIST + " int, "
-            + W_RAT + " int, "
-            + W_REP + " int, "
-            + W_TYPE + " text not null);" ;
 
     public DBConnection(Context c) {
         this.helper = new SQLiteHelper(c);
@@ -160,11 +152,14 @@ public class DBConnection{
         System.out.println(count);
 
         //if rate, get the average rate
-        //yo
         if (t.equals("DTA-R")){
             sum = sum/count;
         }
-        if (sum > goal){
+        if ((sum >= goal)&& (!t.equals("DTA-R"))){
+            System.out.println("goal met");
+            return true;
+        }
+        if ((sum <= goal)&& (t.equals("DTA-R"))){
             System.out.println("goal met");
             return true;
         }
