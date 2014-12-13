@@ -11,4 +11,8 @@
     <string name="activity_types_REP">Crunches,Pull-Ups,Push-Ups,Squats,Dips</string>
     <string name="activity_types_DTA">Running (Time),Running (Distance),Swimming (Time),Swimming (Distance),Cycling (Time), Cycling (Distance)</string>
     <string name="title_activity_goal_set">GoalSetActivity</string>
+    <string name="title_activity_navigation_drawer_main">NavigationDrawerMain</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Closed</string>
+
 </resources>

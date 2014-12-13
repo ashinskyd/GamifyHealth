@@ -19,11 +19,11 @@
         <activity
             android:name=".SelectActivities"
             android:label="SelectActivities"
-            android:parentActivityName=".WelcomeActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.cs400.gamifyhealth.WelcomeActivity" />
-              </activity>
+            android:parentActivityName=".WelcomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cs400.gamifyhealth.WelcomeActivity" />
+        </activity>
         <activity
             android:name=".CurrentActivityLevel"
             android:label="@string/title_activity_current_activity_level"
@@ -36,10 +36,14 @@
             android:name=".GoalSetActivity"
             android:label="@string/title_activity_goal_set"
             android:parentActivityName=".CurrentActivityLevel"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cs400.gamifyhealth.CurrentActivityLevel" />
+        </activity>
+        <activity
+            android:name=".NavigationDrawerMain"
+            android:label="@string/title_activity_navigation_drawer_main" >
         </activity>
     </application>
 
