@@ -54,15 +54,23 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
                 switch (i){
                     case 0:
                         Log.d("TAG","Clicked 0!");
+                        break;
                     case 1:
+                        Log.d("TAG","Clicked 1!");
                         DataEntryFragment mFragment = new DataEntryFragment();
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.content_frame, mFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-                        Log.d("TAG","Clicked 1!");
+                        break;
                     case 2:
-                        Log.d("TAG","Edit Activities clicked");
+                        Log.d("TAG","Clicked 2!");
+                        EditActivitySetFragment mFragment2 = new EditActivitySetFragment();
+                        FragmentTransaction transaction1 = getFragmentManager().beginTransaction();
+                        transaction1.replace(R.id.content_frame, mFragment2);
+                        transaction1.addToBackStack(null);
+                        transaction1.commit();
+                        break;
                 }
                 mDrawerLayout.closeDrawer(mDrawerListView);
             }
