@@ -1,34 +1,41 @@
 package com.cs400.gamifyhealth;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DataEntryFragment.OnFragmentInteractionListener} interface
+ * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link DataEntryFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
  */
-public class DataEntryFragment extends Fragment {
+public class DataEntryFragment extends Fragment implements WorkoutDialogFragment.NoticeDialogListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -80,6 +87,7 @@ public class DataEntryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_data_entry, container, false);
+        getActivity().setTitle("Workout Entry");
         currentLevel = new HashMap<String, Integer>();
         activityList = new ArrayList<String>();
         sharedPrefs = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -94,6 +102,15 @@ public class DataEntryFragment extends Fragment {
         mListView = (ListView) V.findViewById(R.id.seekBarListView);
         mAdapter = new SeekBarAdapter(getActivity().getApplicationContext(),R.layout.seekbar_row,activityList);
         mListView.setAdapter(mAdapter);
+        Button confirm = (Button) V.findViewById(R.id.continueButton2);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WorkoutDialogFragment dialog = new WorkoutDialogFragment();
+                dialog.setTargetFragment(DataEntryFragment.this,0);
+                dialog.show(getActivity().getFragmentManager(),"DialogFragment");
+            }
+        });
         return V;
     }
 
@@ -120,6 +137,19 @@ public class DataEntryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDialogPositiveClick() {
+        Log.d("TAG","Positive Callback");
+        for(String s: currentLevel.keySet()){
+            Log.d("TAG","Activity: "+s+"VALUE: "+currentLevel.get(s));
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+        Log.d("TAG","Positive Callback");
     }
 
     /**
@@ -150,13 +180,11 @@ public class DataEntryFragment extends Fragment {
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
+
             String temp = activityList.get(position).split("_")[0];
             title.setText(temp);
             progress.setText("HI");
-            if(currentLevel.get(activityList.get(position))!=null){
-                sb.setProgress(currentLevel.get(activityList.get(position)));
-            }
-            sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+              sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     currentLevel.put(activityList.get(position),seekBar.getProgress());
@@ -198,6 +226,7 @@ public class DataEntryFragment extends Fragment {
             return convertView;
         }
     }
+
 
 
 

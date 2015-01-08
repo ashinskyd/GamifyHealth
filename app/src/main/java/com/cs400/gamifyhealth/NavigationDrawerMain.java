@@ -29,9 +29,10 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigationdrawerlayout);
-        itemTitles = new String[2];
+        itemTitles = new String[3];
         itemTitles[0] = "Main Game Page";
         itemTitles[1] = "Workout Entry";
+        itemTitles[2] = "Edit Activities";
         setTitle("Gamify your Health");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerListView = (ListView) findViewById(R.id.left_drawer);
@@ -60,6 +61,8 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
                         transaction.addToBackStack(null);
                         transaction.commit();
                         Log.d("TAG","Clicked 1!");
+                    case 2:
+                        Log.d("TAG","Edit Activities clicked");
                 }
                 mDrawerLayout.closeDrawer(mDrawerListView);
             }

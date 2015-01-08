@@ -95,8 +95,8 @@ public class GoalSetActivity extends Activity {
         mEditor.putString("Activity_Goal_Levels", temp.toString());
         mEditor.putString("Goal_Time_Levels", S.toString());
 
-      // / Log.d("TAG", "GOALS: " + temp.toString());
-      //  Log.d("TAG", "time: " + S.toString());
+        Log.d("TAG", "GOALS: " + temp.toString());
+        Log.d("TAG", "time: " + S.toString());
         mEditor.commit();
     }
 
