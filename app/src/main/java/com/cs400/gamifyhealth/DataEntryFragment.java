@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -141,10 +142,30 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
 
     @Override
     public void onDialogPositiveClick() {
-        Log.d("TAG","Positive Callback");
-        for(String s: currentLevel.keySet()){
-            Log.d("TAG","Activity: "+s+"VALUE: "+currentLevel.get(s));
+        ArrayList<Workout> workoutArray = new ArrayList<Workout>();
+        for(Map.Entry<String, Integer> entry: currentLevel.entrySet()) {
+            String activity = entry.getKey();
+            int indexOfSpace = activity.indexOf(" ");
+            String activityName = activity;
+            if (indexOfSpace != -1 && activity.charAt(indexOfSpace + 1) == '(') {
+                activityName = activity.substring(0, indexOfSpace);
+            } else if (indexOfSpace != -1 && activity.charAt(indexOfSpace + 1) != '(') {
+                activityName = activity.split("_")[0];
+            } else {
+                activityName = activity.split("_")[0];
+            }
+            String activityType = activity.split("_")[1];
+            int unit = entry.getValue();
+            Workout w = new Workout(activityName,unit,activityType);
+            workoutArray.add(w);
         }
+        DBConnection datasource = new DBConnection(getActivity());
+        datasource.open();
+        for (Workout w: workoutArray){
+            datasource.insertWorkout(w);
+        }
+        datasource.checkWorkoutDB();
+        datasource.close();
     }
 
     @Override
@@ -193,9 +214,9 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
                     }else if (activityList.get(position).toString().contains("_TIM")){
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
                     }else{
-                        if(activityList.get(position).toString().contains("_DTA_T")){
+                        if(activityList.get(position).toString().contains("_DTA-T")){
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        }else if(activityList.get(position).toString().contains("_DTA_D")){
+                        }else if(activityList.get(position).toString().contains("_DTA-D")){
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
                         }
                     }
@@ -216,7 +237,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             }else if (activityList.get(position).contains("_TIM")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
             }else{
-                if (activityList.get(position).contains("_DTA_T")){
+                if (activityList.get(position).contains("_DTA-T")){
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
                 }else{
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));

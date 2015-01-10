@@ -115,9 +115,9 @@ public class CurrentActivityLevel extends Activity {
                     }else if (activityList.get(position).toString().contains("_TIM")){
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
                     }else{
-                        if(activityList.get(position).toString().contains("_DTA_T")){
+                        if(activityList.get(position).toString().contains("_DTA-T")){
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        }else if(activityList.get(position).toString().contains("_DTA_D")){
+                        }else if(activityList.get(position).toString().contains("_DTA-D")){
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
                         }
                     }
@@ -138,7 +138,7 @@ public class CurrentActivityLevel extends Activity {
             }else if (activityList.get(position).contains("_TIM")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
             }else{
-                if (activityList.get(position).contains("_DTA_T")){
+                if (activityList.get(position).contains("_DTA-T")){
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
                 }else{
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));

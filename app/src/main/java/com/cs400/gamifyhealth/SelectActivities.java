@@ -53,9 +53,9 @@ public class SelectActivities extends Activity {
                             sb.append(activityItems.get(j).getName()).append("_REP").append(",");
                         }else if(dtaArray.contains(activityItems.get(j).getName())){
                             if(activityItems.get(j).getName().contains("Time")){
-                                sb.append(activityItems.get(j).getName()).append("_DTA_T").append(",");
+                                sb.append(activityItems.get(j).getName()).append("_DTA-T").append(",");
                             }else{
-                                sb.append(activityItems.get(j).getName()).append("_DTA_D").append(",");
+                                sb.append(activityItems.get(j).getName()).append("_DTA-D").append(",");
                             }
                         }else{
                             sb.append(activityItems.get(j).getName()).append("_TIM").append(",");
@@ -87,6 +87,7 @@ public class SelectActivities extends Activity {
         activityItems.add(new ActivityModel("Squash",false));
         activityItems.add(new ActivityModel("Cycling (Time)",false));
         activityItems.add(new ActivityModel("Cycling (Distance)",false));
+        activityItems.add(new ActivityModel("Ping Pong",false));
         CheckBoxAdapter adapter = new CheckBoxAdapter(getApplicationContext(),R.layout.checkbox_layout,activityItems);
         activitiesListView.setAdapter(adapter);
     }
