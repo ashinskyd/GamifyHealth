@@ -31,7 +31,7 @@ public class WelcomeActivity extends Activity {
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
-       /* Workout w = new Workout("Running", 5, "DTA-D");
+       Workout w = new Workout("Running", 5, "DTA-D");
         Workout d = new Workout("Walking", 10, "DTA-T");
         DBConnection datasource = new DBConnection(this);
         datasource.open();
@@ -40,13 +40,22 @@ public class WelcomeActivity extends Activity {
         datasource.createTables();
         datasource.insertWorkout(w);
         datasource.insertWorkout(d);
-        datasource.checkDB();
-        Goal g = new Goal("2014-11-14", "Running","DTA-D", 0, 10, 4 );
+        datasource.checkWorkoutDB();
+        Goal g = new Goal("2015-01-10", "Running","DTA-D", 0, 10, 4 );
+        Goal g2 = new Goal("2015-01-10", "Walking","DTA-D", 0, 5, 10 );
+        try {
+            datasource.insertGoal(g);
+            datasource.insertGoal(g2);
+        }
+        catch (ParseException e){
+            System.out.println("parse error");
+        }
+        datasource.printGoalDB();
         //write try catch for thing
         try {
             datasource.checkGoal(g);
         } catch (ParseException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }
