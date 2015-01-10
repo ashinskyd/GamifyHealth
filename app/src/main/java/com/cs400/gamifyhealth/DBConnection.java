@@ -50,7 +50,9 @@ public class DBConnection{
 
     public void createTables(){
         this.database.execSQL("drop table workout");
+        // this.database.execSQL("drop table goals");
         this.database.execSQL("create table workout( date text not null, name text not null, time int, distance int, rate int, reps int, type text not null);");
+        this.database.execSQL("create table goals( startDate text not null name text not null, type text not null, startUnit int, goalUnit int, currentWeek int, currentWeekGoal int, duration int");
     }
 
     public void insertWorkout(Workout w) {
@@ -155,10 +157,12 @@ public class DBConnection{
         if (t.equals("DTA-R")){
             sum = sum/count;
         }
+        //if the goal is not measured in minutes per mile, the goal is met when the weekly total >= the goal
         if ((sum >= goal)&& (!t.equals("DTA-R"))){
             System.out.println("goal met");
             return true;
         }
+        //if the goal is a rate goal, measured in minutes per mile, then the goal is met when minute/mile <= goal
         if ((sum <= goal)&& (t.equals("DTA-R"))){
             System.out.println("goal met");
             return true;
