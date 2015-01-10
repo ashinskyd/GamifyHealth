@@ -2,6 +2,7 @@ package com.cs400.gamifyhealth;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -64,6 +65,13 @@ public class GoalSetActivity extends Activity {
         }
         mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row2,activitySet);
         mListView.setAdapter(mAdapter);
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),NavigationDrawerMain.class);
+                startActivity(i);
+            }
+        });
     }
 
     public void onBackPressed(){
