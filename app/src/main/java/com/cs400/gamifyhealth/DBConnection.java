@@ -48,9 +48,27 @@ public class DBConnection{
         helper.close();
     }
 
+
+
     public void createTables(){
-        this.database.execSQL("drop table workout");
+        this.database.execSQL("drop table if exists workout");
+        this.database.execSQL("drop table if exists goals");
         this.database.execSQL("create table workout( date text not null, name text not null, time int, distance int, rate int, reps int, type text not null);");
+        this.database.execSQL("create table goals( startDate text not null, name text not null, type text not null, startUnit int, goalUnit int, currentWeek int, currentWeekGoal int, duration int);");
+    }
+    //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)
+    public void insertGoal(Goal g) throws ParseException{
+        ContentValues values = new ContentValues();
+        values.put("startDate", g.startDate);
+        values.put("name", g.name);
+        values.put("type", g.type);
+        values.put("startUnit", g.startUnit);
+        values.put("goalUnit", g.goalUnit);
+        values.put("currentWeek", g.currentWeek);
+        values.put("currentWeekGoal", g.currentWeekGoal);
+        values.put("duration", g.duration);
+        long insertId = database.insert("goals", null,
+                values);
     }
 
     public void insertWorkout(Workout w) {
@@ -133,10 +151,8 @@ public class DBConnection{
             temp.setTime(td);
             System.out.println("temp" + temp.toString());
             if (temp.before(endDate) == true|temp.compareTo(endDate) == 0){
-                System.out.println("YES");
                 //adjust for when they have the same date
                 if (temp.after(start) == true| temp.compareTo(start) == 0){
-                    System.out.println("YES2");
                     System.out.println(g.name);
                     System.out.println(cur.getString(1));
                     if (cur.getString(1).equals(g.name)){
@@ -149,16 +165,18 @@ public class DBConnection{
         }
         cur.close();
         System.out.println("sum " + sum);
-        System.out.println(count);
+        System.out.println(" count" + count);
 
         //if rate, get the average rate
         if (t.equals("DTA-R")){
             sum = sum/count;
         }
+        //if the goal is not measured in minutes per mile, the goal is met when the weekly total >= the goal
         if ((sum >= goal)&& (!t.equals("DTA-R"))){
             System.out.println("goal met");
             return true;
         }
+        //if the goal is a rate goal, measured in minutes per mile, then the goal is met when minute/mile <= goal
         if ((sum <= goal)&& (t.equals("DTA-R"))){
             System.out.println("goal met");
             return true;
@@ -167,7 +185,32 @@ public class DBConnection{
         return false;
     }
 
-    public void checkDB() {
+    //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)
+    public void printGoalDB(){
+        List<String> s = new ArrayList<String>();
+        String[] allColumns = {"startDate","name", "type", "startUnit",
+                "goalUnit","currentWeek", "currentWeekGoal", "duration"};
+        Cursor cursor = database.query("goals",
+                allColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            System.out.println(
+            "startDate: " +  cursor.getString(0) +
+            " name: " + cursor.getString(1) +
+            " type: " + cursor.getString(2) +
+            " startUnit: " + cursor.getInt(3) +
+            " goalUnit: " + cursor.getInt(4) +
+            " current Week: " + cursor.getInt(5) +
+            " currentWeekGoal: " + cursor.getInt(6) +
+            " duration: " + cursor.getInt(7) );
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+
+    }
+
+    public void checkWorkoutDB() {
         List<String> s = new ArrayList<String>();
         String[] allColumns = {W_DATE,W_NAME, W_TIME, W_DIST,
                 W_RAT, W_REP, W_TYPE};
