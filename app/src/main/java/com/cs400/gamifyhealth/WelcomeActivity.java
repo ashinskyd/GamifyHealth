@@ -57,5 +57,6 @@ public class WelcomeActivity extends Activity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        datasource.close();
     }
 }
