@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +16,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
-
+//Activity is used to gather the current fitness level of a user
 public class CurrentActivityLevel extends Activity {
+    //Declares the data structures to hold the information in addition to the layout values
     private ListView mListView;
     private SharedPreferences sharedPrefs;
     private ArrayList<String> activityList;
@@ -43,6 +40,7 @@ public class CurrentActivityLevel extends Activity {
         coninueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //On button click, launch the next activity
                 Intent i = new Intent(getBaseContext(),GoalSetActivity.class);
                 final AlphaAnimation buttonClick = new AlphaAnimation(1F,0.8F);
                 view.startAnimation(buttonClick);
@@ -52,13 +50,15 @@ public class CurrentActivityLevel extends Activity {
             }
         });
         currentLevel = new HashMap<String, Integer>();
+        //Map used to store the key,value of activty-name,Value for every activity
         activityList = new ArrayList<String>();
+        //Arraylist is gatherd from sharedprefs and holds a master list of all activiteis
         String[] activities = sharedPrefs.getString("ACTIVITIES","").split(",");
         for(int i=0;i<activities.length;i++){
+            //Loop puts all activities and a default value of 0 into the loop
             activityList.add(i,activities[i]);
             currentLevel.put(activities[i],0);
         }
-        //TODO: Should really be looking at the shared prefs to populate any existing values
         mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row,activityList);
         mListView.setAdapter(mAdapter);
     }
@@ -66,27 +66,36 @@ public class CurrentActivityLevel extends Activity {
     @Override
     public void onPause(){
         super.onPause();
-        StringBuilder temp = new StringBuilder();
-        StringBuilder S = new StringBuilder();
+        /*Upon pausing we store in shared prefs the following:
+        *@names is the string of all the activities
+        *@levels is the current fitness level for all activities
+        *NOTE: In shared prefs, we store 2 strings, 1 for the names and 1 for the values. They correspond 1 to 1 just as in a Map
+        */
+        StringBuilder names = new StringBuilder();
+        StringBuilder levels = new StringBuilder();
         Iterator entryIter = currentLevel.entrySet().iterator();
         while (entryIter.hasNext()){
             Map.Entry entry = (Map.Entry) entryIter.next();
-            temp.append(((String) entry.getKey()).concat(","));
-            S.append(entry.getValue().toString().concat(","));
+            names.append(((String) entry.getKey()).concat(","));
+            levels.append(entry.getValue().toString().concat(","));
         }
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
-        mEditor.putString("ACTIVITIES",temp.toString());
-        mEditor.putString("Activity_Prelim_Levels", S.toString());
+        /*
+        *@ACTIVITIES: the sharedprefs string of all the activites: "Running (Time)_DTA-T,Ping-Pong_REP..."
+        *@Activity_Prelim_Levels: the sharedprefs string of the preliminary fitness level
+         */
+        mEditor.putString("ACTIVITIES",names.toString());
+        mEditor.putString("Activity_Prelim_Levels", levels.toString());
         mEditor.commit();
     }
 
-
+    //Just sets the animation for back button press
     public void onBackPressed(){
         super.onBackPressed();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 
-
+    //Inner class is a custom adapter for our listview. It uses a custom layout to inflate
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
         public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList){
@@ -102,13 +111,16 @@ public class CurrentActivityLevel extends Activity {
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
             String temp = activityList.get(position).split("_")[0];
             title.setText(temp);
+            //Required to set some text before proceding to avoid a null ptr
             progress.setText("HI");
             if(currentLevel.get(activityList.get(position))!=null){
                 sb.setProgress(currentLevel.get(activityList.get(position)));
             }
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                //Listens for seekbar sliding
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    //When progress is changed, update our currentlevel map and adjust the textview to display the value
                     currentLevel.put(activityList.get(position),seekBar.getProgress());
                     if (activityList.get(position).toString().contains("_REP")){
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
@@ -121,7 +133,6 @@ public class CurrentActivityLevel extends Activity {
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
                         }
                     }
-                    //TODO: Keep track of the progress for all the types somehow, then save it somewhere...
                 }
 
                 @Override
@@ -133,6 +144,7 @@ public class CurrentActivityLevel extends Activity {
                 }
             });
 
+            //Adds the proper unit to the progress view
             if (activityList.get(position).contains("_REP")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
             }else if (activityList.get(position).contains("_TIM")){

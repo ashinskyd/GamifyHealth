@@ -1,15 +1,11 @@
 package com.cs400.gamifyhealth;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,49 +16,35 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DataEntryFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
+//This fragment is our way for the user to enter a workout. It is inflated in NavigationDrawerMainActivity
 public class DataEntryFragment extends Fragment implements WorkoutDialogFragment.NoticeDialogListener {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
     private ArrayList<String> activityList;
+    //Gets an array of all of the users relevant activities
     private Map<String,Integer> currentLevel;
+    //Map records the activty,value for all activities and their values
     private ArrayList<Integer> activitySetLevels;
+    //Used to store the levels for intermediete processing
+
+    //Our layout objects
     private ListView mListView;
     private SeekBarAdapter mAdapter;
     private SharedPreferences sharedPrefs;
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DataEntryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static DataEntryFragment newInstance(String param1, String param2) {
+        //Factory Method to create teh fragment
         DataEntryFragment fragment = new DataEntryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -92,13 +74,21 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
         currentLevel = new HashMap<String, Integer>();
         activityList = new ArrayList<String>();
         sharedPrefs = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
         String[] activities = sharedPrefs.getString("ACTIVITIES","").split(",");
+        //Gets the relevant activty set from sharedprefs
+
+        //TODO: I believe we can actually get rid of this array, and initialize @currentLevel to 0 since we set the seekbars to 0 to begin with
         String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
+        //Gets the prelim level generated at setup
+
         activitySetLevels = new ArrayList<Integer>();
         for(int i=0;i<activities.length;i++){
             activityList.add(i,activities[i]);
             activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
+            //Adds the activity and the given level to our arrays
             currentLevel.put(activities[i],Integer.parseInt(activityStartValString[i]));
+            //TODO: Get rid of the Inter.parseInt, and just set to 0?
         }
         mListView = (ListView) V.findViewById(R.id.seekBarListView);
         mAdapter = new SeekBarAdapter(getActivity().getApplicationContext(),R.layout.seekbar_row,activityList);
@@ -107,15 +97,16 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //On buttonclick, inflate a dialog asking user to confirm their selection or cancel
                 WorkoutDialogFragment dialog = new WorkoutDialogFragment();
-                dialog.setTargetFragment(DataEntryFragment.this,0);
-                dialog.show(getActivity().getFragmentManager(),"DialogFragment");
+                dialog.setTargetFragment(DataEntryFragment.this, 0);
+                dialog.show(getActivity().getFragmentManager(), "DialogFragment");
             }
         });
         return V;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -125,6 +116,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
 
     @Override
     public void onAttach(Activity activity) {
+        //makes sure our activity listens for fragment changes (unused)
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
@@ -142,11 +134,17 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
 
     @Override
     public void onDialogPositiveClick() {
+        //Listener implementation-Upon confirmationm we do some processing
         ArrayList<Workout> workoutArray = new ArrayList<Workout>();
+        //Array of workout objects
+
         for(Map.Entry<String, Integer> entry: currentLevel.entrySet()) {
+            //Loop iterates through the users activities and creates a set of workout objects based on their selections
             String activity = entry.getKey();
             int indexOfSpace = activity.indexOf(" ");
             String activityName = activity;
+
+            //This is string processing to have appropriate interaction with the database
             if (indexOfSpace != -1 && activity.charAt(indexOfSpace + 1) == '(') {
                 activityName = activity.substring(0, indexOfSpace);
             } else if (indexOfSpace != -1 && activity.charAt(indexOfSpace + 1) != '(') {
@@ -159,6 +157,8 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             Workout w = new Workout(activityName,unit,activityType);
             workoutArray.add(w);
         }
+
+        //Opens the database and inserts all of the workouts
         DBConnection datasource = new DBConnection(getActivity());
         datasource.open();
         for (Workout w: workoutArray){
@@ -172,22 +172,15 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
     public void onDialogNegativeClick() {
         Log.d("TAG","Positive Callback");
     }
+    //If the user cancels from the dialog, we do nothing
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 
+
+    //Same custom adapter from currentActivityLevel. Used to populate listview
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
         public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList){
@@ -205,7 +198,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             String temp = activityList.get(position).split("_")[0];
             title.setText(temp);
             progress.setText("HI");
-              sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     currentLevel.put(activityList.get(position),seekBar.getProgress());
