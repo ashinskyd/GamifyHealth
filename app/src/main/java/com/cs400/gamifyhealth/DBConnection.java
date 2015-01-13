@@ -71,7 +71,8 @@ public class DBConnection{
                 values);
     }
 
-
+//in order for this to work, we must prevent the user from adding to goals of the same name and type
+    //ie no two goals of the same thing measuring the same thing at the same time
     public void removeGoal(Goal g){
         String command = "delete from goals where type = '" + g.type + "' and name = '" + g.name + "' ;";
         this.database.execSQL(command);
