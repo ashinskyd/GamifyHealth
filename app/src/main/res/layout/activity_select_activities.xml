@@ -24,7 +24,7 @@
         android:divider="@null"
         android:id="@+id/activityListView"
         android:layout_below="@+id/textView"
-        />
+        android:layout_above="@+id/continueButton2" />
 
     <Button
         android:layout_width="match_parent"

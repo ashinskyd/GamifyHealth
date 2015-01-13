@@ -9,7 +9,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".WelcomeActivity"
-            android:label="GamifyHealth" >
+            android:label="GamifyHealth"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +20,8 @@
         <activity
             android:name=".SelectActivities"
             android:label="SelectActivities"
-            android:parentActivityName=".WelcomeActivity" >
+            android:parentActivityName=".WelcomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cs400.gamifyhealth.WelcomeActivity" />
@@ -27,7 +29,8 @@
         <activity
             android:name=".CurrentActivityLevel"
             android:label="@string/title_activity_current_activity_level"
-            android:parentActivityName=".SelectActivities" >
+            android:parentActivityName=".SelectActivities"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cs400.gamifyhealth.SelectActivities" />
@@ -36,14 +39,16 @@
             android:name=".GoalSetActivity"
             android:label="@string/title_activity_goal_set"
             android:parentActivityName=".CurrentActivityLevel"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cs400.gamifyhealth.CurrentActivityLevel" />
         </activity>
         <activity
             android:name=".NavigationDrawerMain"
-            android:label="@string/title_activity_navigation_drawer_main" >
+            android:label="@string/title_activity_navigation_drawer_main"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

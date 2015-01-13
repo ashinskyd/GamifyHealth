@@ -31,7 +31,7 @@ public class WelcomeActivity extends Activity {
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
-       Workout w = new Workout("Running", 5, "DTA-D");
+      /* Workout w = new Workout("Running", 5, "DTA-D");
         Workout d = new Workout("Walking", 10, "DTA-T");
         DBConnection datasource = new DBConnection(this);
         datasource.open();
@@ -56,7 +56,6 @@ public class WelcomeActivity extends Activity {
             datasource.checkGoal(g);
         } catch (ParseException e) {
             e.printStackTrace();
-        }
-        datasource.close();
+        }*/
     }
 }

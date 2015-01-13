@@ -1,6 +1,7 @@
 package com.cs400.gamifyhealth;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,9 +24,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -59,15 +62,50 @@ public class GoalSetActivity extends Activity {
         activitySetLevels = new ArrayList<Integer>();
         goalLevelMap = new HashMap<String, Integer>();
         for (int i=0; i<activitySetString.length; i++){
-                activitySet.add(i, activitySetString[i]);
-                activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
-                goalLevelMap.put(activitySetString[i],Integer.parseInt(activityStartValString[i]));
+            activitySet.add(i, activitySetString[i]);
+            activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
+            goalLevelMap.put(activitySetString[i],Integer.parseInt(activityStartValString[i]));
         }
         mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row2,activitySet);
         mListView.setAdapter(mAdapter);
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ArrayList<Goal> goalList = new ArrayList<Goal>();
+                ContentValues values = new ContentValues();
+                GregorianCalendar c = new GregorianCalendar();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String date = sdf.format(c.getTime());
+                for (int i=0;i<activitySet.size();i++){
+                    int goalTarget = goalLevelMap.get(activitySet.get(i));
+                    int goalDuration = Integer.parseInt(goalTimeEditTextMap.get(activitySet.get(i)).getText().toString());
+                    int startValue = activitySetLevels.get(i);
+                    String activity = activitySet.get(i);
+                    int indexOfSpace = activity.indexOf(" ");
+                    String activityName = activity;
+                    if (indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)=='('){
+                        activityName = activity.substring(0,indexOfSpace);
+                    }else if(indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)!='('){
+                        activityName = activity.split("_")[0];
+                    }else{
+                        activityName = activity.split("_")[0];
+                    }
+                    String activityType = activity.split("_")[1];
+                    Goal g = new Goal(date,activityName,activityType,startValue,goalTarget,goalDuration);
+                    goalList.add(g);
+                }
+                DBConnection datasource = new DBConnection(GoalSetActivity.this);
+                datasource.open();
+                try{
+                    for (Goal g: goalList){
+                        datasource.insertGoal(g);
+                    }
+                }catch (ParseException e){
+                    Log.d("TAG","Exception Caught");
+                }
+                datasource.printGoalDB();
+                datasource.close();
+
                 Intent i = new Intent(getApplicationContext(),NavigationDrawerMain.class);
                 startActivity(i);
             }
@@ -90,13 +128,11 @@ public class GoalSetActivity extends Activity {
             temp.append(( entry.getValue().toString()).concat(","));
             key = entry.getKey().toString();
             S.append(goalTimeEditTextMap.get(key).getText().toString().concat(","));
+
         }
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
         mEditor.putString("Activity_Goal_Levels", temp.toString());
         mEditor.putString("Goal_Time_Levels", S.toString());
-
-        Log.d("TAG", "GOALS: " + temp.toString());
-        Log.d("TAG", "time: " + S.toString());
         mEditor.commit();
     }
 
@@ -128,9 +164,9 @@ public class GoalSetActivity extends Activity {
             } else if (activitySet.get(position).contains("_TIM")) {
                 oldValue.setText(oldValue.getText().toString().concat(" Hours"));
             } else {
-                if (activitySet.get(position).contains("_DTA_T")) {
+                if (activitySet.get(position).contains("_DTA-T")) {
                     oldValue.setText(oldValue.getText().toString().concat(" Hours"));
-                } else if (activitySet.get(position).contains("_DTA_D")) {
+                } else if (activitySet.get(position).contains("_DTA-D")) {
                     oldValue.setText(oldValue.getText().toString().concat(" Miles"));
                 }
             }
@@ -170,9 +206,9 @@ public class GoalSetActivity extends Activity {
                     } else if (activitySet.get(position).contains("_TIM")) {
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
                     } else {
-                        if (activitySet.get(position).contains("_DTA_T")) {
+                        if (activitySet.get(position).contains("_DTA-T")) {
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        } else if (activitySet.get(position).contains("_DTA_D")) {
+                        } else if (activitySet.get(position).contains("_DTA-D")) {
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
                         }
                     }
@@ -192,7 +228,7 @@ public class GoalSetActivity extends Activity {
             } else if (activitySet.get(position).contains("_TIM")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
             } else {
-                if (activitySet.get(position).contains("_DTA_T")) {
+                if (activitySet.get(position).contains("_DTA-T")) {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
                 } else {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));

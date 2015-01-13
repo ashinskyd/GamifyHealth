@@ -71,6 +71,12 @@ public class DBConnection{
                 values);
     }
 
+
+    public void removeGoal(Goal g){
+        String command = "delete from goals where type = '" + g.type + "' and name = '" + g.name + "' ;";
+        this.database.execSQL(command);
+    }
+
     public void insertWorkout(Workout w) {
         ContentValues values = new ContentValues();
         GregorianCalendar c = new GregorianCalendar();
