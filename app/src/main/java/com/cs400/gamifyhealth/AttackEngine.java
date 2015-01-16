@@ -37,16 +37,13 @@ public class AttackEngine extends Service {
                 //While we are not generating an attack we will wait in this state
                 try {
                     wait(endTime - System.currentTimeMillis());
-
                 } catch (Exception e) {
-
                 }
             }
             Log.d("TAG", "Attack Posted!");
             Message m = mServiceHandler.obtainMessage();
             m.arg1 = genTime();
             mServiceHandler.sendMessage(m);
-
         }
     }
 
