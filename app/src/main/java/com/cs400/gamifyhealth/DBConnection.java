@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Date;
 
-
+//population and credits are stored in sharedpreferences
+//objects like
 public class DBConnection{
     //TODO: Implement rate so that rate is in Min/Mile so that rate goal is getting smaller
     //done
@@ -53,7 +54,9 @@ public class DBConnection{
     public void createTables(){
         this.database.execSQL("drop table if exists workout");
         this.database.execSQL("drop table if exists goals");
+        this.database.execSQL("drop table if exists objects");
         this.database.execSQL("create table workout( date text not null, name text not null, time int, distance int, rate int, reps int, type text not null);");
+        this.database.execSQL("create table objects( type text not null, position text);");
         this.database.execSQL("create table goals( startDate text not null, name text not null, type text not null, startUnit int, goalUnit int, currentWeek int, currentWeekGoal int, duration int);");
     }
     //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)

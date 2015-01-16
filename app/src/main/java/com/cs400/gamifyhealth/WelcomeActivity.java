@@ -31,7 +31,7 @@ public class WelcomeActivity extends Activity {
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
-      /* Workout w = new Workout("Running", 5, "DTA-D");
+        /*Workout w = new Workout("Running", 5, "DTA-D");
         Workout d = new Workout("Walking", 10, "DTA-T");
         */
         DBConnection datasource = new DBConnection(this);
@@ -40,6 +40,7 @@ public class WelcomeActivity extends Activity {
         //we only want to create tables once
         datasource.createTables();
         /*datasource.insertWorkout(w);
+
         datasource.insertWorkout(d);
         datasource.checkWorkoutDB();
         Goal g = new Goal("2015-01-10", "Running","DTA-D", 0, 10, 4 );
