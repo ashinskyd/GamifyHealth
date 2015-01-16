@@ -33,12 +33,13 @@ public class WelcomeActivity extends Activity {
         });
       /* Workout w = new Workout("Running", 5, "DTA-D");
         Workout d = new Workout("Walking", 10, "DTA-T");
+        */
         DBConnection datasource = new DBConnection(this);
         datasource.open();
         //how do we tell this is the first time the app has been opened
         //we only want to create tables once
         datasource.createTables();
-        datasource.insertWorkout(w);
+        /*datasource.insertWorkout(w);
         datasource.insertWorkout(d);
         datasource.checkWorkoutDB();
         Goal g = new Goal("2015-01-10", "Running","DTA-D", 0, 10, 4 );

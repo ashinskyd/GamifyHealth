@@ -2,6 +2,7 @@ package com.cs400.gamifyhealth;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class NavigationDrawerMain extends FragmentActivity implements DataEntryFragment.OnFragmentInteractionListener {
+public class NavigationDrawerMain extends FragmentActivity implements GameFragment.OnFragmentInteractionListener, DataEntryFragment.OnFragmentInteractionListener, EditActivitySetFragment.OnFragmentInteractionListener {
     private String[] itemTitles;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -48,34 +49,45 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
         );
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Launch Game fragment by default
+        FragmentTransaction defaultTransaction = getFragmentManager().beginTransaction();
+        GameFragment gameFragment = new GameFragment();
+        Intent intent = new Intent(this, AttackEngine.class);
+        startService(intent);
+        defaultTransaction.replace(R.id.content_frame,gameFragment);
+        defaultTransaction.addToBackStack(null);
+        defaultTransaction.commit();
         mDrawerListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                FragmentTransaction transaction;
                 switch (i){
                     case 0:
-                        Log.d("TAG","Clicked 0!");
+                        GameFragment gameFragment = new GameFragment();
+                        transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.content_frame, gameFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                         break;
                     case 1:
-                        Log.d("TAG","Clicked 1!");
                         DataEntryFragment mFragment = new DataEntryFragment();
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.content_frame, mFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
                         break;
                     case 2:
-                        Log.d("TAG","Clicked 2!");
                         EditActivitySetFragment mFragment2 = new EditActivitySetFragment();
-                        FragmentTransaction transaction1 = getFragmentManager().beginTransaction();
-                        transaction1.replace(R.id.content_frame, mFragment2);
-                        transaction1.addToBackStack(null);
-                        transaction1.commit();
+                        transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.content_frame, mFragment2);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                         break;
                 }
                 mDrawerLayout.closeDrawer(mDrawerListView);
             }
         });
-
 
     }
 
@@ -105,7 +117,7 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        //TODO: Should update some info upon creating the transaction
+       Log.d("TAG","Fragment Changed!");
     }
     @Override
     public void onBackPressed() {
