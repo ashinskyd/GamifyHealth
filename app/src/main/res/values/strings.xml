@@ -15,5 +15,25 @@
     <string name="drawer_open">Drawer Open</string>
     <string name="drawer_close">Drawer Closed</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="people1">Your village contracted itching disease</string>
+    <string name="people2">Your village contracted itching disease</string>
+    <string name="people3">Your village contracted itching disease</string>
+    <string name="people4">Your village contracted itching disease</string>
+    <string name="people5">Your village contracted itching disease</string>
+    <string name="farm1">Your village contracted itching disease</string>
+    <string name="farm2">Your village contracted itching disease</string>
+    <string name="farm3">Your village contracted itching disease</string>
+    <string name="farm4">Your village contracted itching disease</string>
+    <string name="farm5">Your village contracted itching disease</string>
+    <string name="fort1">Your village contracted itching disease</string>
+    <string name="fort2">Your village contracted itching disease</string>
+    <string name="fort3">Your village contracted itching disease</string>
+    <string name="fort4">Your village contracted itching disease</string>
+    <string name="fort5">Your village contracted itching disease</string>
+    <string name="houses1">Your village contracted itching disease</string>
+    <string name="houses2">Your village contracted itching disease</string>
+    <string name="houses3">Your village contracted itching disease</string>
+    <string name="houses4">Your village contracted itching disease</string>
+    <string name="houses5">Your village contracted itching disease</string>
 
 </resources>
