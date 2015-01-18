@@ -18,11 +18,11 @@ import android.os.Process;
 
 import java.util.Random;
 
-public class AttackEngine extends Service {
+public class AttackService extends Service {
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
     private HandlerThread thread;
-    private static AttackEngine instance;
+    private static AttackService instance;
     private static long remainingTime;
     private static long recentTime;
     private Random randomGen;
@@ -43,7 +43,7 @@ public class AttackEngine extends Service {
                 recentTime = System.currentTimeMillis();
             }
             Log.d("TAG", "Attack Posted!");
-            AttackEngine.postAttack(AttackEngine.this);
+            AttackService.postAttack(AttackService.this);
             Message m = mServiceHandler.obtainMessage();
             m.arg1 = genTime();
             m.what = 0;
@@ -121,8 +121,8 @@ public class AttackEngine extends Service {
     }
 
     public int genTime() {
-        //return (randomGen.nextInt(2880) + 2880) * 60000;
-        return 20000;
+        return (randomGen.nextInt(2880) + 2880) * 60000;
+        //return 20000;
     }
 
     @Override
