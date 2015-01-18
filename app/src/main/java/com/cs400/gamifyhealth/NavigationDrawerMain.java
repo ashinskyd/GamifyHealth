@@ -22,20 +22,20 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class NavigationDrawerMain extends FragmentActivity implements GameFragment.OnFragmentInteractionListener, DataEntryFragment.OnFragmentInteractionListener, EditActivitySetFragment.OnFragmentInteractionListener {
+public class NavigationDrawerMain extends FragmentActivity implements HouseStoreFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, DataEntryFragment.OnFragmentInteractionListener, EditActivitySetFragment.OnFragmentInteractionListener {
     private String[] itemTitles;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerListView;
     private FrameLayout mFrame;
-    private AttackEngine attackEngine;
+    private AttackService attackService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigationdrawerlayout);
         boolean serviceStarted = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("SERVICE_STARTED",false);
         if (!serviceStarted){
-            Intent intent = new Intent(this, AttackEngine.class);
+            Intent intent = new Intent(this, AttackService.class);
             startService(intent);
         }
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -138,6 +138,8 @@ public class NavigationDrawerMain extends FragmentActivity implements GameFragme
     }
 
 
-
-
+    @Override
+    public void onFragmentInteraction(int i) {
+        Log.d("TAG","INTEGER: "+i);
+    }
 }
