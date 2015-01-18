@@ -2,7 +2,9 @@ package com.cs400.gamifyhealth;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,10 +28,22 @@ public class NavigationDrawerMain extends FragmentActivity implements GameFragme
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerListView;
     private FrameLayout mFrame;
+    private AttackEngine attackEngine;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigationdrawerlayout);
+        boolean serviceStarted = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("SERVICE_STARTED",false);
+        if (!serviceStarted){
+            Intent intent = new Intent(this, AttackEngine.class);
+            startService(intent);
+        }
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("SERVICE_STARTED", true);
+        editor.commit();
+
+
         itemTitles = new String[3];
         itemTitles[0] = "Main Game Page";
         itemTitles[1] = "Workout Entry";
@@ -53,8 +67,6 @@ public class NavigationDrawerMain extends FragmentActivity implements GameFragme
         //Launch Game fragment by default
         FragmentTransaction defaultTransaction = getFragmentManager().beginTransaction();
         GameFragment gameFragment = new GameFragment();
-        Intent intent = new Intent(this, AttackEngine.class);
-        startService(intent);
         defaultTransaction.replace(R.id.content_frame,gameFragment);
         defaultTransaction.addToBackStack(null);
         defaultTransaction.commit();
@@ -90,6 +102,7 @@ public class NavigationDrawerMain extends FragmentActivity implements GameFragme
         });
 
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
