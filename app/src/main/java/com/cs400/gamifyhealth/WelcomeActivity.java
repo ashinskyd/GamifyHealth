@@ -39,6 +39,19 @@ public class WelcomeActivity extends Activity {
         //how do we tell this is the first time the app has been opened
         //we only want to create tables once
         datasource.createTables();
+        datasource.insertObject("house", 1, 1);
+        datasource.insertObject("farm", 0, 1);
+        datasource.insertObject("house", 1, 2);
+        datasource.insertObject("farm", 2, 1);
+        datasource.insertObject("fort", 1, 3);
+        datasource.insertObject("farm", 2, 2);
+        datasource.printObjectDB();
+        datasource.getObjectCounts();
+        datasource.close();
+
+
+
+
         /*datasource.insertWorkout(w);
 
         datasource.insertWorkout(d);

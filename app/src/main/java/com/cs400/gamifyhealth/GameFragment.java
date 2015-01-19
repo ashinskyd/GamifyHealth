@@ -2,7 +2,9 @@ package com.cs400.gamifyhealth;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,6 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+
+//TODO: how do we curtail calls to the database??
+
+//NOTE: FOR NOW WE ARE TESTING THE ATTACK ENGINE CALLS IN THIS CLASS
+//WE ALSO INITIALIZE THE POPULATION VALUE IN SHAREDPREFERENCES HERE
+
 public class GameFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -20,6 +28,7 @@ public class GameFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button houseStore;
+    private SharedPreferences sharedPrefs;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,6 +71,16 @@ public class GameFragment extends Fragment {
                 transaction.commit();
             }
         });
+        //tester code: shared preferences isn't quite working as intended yet
+        //ideally, should store a population in sharedpreferences with key "population" and value 1 to represent initial population IF
+        //no value already exists, if a value already exists, leave as is
+/*        int initialPop = 1;
+        sharedPrefs = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putInt("population", initialPop);
+        editor.commit();
+        AttackEngine a = new AttackEngine(this.getActivity());*/
+
         return V;
     }
 

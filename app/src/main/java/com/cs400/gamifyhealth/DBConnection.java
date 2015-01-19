@@ -50,13 +50,13 @@ public class DBConnection{
     }
 
 
-
+//redo later: change all to plural
     public void createTables(){
         this.database.execSQL("drop table if exists workout");
         this.database.execSQL("drop table if exists goals");
         this.database.execSQL("drop table if exists objects");
         this.database.execSQL("create table workout( date text not null, name text not null, time int, distance int, rate int, reps int, type text not null);");
-        this.database.execSQL("create table objects( type text not null, position text);");
+        this.database.execSQL("create table objects( type text not null, xposition int, yposition int);");
         this.database.execSQL("create table goals( startDate text not null, name text not null, type text not null, startUnit int, goalUnit int, currentWeek int, currentWeekGoal int, duration int);");
     }
     //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)
@@ -73,6 +73,19 @@ public class DBConnection{
         long insertId = database.insert("goals", null,
                 values);
     }
+
+    //object table scheme: type, xposition, yposition
+    //valid types = "farm, fort, house" USE THESE WORDS EXACTLY
+    public void insertObject(String type, int x, int y){
+        ContentValues values = new ContentValues();
+        values.put("type", type);
+        values.put("xposition", x);
+        values.put("yposition", y);
+        database.insert("objects", null,
+                values);
+    }
+
+
 
 //in order for this to work, we must prevent the user from adding to goals of the same name and type
     //ie no two goals of the same thing measuring the same thing at the same time
@@ -193,6 +206,61 @@ public class DBConnection{
         }
         System.out.println("GOAL NOT MET");
         return false;
+    }
+
+    //object table scheme: type, xposition, yposition
+    public void printObjectDB(){
+        String[] allColumns = {"type","xposition", "yposition"};
+        Cursor cursor = database.query("objects",
+                allColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            System.out.println(
+                    "type: " +  cursor.getString(0) +
+                            " xpos: " + cursor.getInt(1) +
+                            " ypos: " + cursor.getInt(2));
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+
+    }
+    //make a call to the DB that returns player objects as an array of ints representing counts the order farms, forts, houses
+    //then the 4th spot in the array becomes the population stored in shared prefs
+    public int[] getObjectCounts(){
+        int farmCount = 0;
+        int fortCount = 0;
+        int houseCount = 0;
+        String[] allColumns = {"type","xposition", "yposition"};
+        Cursor cursor = database.query("objects",
+                allColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String type = cursor.getString(0);
+            if (type.equals("farm")){
+                farmCount++;
+            }
+            if (type.equals("fort")){
+                fortCount++;
+            }
+            if (type.equals("house")){
+                houseCount++;
+            }
+
+
+            cursor.moveToNext();
+        }
+        int[] objects = new int[4];
+        objects[0] = farmCount;
+        objects[1] = fortCount;
+        objects[2] = houseCount;
+        // make sure to close the cursor
+        System.out.println("Printing object counts: ");
+        for (int i = 0; i<3; i++){
+            System.out.println(objects[i]);
+        }
+        cursor.close();
+        return objects;
     }
 
     //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)
