@@ -11,23 +11,11 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <GridLayout
+        <SurfaceView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:background="@drawable/map">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="People Counter"
-                android:id="@+id/textView"
-                android:layout_gravity="right|top"
-                android:textColor="#ffffbc46"
-                android:password="false"
-                android:textStyle="bold" />
-        </GridLayout>
+            android:id="@+id/surfaceView" />
 
         <RelativeLayout
             android:layout_width="fill_parent"

@@ -5,11 +5,19 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -81,6 +89,34 @@ public class GameFragment extends Fragment {
         System.out.println("attack 3");
         a.attack();
         a.printObjectsOwned();
+        final SurfaceView surface = (SurfaceView) V.findViewById(R.id.surfaceView);
+        surface.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder surfaceHolder) {
+                Canvas canvas = surfaceHolder.lockCanvas();
+                Rect dest = new Rect(0, 0, surface.getWidth(), surface.getHeight());
+                canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.map), null, dest, new Paint());
+                surfaceHolder.unlockCanvasAndPost(canvas);
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
+                Log.d("TAG","CHANGED!");
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+
+
+            }
+
+        });
+        surface.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
         return V;
     }
 
