@@ -1,7 +1,9 @@
 package com.cs400.gamifyhealth;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,12 +44,19 @@ public class WelcomeActivity extends Activity {
         datasource.insertObject("house", 1, 1);
         datasource.insertObject("farm", 0, 1);
         datasource.insertObject("house", 1, 2);
+        datasource.insertObject("house", 1, 4);
         datasource.insertObject("farm", 2, 1);
+        datasource.insertObject("farm", 2, 4);
         datasource.insertObject("fort", 1, 3);
         datasource.insertObject("farm", 2, 2);
         datasource.printObjectDB();
         datasource.getObjectCounts();
         datasource.close();
+        int iPop = 2;
+        SharedPreferences sharedPrefs = this.getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putInt("POPULATION", iPop);
+        editor.commit();
 
 
 

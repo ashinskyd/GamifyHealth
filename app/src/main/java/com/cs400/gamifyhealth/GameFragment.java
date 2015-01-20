@@ -73,14 +73,14 @@ public class GameFragment extends Fragment {
         });
         //tester code: shared preferences isn't quite working as intended yet
         //ideally, should store a population in sharedpreferences with key "population" and value 1 to represent initial population IF
-        //no value already exists, if a value already exists, leave as is
-/*        int initialPop = 1;
-        sharedPrefs = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.putInt("population", initialPop);
-        editor.commit();
-        AttackEngine a = new AttackEngine(this.getActivity());*/
-
+        AttackEngine a = new AttackEngine(this.getActivity());
+        a.printObjectsOwned();
+        System.out.println("attack 2");
+        a.attack();
+        a.printObjectsOwned();
+        System.out.println("attack 3");
+        a.attack();
+        a.printObjectsOwned();
         return V;
     }
 

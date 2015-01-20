@@ -32,25 +32,17 @@ public class AttackEngine {
         datasource.open();
         objectsOwned = datasource.getObjectCounts();
         datasource.close();
-        SharedPreferences sharedPrefs = a.getPreferences(Context.MODE_PRIVATE);
+        String pref_file_key = a.getString(R.string.preference_file_key);
+        SharedPreferences sharedPrefs = a.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
         //ask Andy, how do we access sharedpreferences, store 1 int, help
-        //int population = sharedPrefs.getInt("population", 1);
-
-        int population = 1;
+        int population = sharedPrefs.getInt("POPULATION", 1);
         objectsOwned[3] = population;
         System.out.println(Arrays.toString(objectsOwned));
-
-
     }
 
-
-
-    public int postAttack() {
-
-        return randomGen.nextInt(2880) + 2880;
-
+    public void printObjectsOwned(){
+        System.out.println(Arrays.toString(objectsOwned));
     }
-
 
 
     public int calculateAttackStrength() {
@@ -75,29 +67,51 @@ public class AttackEngine {
 
         int type = generateAttackType();
 
-        double fortsOwned = (double)objectsOwned[3];
+        System.out.println("Doing " + percentage + " damage to " + attackTypeArray[type]);
 
-        if (type == 3) {
+        double fortsOwned = (double)objectsOwned[1];
+
+        //forts reduce damage done by all types of attacks except those that specifically target forts
+
+        if (type == 1) {
 
             fortsOwned = fortsOwned - (fortsOwned * percentage);
 
-            objectsOwned[3] = (int)fortsOwned;
+            //rounding down ensures that you always lose at least one fort per fort attack
+
+            objectsOwned[1] = (int)fortsOwned;
 
         }
 
         else {
 
-            System.out.println(percentage);
+            System.out.println("Attacking non fort to do " + percentage);
 
             percentage = percentage - (percentage * (fortsOwned / 10));
 
-            System.out.println(percentage + "here");
+            System.out.println("Reduced percentage " + percentage);
 
-            double shitOwned = (double)objectsOwned[type];
 
-            shitOwned = shitOwned - (shitOwned * percentage);
+            double itemDamaged = (double)objectsOwned[type];
+            System.out.println("Item damaged" + itemDamaged);
 
-            objectsOwned[type] = (int)shitOwned;
+            itemDamaged = itemDamaged - (itemDamaged * percentage);
+            System.out.println("Item damaged after attack " + itemDamaged);
+
+            //population must be at least 1
+            if (type == 3){
+                if ((int)itemDamaged == 0){
+                    itemDamaged = 1;
+                }
+            }
+            //it's not possible to have negative farms, forts, or houses
+            else{
+                if ((int)itemDamaged < 0){
+                    itemDamaged = 0;
+                }
+            }
+
+            objectsOwned[type] = (int)itemDamaged;
 
         }
 
