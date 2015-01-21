@@ -4,25 +4,32 @@
     android:layout_height="match_parent"
     tools:context="com.cs400.gamifyhealth.GameFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <SurfaceView
+        <GridLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:id="@+id/surfaceView" />
+            android:columnCount="10"
+            android:rowCount="13"
+            android:id="@+id/map"
+            android:background="@drawable/map">
+
+
+
+        </GridLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="#ffaaaaaa"
-            android:layout_weight="10">
+            android:layout_weight="10"
+            android:id="@+id/relative_layout">
 
             <Button
                 android:layout_width="wrap_content"
@@ -53,7 +60,6 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="2dp" />
         </RelativeLayout>
-
     </LinearLayout>
 
 </FrameLayout>

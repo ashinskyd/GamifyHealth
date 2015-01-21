@@ -106,6 +106,7 @@ public class AttackService extends Service {
         }
         msg.what = 0;
         mServiceHandler.sendMessage(msg);
+        Log.d("TAG","NEXT ATTACK IN :"+msg.arg1/60000);
         return START_STICKY;
     }
 

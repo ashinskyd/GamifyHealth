@@ -1,5 +1,6 @@
 package com.cs400.gamifyhealth;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -13,7 +14,11 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -21,6 +26,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.Space;
+
+import org.xmlpull.v1.XmlPullParser;
 
 
 //TODO: how do we curtail calls to the database??
@@ -89,34 +98,30 @@ public class GameFragment extends Fragment {
         System.out.println("attack 3");
         a.attack();
         a.printObjectsOwned();
-        final SurfaceView surface = (SurfaceView) V.findViewById(R.id.surfaceView);
-        surface.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                Canvas canvas = surfaceHolder.lockCanvas();
-                Rect dest = new Rect(0, 0, surface.getWidth(), surface.getHeight());
-                canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.map), null, dest, new Paint());
-                surfaceHolder.unlockCanvasAndPost(canvas);
-            }
+        GridLayout mGrid = (GridLayout) V.findViewById(R.id.map);
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        final float scale = getActivity().getResources().getDisplayMetrics().density;
+        int h = (int)(40 * scale);
+        int c = -1;
+        for (int i=0;i<(10*13);i++) {
+                c+=1;
+                final Button space = new Button(getActivity());
+                //final Space space2 = new Space(getActivity());
+                space.setTag("space_" +c);
 
-            @Override
-            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
-                Log.d("TAG","CHANGED!");
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-
-
-            }
-
-        });
-        surface.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return false;
-            }
-        });
+                space.setBackgroundColor(Color.TRANSPARENT);
+                //space2.setLayoutParams(new ViewGroup.LayoutParams(h,h));
+                space.setLayoutParams(new ViewGroup.LayoutParams(h,h));
+                space.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        Log.d("TAG", "SPACED CLICKED! " + space.getTag().toString());
+                        space.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
+                        return false;
+                    }
+                });
+                 mGrid.addView(space,c);
+        }
         return V;
     }
 
