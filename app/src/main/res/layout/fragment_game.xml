@@ -63,7 +63,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/button"
+                android:id="@+id/wheat_button"
                 android:background="@drawable/wheat_button"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/cottage_button"
-                android:id="@+id/button2"
+                android:id="@+id/cottage_store_button"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="2dp" />

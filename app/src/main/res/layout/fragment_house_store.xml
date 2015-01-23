@@ -10,18 +10,11 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
+        <ListView
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="90">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Buy House"
-                android:id="@+id/buy_button" />
-        </LinearLayout>
+            android:layout_weight="90"
+            android:id="@+id/store_listView" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -33,7 +26,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/button"
+                android:id="@+id/wheat_store_button"
                 android:background="@drawable/wheat_button"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
@@ -42,8 +35,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/cottage_button"
-                android:id="@+id/button2"
+                android:background="@drawable/cottage_button2"
+                android:id="@+id/cottage_store_button"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="2dp" />
@@ -52,17 +45,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/sword_button"
-
-                android:id="@+id/button3"
+                android:id="@+id/sword_button"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="2dp" />
         </RelativeLayout>
 
+
     </LinearLayout>
-
-
 
 
 </FrameLayout>

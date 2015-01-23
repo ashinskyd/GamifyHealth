@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:background="@drawable/sword" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLACEHOLDER"
+        android:id="@+id/description"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="70"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5000"
+        android:layout_gravity="center_vertical|right"
+        android:id="@+id/textView2"
+        android:autoText="false"
+        android:textSize="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="#ff4b5dff" />
+</LinearLayout>

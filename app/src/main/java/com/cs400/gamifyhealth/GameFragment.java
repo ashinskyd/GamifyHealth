@@ -82,14 +82,13 @@ public class GameFragment extends Fragment {
         }else{
             store = false;
         }
-        houseStore = (Button) V.findViewById(R.id.button2);
+        houseStore = (Button) V.findViewById(R.id.cottage_store_button);
         houseStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction;
                 HouseStoreFragment houseStoreFragment = new HouseStoreFragment();
                 transaction = getFragmentManager().beginTransaction();
-                mListener.onFragmentInteraction(0);
                 transaction.replace(R.id.content_frame, houseStoreFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -97,6 +96,7 @@ public class GameFragment extends Fragment {
         });
         //tester code: shared preferences isn't quite working as intended yet
         //ideally, should store a population in sharedpreferences with key "population" and value 1 to represent initial population IF
+
         AttackEngine a = new AttackEngine(this.getActivity());
         a.printObjectsOwned();
         System.out.println("attack 2");
@@ -105,6 +105,7 @@ public class GameFragment extends Fragment {
         System.out.println("attack 3");
         a.attack();
         a.printObjectsOwned();
+
         GridLayout mGrid = (GridLayout) V.findViewById(R.id.map);
         DisplayMetrics dm = getResources().getDisplayMetrics();
         final float scale = getActivity().getResources().getDisplayMetrics().density;
@@ -115,7 +116,6 @@ public class GameFragment extends Fragment {
                 final Button space = new Button(getActivity());
                 //final Space space2 = new Space(getActivity());
                 space.setTag("space_" +c);
-
                 space.setBackgroundColor(Color.TRANSPARENT);
                 //space2.setLayoutParams(new ViewGroup.LayoutParams(h,h));
                 space.setLayoutParams(new ViewGroup.LayoutParams(h,h));
