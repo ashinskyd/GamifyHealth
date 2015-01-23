@@ -75,6 +75,13 @@ public class GameFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_game, container, false);
+        Boolean store;
+        Bundle b = getArguments();
+        if (b!=null){
+            store = true;
+        }else{
+            store = false;
+        }
         houseStore = (Button) V.findViewById(R.id.button2);
         houseStore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,14 +119,19 @@ public class GameFragment extends Fragment {
                 space.setBackgroundColor(Color.TRANSPARENT);
                 //space2.setLayoutParams(new ViewGroup.LayoutParams(h,h));
                 space.setLayoutParams(new ViewGroup.LayoutParams(h,h));
-                space.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        Log.d("TAG", "SPACED CLICKED! " + space.getTag().toString());
-                        space.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
-                        return false;
-                    }
-                });
+                if (store == true){
+                    space.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            Log.d("TAG", "SPACED CLICKED! " + space.getTag().toString());
+                            space.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
+                            //TODO: Add the touched coordinates to the DB
+                            //REdraw/relaunch fragment from navdrawer
+                            mListener.onFragmentInteraction(0);
+                            return false;
+                        }
+                    });
+                }
                  mGrid.addView(space,c);
         }
         return V;

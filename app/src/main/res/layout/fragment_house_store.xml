@@ -10,13 +10,18 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <TableRow
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="90">
 
-        </TableRow>
-
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Buy House"
+                android:id="@+id/buy_button" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"

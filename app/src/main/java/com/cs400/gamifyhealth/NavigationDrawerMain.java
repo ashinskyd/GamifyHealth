@@ -140,6 +140,11 @@ public class NavigationDrawerMain extends FragmentActivity implements HouseStore
 
     @Override
     public void onFragmentInteraction(int i) {
-        Log.d("TAG","INTEGER: "+i);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        GameFragment gameFragment = new GameFragment();
+        transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, gameFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
