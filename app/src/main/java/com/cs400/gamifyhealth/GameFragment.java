@@ -31,6 +31,8 @@ import android.widget.Space;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import java.net.URI;
+
 
 //TODO: how do we curtail calls to the database??
 
@@ -41,7 +43,7 @@ public class GameFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
     private Button houseStore;
@@ -75,14 +77,17 @@ public class GameFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_game, container, false);
-        Boolean store;
+        getActivity().getActionBar().setTitle("Game Page");
+        Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
         Bundle b = getArguments();
-        if (b!=null){
+        if (b!=null && b.getBoolean("HOUSE_STORE")){
             store = true;
         }else{
             store = false;
         }
-        houseStore = (Button) V.findViewById(R.id.cottage_store_button);
+
+        //If we click the houseStore icon, we launch the store
+        houseStore = (Button) V.findViewById(R.id.cottage_button);
         houseStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,52 +112,48 @@ public class GameFragment extends Fragment {
         a.printObjectsOwned();
 
         GridLayout mGrid = (GridLayout) V.findViewById(R.id.map);
+
+        //Convert the screen size into a scale for calculating dp
         DisplayMetrics dm = getResources().getDisplayMetrics();
         final float scale = getActivity().getResources().getDisplayMetrics().density;
+
+        //Here is where we will change the tile size based on zoom level. Current is hardcoded to 40
         int h = (int)(40 * scale);
         int c = -1;
         for (int i=0;i<(10*13);i++) {
                 c+=1;
-                final Button space = new Button(getActivity());
-                //final Space space2 = new Space(getActivity());
-                space.setTag("space_" +c);
-                space.setBackgroundColor(Color.TRANSPARENT);
+                final Button tileIcon = new Button(getActivity());
+                tileIcon.setTag("space_" +c);
+                tileIcon.setBackgroundColor(Color.TRANSPARENT);
                 //space2.setLayoutParams(new ViewGroup.LayoutParams(h,h));
-                space.setLayoutParams(new ViewGroup.LayoutParams(h,h));
+                tileIcon.setLayoutParams(new ViewGroup.LayoutParams(h,h));
+            //upon a tile being clicked, if we came from the store, we just se the
                 if (store == true){
-                    space.setOnTouchListener(new View.OnTouchListener() {
+                    tileIcon.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View view, MotionEvent motionEvent) {
-                            Log.d("TAG", "SPACED CLICKED! " + space.getTag().toString());
-                            space.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
+                            tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
                             //TODO: Add the touched coordinates to the DB
                             //REdraw/relaunch fragment from navdrawer
-                            mListener.onFragmentInteraction(0);
+                            //TODO: This will not be called. We will just do a DB update
                             return false;
                         }
                     });
                 }
-                 mGrid.addView(space,c);
+                 mGrid.addView(tileIcon,c);
         }
         return V;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(0);
-        }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
+        /*try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
+        }*/
     }
 
     @Override
@@ -163,7 +164,7 @@ public class GameFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(int i);
+        public void onFragmentInteraction(URI i);
     }
 
 }

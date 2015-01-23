@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/cottage_button"
-                android:id="@+id/cottage_store_button"
+                android:id="@+id/cottage_button"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="2dp" />
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/sword_button"
 
-                android:id="@+id/button3"
+                android:id="@+id/sword_button"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="20dp"

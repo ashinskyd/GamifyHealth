@@ -12,17 +12,27 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class NavigationDrawerMain extends FragmentActivity implements HouseStoreFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, DataEntryFragment.OnFragmentInteractionListener, EditActivitySetFragment.OnFragmentInteractionListener {
+
+public class NavigationDrawerMain extends FragmentActivity implements DataEntryFragment.OnFragmentInteractionListener, EditActivitySetFragment.OnFragmentInteractionListener {
     private String[] itemTitles;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -49,10 +59,12 @@ public class NavigationDrawerMain extends FragmentActivity implements HouseStore
         itemTitles[1] = "Workout Entry";
         itemTitles[2] = "Edit Activities";
         setTitle("Gamify your Health");
+        ArrayList<String> itemTitles2 = new ArrayList<String>(Arrays.asList(itemTitles));
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerListView = (ListView) findViewById(R.id.left_drawer);
         mFrame = (FrameLayout) findViewById(R.id.content_frame);
-        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, itemTitles);
+        //ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this,R.layout.simple_list_item, itemTitles);
+        NavDrawerAdapter mAdapter = new NavDrawerAdapter(this,R.layout.simple_list_item,itemTitles2);
         mDrawerListView.setAdapter(mAdapter);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -137,14 +149,42 @@ public class NavigationDrawerMain extends FragmentActivity implements HouseStore
         return;
     }
 
+    private class NavDrawerAdapter extends BaseAdapter {
+        private ArrayList<String> mList;
+        private ImageView mImage;
+        private TextView mText;
+        private Context context;
 
-    @Override
-    public void onFragmentInteraction(int i) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        GameFragment gameFragment = new GameFragment();
-        transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, gameFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        public NavDrawerAdapter(Context context, int textViewResourceId, ArrayList<String> titles) {
+            context = context;
+            mList = titles;
+        }
+
+        @Override
+        public int getCount() {
+            return mList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater mInflater = LayoutInflater.from(getApplicationContext());
+                convertView = mInflater.inflate(R.layout.simple_list_item, null);
+            }
+            mText = (TextView) convertView.findViewById(R.id.navdrawer_item);
+            mText.setText(mList.get(position));
+            return convertView;
+        }
     }
+
 }

@@ -70,7 +70,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_data_entry, container, false);
-        getActivity().setTitle("Workout Entry");
+        getActivity().getActionBar().setTitle("Workout Entry");
         currentLevel = new HashMap<String, Integer>();
         activityList = new ArrayList<String>();
         sharedPrefs = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);

@@ -18,6 +18,12 @@ public class WelcomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        boolean started = sharedPrefs.getBoolean("SERVICE_STARTED",false);
+        if (started){
+            Intent intent = new Intent(this, NavigationDrawerMain.class);
+            startActivity(intent);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         continueButton = (Button) findViewById(R.id.continueButton);
@@ -53,7 +59,6 @@ public class WelcomeActivity extends Activity {
         datasource.getObjectCounts();
         datasource.close();
         int iPop = 2;
-        SharedPreferences sharedPrefs = this.getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putInt("POPULATION", iPop);
         editor.commit();

@@ -73,7 +73,7 @@ public class EditActivitySetFragment extends Fragment {
                              Bundle savedInstanceState) {
         activityItems = new ArrayList<ActivityModel>();
         View V = inflater.inflate(R.layout.fragment_edit_activity_set, container, false);
-        getActivity().setTitle("Edit Activities");
+        getActivity().getActionBar().setTitle("Edit Activities");
         SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         String s = sharedPref.getString("ACTIVITIES", null);

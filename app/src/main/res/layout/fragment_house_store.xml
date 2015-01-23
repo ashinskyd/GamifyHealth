@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.cs400.gamifyhealth.GameFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:orientation="vertical"
@@ -26,7 +25,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/wheat_store_button"
+                android:id="@+id/wheat_button"
                 android:background="@drawable/wheat_button"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
@@ -36,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/cottage_button2"
-                android:id="@+id/cottage_store_button"
+                android:id="@+id/cottage_button"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="2dp" />

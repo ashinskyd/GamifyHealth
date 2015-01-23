@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -57,12 +58,13 @@ public class HouseStoreFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_house_store, container, false);
+        getActivity().getActionBar().setTitle("Purchase Houses");
         ArrayList<String> housesArray = new ArrayList<String>();
         housesArray.add("Hut");
         housesArray.add("Yurt");
         housesArray.add("Townhouse");
         housesArray.add("Yuen Hsi's Mansion");
-        Button houseStore = (Button) V.findViewById(R.id.cottage_store_button);
+        Button houseStore = (Button) V.findViewById(R.id.cottage_button);
         houseStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,18 +79,35 @@ public class HouseStoreFragment extends Fragment {
         ListView houseListView = (ListView) V.findViewById(R.id.store_listView);
         HouseArrayAdapter mAdapter = new HouseArrayAdapter(getActivity(),R.layout.store_custom_row_item, housesArray);
         houseListView.setAdapter(mAdapter);
+        houseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("HOUSE_STORE",true);
+                FragmentTransaction transaction;
+                GameFragment gameFragment = new GameFragment();
+                transaction = getFragmentManager().beginTransaction();
+                gameFragment.setArguments(bundle);
+                transaction.replace(R.id.content_frame, gameFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+
+        });
         return V;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
+       /* try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        */
     }
 
     @Override
@@ -97,16 +116,6 @@ public class HouseStoreFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(Uri uri);
     }
