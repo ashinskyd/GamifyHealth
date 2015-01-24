@@ -56,7 +56,7 @@ public class DBConnection{
         this.database.execSQL("drop table if exists goals");
         this.database.execSQL("drop table if exists objects");
         this.database.execSQL("create table workout( date text not null, name text not null, time int, distance int, rate int, reps int, type text not null);");
-        this.database.execSQL("create table objects( type text not null, xposition int, yposition int);");
+        this.database.execSQL("create table objects( type text not null, xposition int, yposition int, name text not null);");
         this.database.execSQL("create table goals( startDate text not null, name text not null, type text not null, startUnit int, goalUnit int, currentWeek int, currentWeekGoal int, duration int);");
     }
     //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)
@@ -76,11 +76,12 @@ public class DBConnection{
 
     //object table scheme: type, xposition, yposition
     //valid types = "farm, fort, house" USE THESE WORDS EXACTLY
-    public void insertObject(String type, int x, int y){
+    public void insertObject(String type, int x, int y, String name){
         ContentValues values = new ContentValues();
         values.put("type", type);
         values.put("xposition", x);
         values.put("yposition", y);
+        values.put("name", name);
         database.insert("objects", null,
                 values);
     }
@@ -207,10 +208,31 @@ public class DBConnection{
         System.out.println("GOAL NOT MET");
         return false;
     }
+    //returns a list of objects to owned to the game screen
+    //so the player's environment can be reproduced after the game is closed
+    public ArrayList<Building> getObjectsOwned(){
+        ArrayList<Building> blist = new ArrayList<Building>();
+        String[] allColumns = {"type","xposition", "yposition", "name"};
+        Cursor cursor = database.query("objects",
+                allColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String type = cursor.getString(0);
+            int xpos = cursor.getInt(1);
+            int ypos = cursor.getInt(2);
+            String name = cursor.getString(3);
+            Building b = new Building(type, xpos, ypos, name);
+            blist.add(b);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return blist;
+    }
 
     //object table scheme: type, xposition, yposition
     public void printObjectDB(){
-        String[] allColumns = {"type","xposition", "yposition"};
+        String[] allColumns = {"type","xposition", "yposition", "name"};
         Cursor cursor = database.query("objects",
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
@@ -218,7 +240,8 @@ public class DBConnection{
             System.out.println(
                     "type: " +  cursor.getString(0) +
                             " xpos: " + cursor.getInt(1) +
-                            " ypos: " + cursor.getInt(2));
+                            " ypos: " + cursor.getInt(2) +
+                             " name " + cursor.getString(3));
             cursor.moveToNext();
         }
         // make sure to close the cursor
@@ -227,11 +250,14 @@ public class DBConnection{
     }
     //make a call to the DB that returns player objects as an array of ints representing counts the order farms, forts, houses
     //then the 4th spot in the array becomes the population stored in shared prefs
+    //TODO: adjust this to compensate for different types of items of the same class
+    //for example yuen-hsi's mansion and a hut are both of type house
+
     public int[] getObjectCounts(){
         int farmCount = 0;
         int fortCount = 0;
         int houseCount = 0;
-        String[] allColumns = {"type","xposition", "yposition"};
+        String[] allColumns = {"type","xposition", "yposition", "name"};
         Cursor cursor = database.query("objects",
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
