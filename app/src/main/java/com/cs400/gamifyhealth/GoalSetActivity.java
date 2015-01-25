@@ -103,7 +103,6 @@ public class GoalSetActivity extends Activity {
                 }catch (ParseException e){
                     Log.d("TAG","Exception Caught");
                 }
-                datasource.printGoalDB();
                 datasource.close();
 
                 Intent i = new Intent(getApplicationContext(),NavigationDrawerMain.class);
