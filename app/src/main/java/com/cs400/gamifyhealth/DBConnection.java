@@ -50,7 +50,7 @@ public class DBConnection{
     }
 
 
-//redo later: change all to plural
+    //redo later: change all to plural
     public void createTables(){
         this.database.execSQL("drop table if exists workout");
         this.database.execSQL("drop table if exists goals");
@@ -88,7 +88,7 @@ public class DBConnection{
 
 
 
-//in order for this to work, we must prevent the user from adding to goals of the same name and type
+    //in order for this to work, we must prevent the user from adding to goals of the same name and type
     //ie no two goals of the same thing measuring the same thing at the same time
     public void removeGoal(Goal g){
         String command = "delete from goals where type = '" + g.type + "' and name = '" + g.name + "' ;";
@@ -241,12 +241,18 @@ public class DBConnection{
                     "type: " +  cursor.getString(0) +
                             " xpos: " + cursor.getInt(1) +
                             " ypos: " + cursor.getInt(2) +
-                             " name " + cursor.getString(3));
+                            " name " + cursor.getString(3));
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
 
+    }
+
+    //called by AttackEngine to update DB after an attack
+    public void removeObject(int x, int y){
+        String command = "delete from objects where xposition = " + x + " and yposition = " + y + " ;";
+        database.execSQL(command);
     }
     //make a call to the DB that returns player objects as an array of ints representing counts the order farms, forts, houses
     //then the 4th spot in the array becomes the population stored in shared prefs
@@ -289,6 +295,7 @@ public class DBConnection{
         return objects;
     }
 
+    //REMNANT TESTING CODE, REMOVE?
     //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)
     public void printGoalDB(){
         List<String> s = new ArrayList<String>();
@@ -299,23 +306,51 @@ public class DBConnection{
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             System.out.println(
-            "startDate: " +  cursor.getString(0) +
-            " name: " + cursor.getString(1) +
-            " type: " + cursor.getString(2) +
-            " startUnit: " + cursor.getInt(3) +
-            " goalUnit: " + cursor.getInt(4) +
-            " current Week: " + cursor.getInt(5) +
-            " currentWeekGoal: " + cursor.getInt(6) +
-            " duration: " + cursor.getInt(7) );
+                    "startDate: " +  cursor.getString(0) +
+                            " name: " + cursor.getString(1) +
+                            " type: " + cursor.getString(2) +
+                            " startUnit: " + cursor.getInt(3) +
+                            " goalUnit: " + cursor.getInt(4) +
+                            " current Week: " + cursor.getInt(5) +
+                            " currentWeekGoal: " + cursor.getInt(6) +
+                            " duration: " + cursor.getInt(7) );
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
 
     }
+    //method to get goals
+    //decide where this is called later
+    public ArrayList<Goal> getGoals(){
+        ArrayList<Goal> goalArrayList = new ArrayList<Goal>();
+        String[] allColumns = {"startDate","name", "type", "startUnit",
+                "goalUnit","currentWeek", "currentWeekGoal", "duration"};
+        Cursor cursor = database.query("goals",
+                allColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String startDate =   cursor.getString(0);
+            String  name =  cursor.getString(1);
+            String type =  cursor.getString(2);
+            int startUnit = cursor.getInt(3);
+            int GoalUnit = cursor.getInt(4);
+            int curWeek =  cursor.getInt(5);
+            int curWeekGoal = cursor.getInt(6);
+            int duration = cursor.getInt(7);
+            Goal g = new Goal(startDate, name, type, startUnit, GoalUnit, duration);
+            g.currentWeek = curWeek;
+            g.currentWeekGoal = curWeekGoal;
+            goalArrayList.add(g);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return goalArrayList;
+
+    }
 
     public void checkWorkoutDB() {
-        List<String> s = new ArrayList<String>();
         String[] allColumns = {W_DATE,W_NAME, W_TIME, W_DIST,
                 W_RAT, W_REP, W_TYPE};
         Cursor cursor = database.query(TABLE_2,
@@ -332,12 +367,12 @@ public class DBConnection{
             String type = cursor.getString(6);
             System.out.println(
                     "Date: " +  date +
-                    " Name: " + name +
-                   " Time: " + time +
-                    " Dist: " + dist +
-                    " Rate: " + rate +
-                     " Reps: " + rep +
-                       " Type: "  +  type);
+                            " Name: " + name +
+                            " Time: " + time +
+                            " Dist: " + dist +
+                            " Rate: " + rate +
+                            " Reps: " + rep +
+                            " Type: "  +  type);
             cursor.moveToNext();
         }
         // make sure to close the cursor

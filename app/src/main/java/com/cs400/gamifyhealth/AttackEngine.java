@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -22,9 +23,11 @@ public class AttackEngine {
     public Random randomGen;
     public String[] attackTypeArray;
     public int[] objectsOwned;
+    public Activity activity;
 
 
     public AttackEngine(Activity a){
+        this.activity = a;
         System.out.println("Attack engine doing something");
         randomGen = new Random();
         attackTypeArray = new String[] {"farms", "forts", "houses",  "people" };
@@ -59,9 +62,96 @@ public class AttackEngine {
 
     }
 
+    //called post-attack
+    public void updateDB(int farmsDestroyed, int fortsDestroyed, int housesDestroyed, int newPopulation){
+        System.out.println("I'm attempting damage");
+        System.out.println(farmsDestroyed + " " + fortsDestroyed + " " + housesDestroyed);
+        DBConnection datasource = new DBConnection(activity);
+        datasource.open();
+        ArrayList<Building> objectLocs = datasource.getObjectsOwned();
+        boolean farmsDone = true;
+        if (farmsDestroyed > 0){
+            farmsDone = false;
+        }
+        boolean fortsDone = true;
+        if (fortsDestroyed > 0){
+            fortsDone = false;
+        }
+        boolean housesDone = true;
+        if (housesDestroyed > 0){
+            housesDone = false;
+        }
+        int farm = 0;
+        int fort = 0;
+        int house = 0;
+        System.out.println(farmsDone);
+        System.out.println(fortsDone);
+        System.out.println(housesDone);
+        ArrayList<Building> toRemove = new ArrayList<Building>();
+        for (Building b: objectLocs){
+            if (farmsDone == false){
+                if (b.type.equals("farm")) {
+                    toRemove.add(b);
+                    farm++;
+                    if (farm == farmsDestroyed) {
+                        farmsDone = true;
+                    }
+                }
+
+            }
+            if (fortsDone == false){
+                if (b.type.equals("fort")) {
+                    toRemove.add(b);
+                    fort++;
+                    if (fort == fortsDestroyed) {
+                        fortsDone = true;
+                    }
+                }
+
+            }
+            if (housesDone == false){
+                if (b.type.equals("house")) {
+                    toRemove.add(b);
+                    house++;
+                    if (house == housesDestroyed) {
+                        housesDone = true;
+                    }
+                }
+
+            }
+            if (farmsDone && fortsDone && housesDone){
+                break;
+            }
+        }
+        System.out.println("I'm removing these buildings");
+        System.out.println(toRemove);
+        for (Building b: toRemove){
+            datasource.removeObject(b.xcoord, b.ycoord);
+        }
+        System.out.println("new object counts");
+        int[] test = datasource.getObjectCounts();
+        System.out.println(Arrays.toString(test));
+        datasource.close();
+
+        String pref_file_key = activity.getString(R.string.preference_file_key);
+        SharedPreferences sharedPrefs = activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = sharedPrefs.edit();
+        mEditor.putInt("POPULATION", newPopulation);
+        mEditor.commit();
+
+
+
+    }
+
 
 
     public void attack() {
+
+        int[] postAttack = new int[4];
+
+        for (int i = 0; i<4; i++){
+            postAttack[i] = objectsOwned[i];
+        }
 
         double percentage = (double)calculateAttackStrength() / 100;
 
@@ -79,7 +169,7 @@ public class AttackEngine {
 
             //rounding down ensures that you always lose at least one fort per fort attack
 
-            objectsOwned[1] = (int)fortsOwned;
+            postAttack[1] = (int)fortsOwned;
 
         }
 
@@ -111,7 +201,13 @@ public class AttackEngine {
                 }
             }
 
-            objectsOwned[type] = (int)itemDamaged;
+            postAttack[type] = (int)itemDamaged;
+            int farmsDamaged = objectsOwned[0] - postAttack[0];
+            int fortsDamaged = objectsOwned[1] - postAttack[1];
+            int housesDamaged = objectsOwned[2] - postAttack[2];
+            int newPopulation = postAttack[3];
+            this.updateDB(farmsDamaged, fortsDamaged, housesDamaged, newPopulation);
+            objectsOwned[type] = postAttack[type];
 
         }
 
