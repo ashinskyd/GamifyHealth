@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.Space;
+import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -85,6 +86,13 @@ public class GameFragment extends Fragment {
         }else{
             store = false;
         }
+
+        //Set the population counter
+        sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        int population = sharedPrefs.getInt("POPULATION",1);
+        TextView peopleCounter =(TextView) V.findViewById(R.id.people_counter);
+        peopleCounter.setText(population+" People");
+
 
         //If we click the houseStore icon, we launch the store
         houseStore = (Button) V.findViewById(R.id.cottage_button);
