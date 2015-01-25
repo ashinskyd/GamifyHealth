@@ -33,6 +33,7 @@ import android.widget.TextView;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 
 //TODO: how do we curtail calls to the database??
@@ -79,20 +80,15 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_game, container, false);
         getActivity().getActionBar().setTitle("Game Page");
-        Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
-        Bundle b = getArguments();
-        if (b!=null && b.getBoolean("HOUSE_STORE")){
-            store = true;
-        }else{
-            store = false;
-        }
-
         //Set the population counter
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         int population = sharedPrefs.getInt("POPULATION",1);
         TextView peopleCounter =(TextView) V.findViewById(R.id.people_counter);
         peopleCounter.setText(population+" People");
 
+        int credits = sharedPrefs.getInt("CREDITS",1);
+        TextView creditCounter = (TextView) V.findViewById(R.id.credit_counter);
+        creditCounter.setText(credits+" Credits");
 
         //If we click the houseStore icon, we launch the store
         houseStore = (Button) V.findViewById(R.id.cottage_button);
@@ -110,45 +106,71 @@ public class GameFragment extends Fragment {
         //tester code: shared preferences isn't quite working as intended yet
         //ideally, should store a population in sharedpreferences with key "population" and value 1 to represent initial population IF
 
-        AttackEngine a = new AttackEngine(this.getActivity());
+/*        AttackEngine a = new AttackEngine(this.getActivity());
         a.printObjectsOwned();
         System.out.println("attack 1");
         a.attack();
         System.out.println("objects according to attack engine");
         a.printObjectsOwned();
         System.out.println("objects according to db");
-        GridLayout mGrid = (GridLayout) V.findViewById(R.id.map);
+  */
+        inflateMap(V);
+        return V;
+    }
 
-        //Convert the screen size into a scale for calculating dp
+    private void inflateMap(View v) {
+        Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
+        Bundle b = getArguments();
+        if (b!=null && b.getBoolean("HOUSE_STORE")){
+            store = true;
+        }else{
+            store = false;
+        }
         DisplayMetrics dm = getResources().getDisplayMetrics();
         final float scale = getActivity().getResources().getDisplayMetrics().density;
-
+        final GridLayout mGrid = (GridLayout) v.findViewById(R.id.map);
         //Here is where we will change the tile size based on zoom level. Current is hardcoded to 40
         int h = (int)(40 * scale);
         int c = -1;
-        for (int i=0;i<(10*13);i++) {
-                c+=1;
-                final Button tileIcon = new Button(getActivity());
-                tileIcon.setTag("space_" +c);
-                tileIcon.setBackgroundColor(Color.TRANSPARENT);
-                //space2.setLayoutParams(new ViewGroup.LayoutParams(h,h));
-                tileIcon.setLayoutParams(new ViewGroup.LayoutParams(h,h));
-            //upon a tile being clicked, if we came from the store, we just se the
-                if (store == true){
-                    tileIcon.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {
-                            tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
-                            //TODO: Add the touched coordinates to the DB
-                            //REdraw/relaunch fragment from navdrawer
-                            //TODO: This will not be called. We will just do a DB update
-                            return false;
-                        }
-                    });
-                }
-                 mGrid.addView(tileIcon,c);
+        final DBConnection dataSource = new DBConnection(getActivity());
+        dataSource.open();
+        ArrayList<Building> buildings = dataSource.getObjectsOwned();
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        for (Building building: buildings){
+            int index = (building.xcoord * mGrid.getRowCount()) + building.ycoord;
+            final Button tileIcon = new Button(getActivity());
+            indices.add(index);
         }
-        return V;
+        for (int i=0;i<(10*13);i++) {
+            c+=1;
+            final Button tileIcon = new Button(getActivity());
+            tileIcon.setTag("space_" +c);
+            if (indices.contains(c)){
+                tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
+            }else{
+                tileIcon.setBackgroundColor(Color.TRANSPARENT);
+            }
+            tileIcon.setLayoutParams(new ViewGroup.LayoutParams(h,h));
+            //upon a tile being clicked, if we came from the store, we just se the
+            if (store == true){
+                if (!indices.contains(c)){
+                    final int d = c;
+                    tileIcon.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int xCoord = d/13;
+                            int yCoord = d%10;
+                            tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
+                            dataSource.insertObject("Farm",xCoord,yCoord,"Default");
+
+                        }
+                    }) ;
+                }
+            }
+            mGrid.addView(tileIcon,c);
+        }
+
+
     }
 
     @Override
