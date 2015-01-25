@@ -15,13 +15,14 @@ public class CreditEngine {
 
     public int coins;
     public Activity activity;
+    public SharedPreferences sp;
 
     public CreditEngine(Activity a){
         //get credits/coins from sharedprefs
         this.activity = a;
         String pref_file_key = a.getString(R.string.preference_file_key);
-        SharedPreferences sharedPrefs = a.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
-        coins = sharedPrefs.getInt("CREDITS", 1);
+        sp = a.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
+        coins = sp.getInt("CREDITS", 1);
     }
 
 
@@ -29,6 +30,16 @@ public class CreditEngine {
     public void updateCredits(Goal g){
         int creditsEarned = g.duration * 10;
         coins = coins + creditsEarned;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("CREDITS", coins);
+        editor.commit();
+
+    }
+
+    public void postWorkout(){
+        coins = coins + 10;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("CREDITS", coins);
     }
 
 

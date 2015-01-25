@@ -109,8 +109,6 @@ public class GameFragment extends Fragment {
         System.out.println("objects according to attack engine");
         a.printObjectsOwned();
         System.out.println("objects according to db");
-        //DBConnection datasource = new DBConnection(this.getActivity());
-        //datasource.getObjectCounts();
         GridLayout mGrid = (GridLayout) V.findViewById(R.id.map);
 
         //Convert the screen size into a scale for calculating dp

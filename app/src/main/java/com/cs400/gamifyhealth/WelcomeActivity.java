@@ -64,6 +64,7 @@ public class WelcomeActivity extends Activity {
         int iPop = 2;
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putInt("POPULATION", iPop);
+        editor.putInt("CREDITS", 100);
         editor.commit();
 
 
