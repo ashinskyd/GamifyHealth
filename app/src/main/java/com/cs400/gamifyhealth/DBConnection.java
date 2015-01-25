@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.*;
+import android.util.Pair;
 
 
 import java.text.ParseException;
@@ -128,7 +129,10 @@ public class DBConnection{
                 values);
     }
 
-    public boolean checkGoal(Goal g)throws ParseException{
+    //returns a pair of booleans
+    //first is the weekly goal met?
+    //second is the goal completed?
+    public boolean[] checkGoal(Goal g)throws ParseException{
         String[] allColumns = {W_DATE,W_NAME, W_TIME, W_DIST,
                 W_RAT, W_REP, W_TYPE};
         int cursorChecks = 0;
@@ -190,7 +194,7 @@ public class DBConnection{
         cur.close();
         System.out.println("sum " + sum);
         System.out.println(" count" + count);
-
+        boolean weeklygoalmet = false;
         //if rate, get the average rate
         if (t.equals("DTA-R")){
             sum = sum/count;
@@ -198,16 +202,26 @@ public class DBConnection{
         //if the goal is not measured in minutes per mile, the goal is met when the weekly total >= the goal
         if ((sum >= goal)&& (!t.equals("DTA-R"))){
             System.out.println("goal met");
-            return true;
+            weeklygoalmet = true;
         }
         //if the goal is a rate goal, measured in minutes per mile, then the goal is met when minute/mile <= goal
         if ((sum <= goal)&& (t.equals("DTA-R"))){
             System.out.println("goal met");
-            return true;
+            weeklygoalmet = true;
         }
         System.out.println("GOAL NOT MET");
-        return false;
+        boolean goalmet = false;
+        if (weeklygoalmet){
+            if (g.duration == g.currentWeek){
+                weeklygoalmet = true;
+            }
+        }
+        boolean[] b = new boolean[2];
+        b[0] = weeklygoalmet;
+        b[1] = goalmet;
+        return b;
     }
+
     //returns a list of objects to owned to the game screen
     //so the player's environment can be reproduced after the game is closed
     public ArrayList<Building> getObjectsOwned(){
