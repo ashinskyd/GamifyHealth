@@ -11,10 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -37,6 +44,11 @@ public class EditActivitySetFragment extends Fragment {
     private String mParam2;
     private ArrayList<ActivityModel> activityItems;
     private OnFragmentInteractionListener mListener;
+    private Button continueButton;
+    private ArrayList<String> orignalSet;
+    private ArrayList<String> addSet;
+    private ArrayList<String> removeSet;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -73,10 +85,58 @@ public class EditActivitySetFragment extends Fragment {
                              Bundle savedInstanceState) {
         activityItems = new ArrayList<ActivityModel>();
         View V = inflater.inflate(R.layout.fragment_edit_activity_set, container, false);
+
+        //Pulls the original activity set stored in sharedprefs
+        orignalSet = new ArrayList<String>();
+        removeSet = new ArrayList<String>();
+        addSet = new ArrayList<String>();
+
         getActivity().getActionBar().setTitle("Edit Activities");
+        continueButton = (Button) V.findViewById(R.id.continueButton2);
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                StringBuilder sb = new StringBuilder();
+                List<String> repArray;
+                List<String> dtaArray;
+                repArray = Arrays.asList(getString(R.string.activity_types_REP).split(","));
+                dtaArray = Arrays.asList(getString(R.string.activity_types_DTA).split(","));
+                for (int j = 0; j < activityItems.size(); j++) {
+                    if (activityItems.get(j).getIsChecked()) {
+                        if(repArray.contains(activityItems.get(j).getName())){
+                            sb.append(activityItems.get(j).getName()).append("_REP").append(",");
+
+                        }else if(dtaArray.contains(activityItems.get(j).getName())){
+                            if(activityItems.get(j).getName().contains("Time")){
+                                sb.append(activityItems.get(j).getName()).append("_DTA-T").append(",");
+                            }else{
+                                sb.append(activityItems.get(j).getName()).append("_DTA-D").append(",");
+                            }
+                        }else{
+                            sb.append(activityItems.get(j).getName()).append("_TIM").append(",");
+                        }
+                    }
+                }
+                for (int i=0;i<removeSet.size();i++){
+                    Log.d("TAG","ADDING: "+removeSet.get(i));
+                }
+                //editor.putString("ACTIVITIES",sb.toString());
+                //editor.commit();
+            }
+        });
         SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         String s = sharedPref.getString("ACTIVITIES", null);
+
+        String[] temp = s.split(",");
+        for (int i=0;i<temp.length;i++){
+            String temp2 = temp[i].split("_")[0];
+            orignalSet.add(temp2);
+            Log.d("TAG","SET: "+temp2);
+        }
+
         activityItems.add(new ActivityModel("Running (Time)", s.contains("Running (Time)")));
         activityItems.add(new ActivityModel("Running (Distance)", s.contains("Running (Distance)")));
         activityItems.add(new ActivityModel("Swimming (Time)",s.contains("Swimming (Time)")));
@@ -98,15 +158,6 @@ public class EditActivitySetFragment extends Fragment {
 
         return V;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-
 
     @Override
     public void onDetach() {
@@ -145,7 +196,15 @@ public class EditActivitySetFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     activityItems.get(position).setChecked(cb.isChecked());
-
+                    if (cb.isChecked()&& !orignalSet.contains(activityItems.get(position).getName())){
+                        addSet.add(activityItems.get(position).getName());
+                    }else if (!cb.isChecked() && orignalSet.contains(activityItems.get(position).getName())){
+                        removeSet.add(activityItems.get(position).getName());
+                    }else if (!cb.isChecked()&& !orignalSet.contains(activityItems.get(position).getName())){
+                        addSet.remove(activityItems.get(position).getName());
+                    }else if (cb.isChecked()&& orignalSet.contains(activityItems.get(position).getName())){
+                        removeSet.remove(activityItems.get(position).getName());
+                    }
                 }
             });
             return convertView;
