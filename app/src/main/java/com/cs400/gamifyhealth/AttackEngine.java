@@ -28,11 +28,10 @@ public class AttackEngine {
     private DBConnection datasource;
 
 
-    public AttackEngine(Activity a){
-        this.activity = a;
+    public AttackEngine(DBConnection d){
         System.out.println("Attack engine doing something");
         randomGen = new Random();
-        datasource = new DBConnection(this.activity);
+        datasource = d;
 
     }
 

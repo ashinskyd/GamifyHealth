@@ -89,7 +89,7 @@ public class GameFragment extends Fragment {
         //Set the population counter
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
-        AttackEngine a = new AttackEngine(this.getActivity());
+        AttackEngine a = new AttackEngine(dataSource);
         for (int i=0;i<attacks;i++){
             Log.d("TAG","ATTACKED GEN");
             a.attack();
