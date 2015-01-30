@@ -1,7 +1,9 @@
 package com.cs400.gamifyhealth;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -96,34 +98,57 @@ public class EditActivitySetFragment extends Fragment {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                StringBuilder sb = new StringBuilder();
-                List<String> repArray;
-                List<String> dtaArray;
-                repArray = Arrays.asList(getString(R.string.activity_types_REP).split(","));
-                dtaArray = Arrays.asList(getString(R.string.activity_types_DTA).split(","));
-                for (int j = 0; j < activityItems.size(); j++) {
-                    if (activityItems.get(j).getIsChecked()) {
-                        if(repArray.contains(activityItems.get(j).getName())){
-                            sb.append(activityItems.get(j).getName()).append("_REP").append(",");
-
-                        }else if(dtaArray.contains(activityItems.get(j).getName())){
-                            if(activityItems.get(j).getName().contains("Time")){
-                                sb.append(activityItems.get(j).getName()).append("_DTA-T").append(",");
+                if (removeSet.size()!=0) {
+                    SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sb2 = new StringBuilder();
+                    //Get the remove set activities, add only activities which aren't in removeset to sharedprefs
+                    List<String> activities = Arrays.asList(sharedPref.getString("ACTIVITIES", "").split(","));
+                    List<String> currentLevel = Arrays.asList(sharedPref.getString("Activity_Prelim_Levels", "").split(","));
+                    ArrayList<String> currentLevelSet = new ArrayList<String>();
+                    ArrayList<String> activitySet = new ArrayList<String>();
+                    for (int i=0;i<activities.size();i++) {
+                        String temp = activities.get(i).split("_")[0];
+                        if (!removeSet.contains(temp)){
+                            activitySet.add(temp);
+                            currentLevelSet.add(currentLevel.get(i));
+                        }
+                    }
+                    List<String> repArray;
+                    List<String> dtaArray;
+                    repArray = Arrays.asList(getString(R.string.activity_types_REP).split(","));
+                    dtaArray = Arrays.asList(getString(R.string.activity_types_DTA).split(","));
+                    for (int j = 0; j < activitySet.size(); j++) {
+                        sb2.append(currentLevelSet.get(j).concat(","));
+                        if(repArray.contains(activitySet.get(j))){
+                            sb.append(activitySet.get(j).concat("_REP").concat(","));
+                        }else if(dtaArray.contains(activitySet.get(j))){
+                            if(activitySet.get(j).contains("Time")){
+                                sb.append(activitySet.get(j).concat("_DTA-T").concat(","));
                             }else{
-                                sb.append(activityItems.get(j).getName()).append("_DTA-D").append(",");
+                                sb.append(activitySet.get(j).concat("_DTA-D").concat(","));
                             }
                         }else{
                             sb.append(activityItems.get(j).getName()).append("_TIM").append(",");
                         }
+
                     }
+                    editor.putString("ACTIVITIES", sb.toString());
+                    editor.putString("Activity_Prelim_Levels", sb2.toString());
+                    editor.commit();
+                    //TODO: itterate through the remove set and remove the activities from the Goal DB?
                 }
-                for (int i=0;i<removeSet.size();i++){
-                    Log.d("TAG","ADDING: "+removeSet.get(i));
+                if (addSet.size()!=0){
+                    Bundle b = new Bundle();
+                    b.putStringArrayList("AddSet",addSet);
+                    FragmentTransaction transaction;
+                    NewCurrentLevelActivity NewCurrentLevelActivity = new NewCurrentLevelActivity();
+                    transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_frame, NewCurrentLevelActivity);
+                    NewCurrentLevelActivity.setArguments(b);
+                    transaction.commit();
                 }
-                //editor.putString("ACTIVITIES",sb.toString());
-                //editor.commit();
             }
         });
         SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -134,7 +159,6 @@ public class EditActivitySetFragment extends Fragment {
         for (int i=0;i<temp.length;i++){
             String temp2 = temp[i].split("_")[0];
             orignalSet.add(temp2);
-            Log.d("TAG","SET: "+temp2);
         }
 
         activityItems.add(new ActivityModel("Running (Time)", s.contains("Running (Time)")));
@@ -165,16 +189,7 @@ public class EditActivitySetFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(Uri uri);
     }
