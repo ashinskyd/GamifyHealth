@@ -2,6 +2,7 @@ package com.cs400.gamifyhealth;
 
 
 
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -86,42 +88,17 @@ public class NewGoalSetFragment extends Fragment {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Goal> goalList = new ArrayList<Goal>();
-                ContentValues values = new ContentValues();
-                GregorianCalendar c = new GregorianCalendar();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String date = sdf.format(c.getTime());
-                for (int i=0;i<activitySet.size();i++){
-                    int goalTarget = goalLevelMap.get(activitySet.get(i));
-                    int goalDuration = Integer.parseInt(goalTimeEditTextMap.get(activitySet.get(i)).getText().toString());
-                    int startValue = activitySetLevels.get(i);
-                    String activity = activitySet.get(i);
-                    int indexOfSpace = activity.indexOf(" ");
-                    String activityName = activity;
-                    if (indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)=='('){
-                        activityName = activity.substring(0,indexOfSpace);
-                    }else if(indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)!='('){
-                        activityName = activity.split("_")[0];
-                    }else{
-                        activityName = activity.split("_")[0];
-                    }
-                    String activityType = activity.split("_")[1];
-                    Goal g = new Goal(date,activityName,activityType,startValue,goalTarget,goalDuration);
-                    goalList.add(g);
-                }
-                DBConnection datasource = new DBConnection(getActivity());
-                datasource.open();
-                try{
-                    for (Goal g: goalList){
-                        datasource.insertGoal(g);
-                    }
-                }catch (ParseException e){
-                    Log.d("TAG","Exception Caught");
-                }
-                datasource.close();
+                addNewGoals();
+
             }
         });
+        initActivitySets();
+        mAdapter = new SeekBarAdapter(getActivity(),R.layout.seekbar_row2,activitySet);
+        mListView.setAdapter(mAdapter);
+        return V;
+    }
 
+    private void initActivitySets() {
         String[] activitySetString = sharedPrefs.getString("ACTIVITIES",null).split(",");
         String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
         int j = 0;
@@ -129,16 +106,59 @@ public class NewGoalSetFragment extends Fragment {
             if (addSet.contains(activitySetString[i])){
                 activitySet.add(j, activitySetString[i]);
                 activitySetLevels.add(j,Integer.parseInt(activityStartValString[i]));
-                Log.d("TAG","LEVEL: "+sharedPrefs.getString("Activity_Prelim_Levels",null));
                 goalLevelMap.put(activitySetString[i],Integer.parseInt(activityStartValString[i]));
                 j++;
             }
 
         }
-        mAdapter = new SeekBarAdapter(getActivity(),R.layout.seekbar_row2,activitySet);
-        mListView.setAdapter(mAdapter);
-        return V;
     }
+
+    private void addNewGoals() {
+        ArrayList<Goal> goalList = new ArrayList<Goal>();
+        ContentValues values = new ContentValues();
+        GregorianCalendar c = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(c.getTime());
+        for (int i=0;i<activitySet.size();i++){
+            int goalTarget = goalLevelMap.get(activitySet.get(i));
+            int goalDuration = Integer.parseInt(goalTimeEditTextMap.get(activitySet.get(i)).getText().toString());
+            int startValue = activitySetLevels.get(i);
+            String activity = activitySet.get(i);
+            int indexOfSpace = activity.indexOf(" ");
+            String activityName = activity;
+            if (indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)=='('){
+                activityName = activity.substring(0,indexOfSpace);
+            }else if(indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)!='('){
+                activityName = activity.split("_")[0];
+            }else{
+                activityName = activity.split("_")[0];
+            }
+            String activityType = activity.split("_")[1];
+            Goal g = new Goal(date,activityName,activityType,startValue,goalTarget,goalDuration);
+            goalList.add(g);
+            CharSequence text = "ADDED ACTIVITY: "+activityName.split("_")[0];
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getActivity(), text, duration);
+            toast.show();
+        }
+        DBConnection datasource = new DBConnection(getActivity());
+        datasource.open();
+        try{
+            for (Goal g: goalList){
+                datasource.insertGoal(g);
+            }
+        }catch (ParseException e){
+            Log.d("TAG","Exception Caught");
+        }
+        datasource.close();
+        FragmentTransaction transaction;
+        GameFragment gameFragment = new GameFragment();
+        transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, gameFragment);
+        transaction.commit();
+
+    }
+
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
         public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList) {

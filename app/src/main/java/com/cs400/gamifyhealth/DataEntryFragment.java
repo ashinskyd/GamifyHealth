@@ -2,6 +2,7 @@ package com.cs400.gamifyhealth;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -88,7 +89,6 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
             //Adds the activity and the given level to our arrays
             currentLevel.put(activities[i],Integer.parseInt(activityStartValString[i]));
-            //TODO: Get rid of the Inter.parseInt, and just set to 0?
         }
         mListView = (ListView) V.findViewById(R.id.seekBarListView);
         mAdapter = new SeekBarAdapter(getActivity().getApplicationContext(),R.layout.seekbar_row,activityList);
@@ -166,6 +166,11 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
         }
         datasource.checkWorkoutDB();
         datasource.close();
+        FragmentTransaction transaction;
+        GameFragment gameFragment = new GameFragment();
+        transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, gameFragment);
+        transaction.commit();
     }
 
     @Override

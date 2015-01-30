@@ -39,6 +39,8 @@ public class NewCurrentLevelActivity extends Fragment {
     private SharedPreferences sharedPrefs;
     private Button continueButton;
     private SeekBarAdapter mAdapter;
+    private List<String> repArray;
+    private List<String> dtaArray;
 
     public static NewCurrentLevelActivity newInstance(String param1, String param2) {
         NewCurrentLevelActivity fragment = new NewCurrentLevelActivity();
@@ -75,39 +77,24 @@ public class NewCurrentLevelActivity extends Fragment {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                StringBuilder activities = new StringBuilder();
-                activities.append(sharedPrefs.getString("ACTIVITIES", ""));
-                StringBuilder preselectedCurrentLevels = new StringBuilder();
-                preselectedCurrentLevels.append(sharedPrefs.getString("Activity_Prelim_Levels",""));
-                //Log.d("TAG","Levels: "+preselectedCurrentLevels.toString());
-                for (String s: addSetCopy){
-                    activities.append(s).append(",");
-                    preselectedCurrentLevels.append(currentLevel.get(s)).append(",");
-                    Log.d("TAGE","HERE: "+preselectedCurrentLevels);
-                }
-                editor.putString("ACTIVITIES",activities.toString());
-                editor.putString("Activity_Prelim_Levels",preselectedCurrentLevels.toString());
-                editor.commit();
-                //Pass the goal set fragment our new activity set
-                Bundle b = new Bundle();
-                b.putStringArrayList("ADDED_ACTIVITIES",addSetCopy);
-                FragmentTransaction transaction;
-                NewGoalSetFragment goalSetFragment = new NewGoalSetFragment();
-                transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.content_frame, goalSetFragment);
-                goalSetFragment.setArguments(b);
-                transaction.commit();
+                addCurrentLevels();
 
             }
         });
+
         Bundle b = getArguments();
         addSet = b.getStringArrayList("AddSet");
         addSetCopy = new ArrayList<String>();
-        List<String> repArray;
-        List<String> dtaArray;
+
         repArray = Arrays.asList(getString(R.string.activity_types_REP).split(","));
         dtaArray = Arrays.asList(getString(R.string.activity_types_DTA).split(","));
+        initAddSet();
+        mAdapter = new SeekBarAdapter(getActivity(), R.layout.seekbar_row, addSetCopy);
+        mListView.setAdapter(mAdapter);
+        return V;
+    }
+
+    private void initAddSet() {
         for (String i : addSet) {
             if (repArray.contains(i)) {
                 currentLevel.put(i.concat("_REP"), 0);
@@ -125,9 +112,32 @@ public class NewCurrentLevelActivity extends Fragment {
                 addSetCopy.add(i.concat("_TIM"));
             }
         }
-        mAdapter = new SeekBarAdapter(getActivity(), R.layout.seekbar_row, addSetCopy);
-        mListView.setAdapter(mAdapter);
-        return V;
+    }
+
+    private void addCurrentLevels() {
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        StringBuilder activities = new StringBuilder();
+        activities.append(sharedPrefs.getString("ACTIVITIES", ""));
+        StringBuilder preselectedCurrentLevels = new StringBuilder();
+        preselectedCurrentLevels.append(sharedPrefs.getString("Activity_Prelim_Levels",""));
+        //Log.d("TAG","Levels: "+preselectedCurrentLevels.toString());
+        for (String s: addSetCopy){
+            activities.append(s).append(",");
+            preselectedCurrentLevels.append(currentLevel.get(s)).append(",");
+            Log.d("TAGE","HERE: "+preselectedCurrentLevels);
+        }
+        editor.putString("ACTIVITIES",activities.toString());
+        editor.putString("Activity_Prelim_Levels",preselectedCurrentLevels.toString());
+        editor.commit();
+        //Pass the goal set fragment our new activity set
+        Bundle b = new Bundle();
+        b.putStringArrayList("ADDED_ACTIVITIES",addSetCopy);
+        FragmentTransaction transaction;
+        NewGoalSetFragment goalSetFragment = new NewGoalSetFragment();
+        transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, goalSetFragment);
+        goalSetFragment.setArguments(b);
+        transaction.commit();
     }
 
 

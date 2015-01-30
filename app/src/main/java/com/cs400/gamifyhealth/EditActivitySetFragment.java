@@ -16,10 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -50,17 +53,13 @@ public class EditActivitySetFragment extends Fragment {
     private ArrayList<String> orignalSet;
     private ArrayList<String> addSet;
     private ArrayList<String> removeSet;
+    private ArrayList<String> removeSetCopy;
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor mEditor;
 
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditActivitySetFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
+
     public static EditActivitySetFragment newInstance(String param1, String param2) {
         EditActivitySetFragment fragment = new EditActivitySetFragment();
         Bundle args = new Bundle();
@@ -94,52 +93,18 @@ public class EditActivitySetFragment extends Fragment {
         addSet = new ArrayList<String>();
 
         getActivity().getActionBar().setTitle("Edit Activities");
+        sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        mEditor = sharedPrefs.edit();
+
         continueButton = (Button) V.findViewById(R.id.continueButton2);
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (removeSet.size()!=0) {
-                    SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    StringBuilder sb = new StringBuilder();
-                    StringBuilder sb2 = new StringBuilder();
-                    //Get the remove set activities, add only activities which aren't in removeset to sharedprefs
-                    List<String> activities = Arrays.asList(sharedPref.getString("ACTIVITIES", "").split(","));
-                    List<String> currentLevel = Arrays.asList(sharedPref.getString("Activity_Prelim_Levels", "").split(","));
-                    ArrayList<String> currentLevelSet = new ArrayList<String>();
-                    ArrayList<String> activitySet = new ArrayList<String>();
-                    for (int i=0;i<activities.size();i++) {
-                        String temp = activities.get(i).split("_")[0];
-                        if (!removeSet.contains(temp)){
-                            activitySet.add(temp);
-                            currentLevelSet.add(currentLevel.get(i));
-                        }
-                    }
-                    List<String> repArray;
-                    List<String> dtaArray;
-                    repArray = Arrays.asList(getString(R.string.activity_types_REP).split(","));
-                    dtaArray = Arrays.asList(getString(R.string.activity_types_DTA).split(","));
-                    for (int j = 0; j < activitySet.size(); j++) {
-                        sb2.append(currentLevelSet.get(j).concat(","));
-                        if(repArray.contains(activitySet.get(j))){
-                            sb.append(activitySet.get(j).concat("_REP").concat(","));
-                        }else if(dtaArray.contains(activitySet.get(j))){
-                            if(activitySet.get(j).contains("Time")){
-                                sb.append(activitySet.get(j).concat("_DTA-T").concat(","));
-                            }else{
-                                sb.append(activitySet.get(j).concat("_DTA-D").concat(","));
-                            }
-                        }else{
-                            sb.append(activityItems.get(j).getName()).append("_TIM").append(",");
-                        }
-
-                    }
-                    editor.putString("ACTIVITIES", sb.toString());
-                    editor.putString("Activity_Prelim_Levels", sb2.toString());
-                    editor.commit();
-                    //TODO: itterate through the remove set and remove the activities from the Goal DB?
+                    processRemoveSet();
                 }
                 if (addSet.size()!=0){
+                    //Launch the fragment to add new goal and give it the new goal Array as a bundle
                     Bundle b = new Bundle();
                     b.putStringArrayList("AddSet",addSet);
                     FragmentTransaction transaction;
@@ -148,12 +113,16 @@ public class EditActivitySetFragment extends Fragment {
                     transaction.replace(R.id.content_frame, NewCurrentLevelActivity);
                     NewCurrentLevelActivity.setArguments(b);
                     transaction.commit();
+                }else{
+                    FragmentTransaction transaction;
+                    GameFragment gameFragment = new GameFragment();
+                    transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_frame, gameFragment);
+                    transaction.commit();
                 }
             }
         });
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        String s = sharedPref.getString("ACTIVITIES", null);
+        String s = sharedPrefs.getString("ACTIVITIES", null);
 
         String[] temp = s.split(",");
         for (int i=0;i<temp.length;i++){
@@ -181,6 +150,84 @@ public class EditActivitySetFragment extends Fragment {
         activitiesListView.setAdapter(adapter);
 
         return V;
+    }
+
+    private void processRemoveSet() {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        //Get the remove set activities, add only activities which aren't in removeset to sharedprefs
+        List<String> activities = Arrays.asList(sharedPrefs.getString("ACTIVITIES", "").split(","));
+        List<String> currentLevel = Arrays.asList(sharedPrefs.getString("Activity_Prelim_Levels", "").split(","));
+        ArrayList<String> currentLevelSet = new ArrayList<String>();
+        ArrayList<String> activitySet = new ArrayList<String>();
+        List<String> repArray;
+        List<String> dtaArray;
+        repArray = Arrays.asList(getString(R.string.activity_types_REP).split(","));
+        dtaArray = Arrays.asList(getString(R.string.activity_types_DTA).split(","));
+        removeSetCopy = new ArrayList<String>();
+        //need to make a copy of the remove set and add in the type for string parsing later on
+        for (int i=0;i<activities.size();i++) {
+            String temp = activities.get(i).split("_")[0];
+            String temp2 = activities.get(i);
+            if (!removeSet.contains(temp)){
+                activitySet.add(temp);
+                currentLevelSet.add(currentLevel.get(i));
+
+
+            }else{
+                removeSetCopy.add(temp2);
+            }
+        }
+
+        for (int j = 0; j < activitySet.size(); j++) {
+            sb2.append(currentLevelSet.get(j).concat(","));
+            if(repArray.contains(activitySet.get(j))){
+                sb.append(activitySet.get(j).concat("_REP").concat(","));
+            }else if(dtaArray.contains(activitySet.get(j))){
+                if(activitySet.get(j).contains("Time")){
+                    sb.append(activitySet.get(j).concat("_DTA-T").concat(","));
+                }else{
+                    sb.append(activitySet.get(j).concat("_DTA-D").concat(","));
+                }
+            }else{
+                sb.append(activityItems.get(j).getName()).append("_TIM").append(",");
+            }
+
+        }
+        mEditor.putString("ACTIVITIES", sb.toString());
+        mEditor.putString("Activity_Prelim_Levels", sb2.toString());
+        mEditor.commit();
+        removeGoals();
+    }
+
+    private void removeGoals() {
+        Goal G;
+        DBConnection dataSource = new DBConnection(getActivity());
+        dataSource.open();
+        for (String s: removeSetCopy){
+            GregorianCalendar c = new GregorianCalendar();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(c.getTime());
+            int indexOfSpace = s.indexOf(" ");
+            String activityName = s;
+            if (indexOfSpace!=-1 && s.charAt(indexOfSpace+1)=='('){
+                activityName = s.substring(0,indexOfSpace);
+            }else if(indexOfSpace!=-1 && s.charAt(indexOfSpace+1)!='('){
+                activityName = s.split("_")[0];
+            }else{
+                activityName = s.split("_")[0];
+            }
+            String activityType = s.split("_")[1];
+            G = new Goal(date,activityName,activityType,0,10,10);
+            Log.d("TAG","STRING: "+s);
+            dataSource.removeGoal(G);
+            CharSequence text = "REMOVED ACTIVITY: "+activityName.split("_")[0];
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getActivity(), text, duration);
+            toast.show();
+        }
+        dataSource.close();
+
     }
 
     @Override
