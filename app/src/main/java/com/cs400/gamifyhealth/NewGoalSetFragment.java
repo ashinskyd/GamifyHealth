@@ -123,6 +123,8 @@ public class NewGoalSetFragment extends Fragment {
             int goalTarget = goalLevelMap.get(activitySet.get(i));
             int goalDuration = Integer.parseInt(goalTimeEditTextMap.get(activitySet.get(i)).getText().toString());
             int startValue = activitySetLevels.get(i);
+            Log.d("TAG","START: "+startValue);
+            Log.d("TAG","TARGET: "+goalTarget);
             String activity = activitySet.get(i);
             int indexOfSpace = activity.indexOf(" ");
             String activityName = activity;

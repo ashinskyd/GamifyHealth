@@ -58,7 +58,7 @@ public class GoalDisplayFragment extends Fragment {
             Log.d("TAG", "ITEM1: "+g.name);
             Log.d("TAG", "ITEM2: "+g.startDate);
             Log.d("TAG", "ITEM3: "+g.currentWeek);
-            Log.d("TAG", "ITEM4: "+g.calculateCurrentGoal());
+            Log.d("TAG", "ITEM4: "+g.currentWeekGoal);
             Log.d("TAG", "ITEM5: "+g.duration);
         }
         return V;
