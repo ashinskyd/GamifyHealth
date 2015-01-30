@@ -56,6 +56,9 @@ public class GameFragment extends Fragment {
     private GridLayout mGrid;
     private OnFragmentInteractionListener mListener;
     private DBConnection dataSource;
+    private TextView peopleCounter;
+    private TextView creditCounter;
+    private int[] gridSize;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -91,15 +94,31 @@ public class GameFragment extends Fragment {
         int attacks = sharedPrefs.getInt("ATTACKS",0);
         AttackEngine a = new AttackEngine(getActivity());
         for (int i=0;i<attacks;i++){
-            Log.d("TAG","ATTACKED GEN");
             a.attack();
         }
+        gridSize = new int[2];
+        String gridSizeString = sharedPrefs.getString("GRID_SIZE","10,13");
+        gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
+        gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
+        initUi(V);
+        getOccupiedIndices(mGrid);
+        inflateMap(V);
+        Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
+        Bundle b = getArguments();
+        if (b!=null && b.getBoolean("HOUSE_STORE")){
+            //Register the listeners if we come from the store
+            RegisterListeners(mGrid);
+        }
+        return V;
+    }
+
+    private void initUi(View V) {
         int population = sharedPrefs.getInt("POPULATION",1);
-        TextView peopleCounter =(TextView) V.findViewById(R.id.people_counter);
+        peopleCounter =(TextView) V.findViewById(R.id.people_counter);
         peopleCounter.setText(population+" People");
         //Set Credit Counter
         int credits = sharedPrefs.getInt("CREDITS",1);
-        TextView creditCounter = (TextView) V.findViewById(R.id.credit_counter);
+        creditCounter = (TextView) V.findViewById(R.id.credit_counter);
         creditCounter.setText(credits+" Credits");
 
         //If we click the houseStore icon, we launch the store
@@ -116,21 +135,13 @@ public class GameFragment extends Fragment {
             }
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
-        getOccupiedIndices(mGrid);
-        inflateMap(V);
-
-        Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
-        Bundle b = getArguments();
-        if (b!=null && b.getBoolean("HOUSE_STORE")){
-            //Register the listeners if we come from the store
-            RegisterListeners(mGrid);
-        }
-        return V;
     }
 
+
     private void RegisterListeners(GridLayout mGrid) {
+        int indices = gridSize[0]*gridSize[1];
         int c=-1;
-        for (int i = 0; i < (10 * 13); i++) {
+        for (int i = 0; i < indices; i++) {
             c += 1;
             final Button tileIcon = (Button) mGrid.findViewWithTag("space_"+c);
             if (!occupiedIndices.contains(c)) {
@@ -138,8 +149,8 @@ public class GameFragment extends Fragment {
                 tileIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int xCoord = d / 13;
-                        int yCoord = d % 13;
+                        int xCoord = d / gridSize[1];
+                        int yCoord = d % gridSize[1];
                         tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
                         dataSource.open();
                         dataSource.insertObject("farm", xCoord, yCoord, "Default");
@@ -153,8 +164,9 @@ public class GameFragment extends Fragment {
     }
 
     private void UnregisterListeners(){
+        int indices = gridSize[0]*gridSize[1];
         int c=-1;
-        for (int i = 0; i < (10 * 13); i++) {
+        for (int i = 0; i < indices; i++) {
             c += 1;
             final Button tileIcon = (Button) mGrid.findViewWithTag("space_"+c);
             tileIcon.setOnClickListener(null);
@@ -173,8 +185,8 @@ public class GameFragment extends Fragment {
         //Here is where we will change the tile size based on zoom level. Current is hardcoded to 40
         int h = (int)(40 * scale);
         int c = -1;
-
-        for (int i=0;i<(10*13);i++) {
+        int indices = gridSize[0]*gridSize[1];
+        for (int i=0;i<indices;i++) {
             c+=1;
             final Button tileIcon = new Button(getActivity());
             tileIcon.setTag("space_" +c);
