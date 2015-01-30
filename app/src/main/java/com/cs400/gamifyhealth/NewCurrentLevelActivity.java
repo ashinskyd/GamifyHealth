@@ -1,7 +1,9 @@
 package com.cs400.gamifyhealth;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,13 +82,23 @@ public class NewCurrentLevelActivity extends Fragment {
                 preselectedCurrentLevels.append(sharedPrefs.getString("Activity_Prelim_Levels",""));
                 //Log.d("TAG","Levels: "+preselectedCurrentLevels.toString());
                 for (String s: addSetCopy){
-                    activities.append(s);
+                    activities.append(s).append(",");
                     preselectedCurrentLevels.append(currentLevel.get(s)).append(",");
+                    Log.d("TAGE","HERE: "+preselectedCurrentLevels);
                 }
                 editor.putString("ACTIVITIES",activities.toString());
                 editor.putString("Activity_Prelim_Levels",preselectedCurrentLevels.toString());
-                Log.d("TAG","ACTIVITIES: "+activities.toString());
                 editor.commit();
+                //Pass the goal set fragment our new activity set
+                Bundle b = new Bundle();
+                b.putStringArrayList("ADDED_ACTIVITIES",addSetCopy);
+                FragmentTransaction transaction;
+                NewGoalSetFragment goalSetFragment = new NewGoalSetFragment();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame, goalSetFragment);
+                goalSetFragment.setArguments(b);
+                transaction.commit();
+
             }
         });
         Bundle b = getArguments();
@@ -98,19 +110,19 @@ public class NewCurrentLevelActivity extends Fragment {
         dtaArray = Arrays.asList(getString(R.string.activity_types_DTA).split(","));
         for (String i : addSet) {
             if (repArray.contains(i)) {
-                currentLevel.put(i.concat("_REP,"), 0);
-                addSetCopy.add(i.concat("_REP,"));
+                currentLevel.put(i.concat("_REP"), 0);
+                addSetCopy.add(i.concat("_REP"));
             } else if (dtaArray.contains(i)) {
                 if (i.contains("Time")) {
-                    currentLevel.put(i.concat("_DTA-T,"), 0);
-                    addSetCopy.add(i.concat("_DTA-T,"));
+                    currentLevel.put(i.concat("_DTA-T"), 0);
+                    addSetCopy.add(i.concat("_DTA-T"));
                 } else {
-                    currentLevel.put(i.concat("_DTA-D,"), 0);
-                    addSetCopy.add(i.concat("_DTA-D,"));
+                    currentLevel.put(i.concat("_DTA-D"), 0);
+                    addSetCopy.add(i.concat("_DTA-D"));
                 }
             } else {
-                currentLevel.put(i.concat("_TIM,"), 0);
-                addSetCopy.add(i.concat("_TIM,"));
+                currentLevel.put(i.concat("_TIM"), 0);
+                addSetCopy.add(i.concat("_TIM"));
             }
         }
         mAdapter = new SeekBarAdapter(getActivity(), R.layout.seekbar_row, addSetCopy);
@@ -152,7 +164,7 @@ public class NewCurrentLevelActivity extends Fragment {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     //When progress is changed, update our currentlevel map and adjust the textview to display the value
-                    currentLevel.put(addSet.get(position), seekBar.getProgress());
+                    currentLevel.put(addSetCopy.get(position), seekBar.getProgress());
                     if (addSetCopy.get(position).contains("_REP")) {
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
                     } else if (addSetCopy.get(position).contains("_TIM")) {
@@ -160,7 +172,7 @@ public class NewCurrentLevelActivity extends Fragment {
                     } else {
                         if (addSetCopy.get(position).contains("_DTA-T")) {
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        } else if (addSetCopy.get(position).toString().contains("_DTA-D")) {
+                        } else if (addSetCopy.get(position).contains("_DTA-D")) {
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
                         }
                     }

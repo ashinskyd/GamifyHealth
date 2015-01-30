@@ -1,18 +1,15 @@
 package com.cs400.gamifyhealth;
 
-import android.app.Activity;
+
+
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,54 +17,72 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
-
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
-public class GoalSetActivity extends Activity {
+public class NewGoalSetFragment extends Fragment {
+
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    private ArrayList<String> addSet;
+    private ArrayList<String> activitySet;
+    private Map<String,Integer> goalMap;
+    private Map<String,EditText> goalTimeEditTextMap;
+    private ArrayList<Integer> activitySetLevels;
+    private Button continueButton;
     private ListView mListView;
     private SharedPreferences sharedPrefs;
-    private SeekBarAdapter mAdapter;
-    private Button continueButton;
-    private ArrayList<String> activitySet;
-    private ArrayList<Integer> activitySetLevels;
     private Map<String,Integer> goalLevelMap;
-    private Map<String,EditText> goalTimeEditTextMap;
+    private SeekBarAdapter mAdapter;
 
-
+    public static NewGoalSetFragment newInstance(String param1, String param2) {
+        NewGoalSetFragment fragment = new NewGoalSetFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public NewGoalSetFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goal_set);
-        continueButton = (Button) findViewById(R.id.continueButton2);
-        mListView = (ListView) findViewById(R.id.seekBarListView);
-        sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
-        String[] activitySetString = sharedPrefs.getString("ACTIVITIES",null).split(",");
-        String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
-        goalTimeEditTextMap = new HashMap<String, EditText>();
-        activitySet = new ArrayList<String>();
-        activitySetLevels = new ArrayList<Integer>();
-        goalLevelMap = new HashMap<String, Integer>();
-        for (int i=0; i<activitySetString.length; i++){
-            activitySet.add(i, activitySetString[i]);
-            activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
-            goalLevelMap.put(activitySetString[i],Integer.parseInt(activityStartValString[i]));
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row2,activitySet);
-        mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View V = inflater.inflate(R.layout.fragment_new_goal_set, container, false);
+        Bundle b = getArguments();
+        addSet = b.getStringArrayList("ADDED_ACTIVITIES");
+
+        activitySetLevels = new ArrayList<Integer>();
+        goalTimeEditTextMap = new HashMap<String, EditText>();
+        goalLevelMap = new HashMap<String, Integer>();
+        activitySet = new ArrayList<String>();
+
+        continueButton = (Button) V.findViewById(R.id.continueButton2);
+        mListView = (ListView) V.findViewById(R.id.seekBarListView);
+        mListView.setItemsCanFocus(true);
+        sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +109,7 @@ public class GoalSetActivity extends Activity {
                     Goal g = new Goal(date,activityName,activityType,startValue,goalTarget,goalDuration);
                     goalList.add(g);
                 }
-                DBConnection datasource = new DBConnection(GoalSetActivity.this);
+                DBConnection datasource = new DBConnection(getActivity());
                 datasource.open();
                 try{
                     for (Goal g: goalList){
@@ -104,38 +119,26 @@ public class GoalSetActivity extends Activity {
                     Log.d("TAG","Exception Caught");
                 }
                 datasource.close();
-
-                Intent i = new Intent(getApplicationContext(),NavigationDrawerMain.class);
-                startActivity(i);
             }
         });
-    }
 
-    public void onBackPressed(){
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-    }
-
-    public void onPause(){
-        super.onPause();
-        StringBuilder temp = new StringBuilder();
-        StringBuilder S = new StringBuilder();
-        String key;
-        Iterator entryIter = goalLevelMap.entrySet().iterator();
-        while (entryIter.hasNext()){
-            Map.Entry entry = (Map.Entry) entryIter.next();
-            temp.append(( entry.getValue().toString()).concat(","));
-            key = entry.getKey().toString();
-            S.append(goalTimeEditTextMap.get(key).getText().toString().concat(","));
+        String[] activitySetString = sharedPrefs.getString("ACTIVITIES",null).split(",");
+        String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
+        int j = 0;
+        for (int i=0; i<activitySetString.length; i++){
+            if (addSet.contains(activitySetString[i])){
+                activitySet.add(j, activitySetString[i]);
+                activitySetLevels.add(j,Integer.parseInt(activityStartValString[i]));
+                Log.d("TAG","LEVEL: "+sharedPrefs.getString("Activity_Prelim_Levels",null));
+                goalLevelMap.put(activitySetString[i],Integer.parseInt(activityStartValString[i]));
+                j++;
+            }
 
         }
-        SharedPreferences.Editor mEditor = sharedPrefs.edit();
-        mEditor.putString("Activity_Goal_Levels", temp.toString());
-        mEditor.putString("Goal_Time_Levels", S.toString());
-        mEditor.commit();
+        mAdapter = new SeekBarAdapter(getActivity(),R.layout.seekbar_row2,activitySet);
+        mListView.setAdapter(mAdapter);
+        return V;
     }
-
-
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
         public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList) {
@@ -157,7 +160,6 @@ public class GoalSetActivity extends Activity {
             final TextView delta = (TextView) convertView.findViewById(R.id.deltatextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
             oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)));
-
             if (activitySet.get(position).contains("_REP")) {
                 oldValue.setText(oldValue.getText().toString().concat(" Reps"));
             } else if (activitySet.get(position).contains("_TIM")) {
@@ -185,6 +187,7 @@ public class GoalSetActivity extends Activity {
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    //TODO: Verfiy this
                     if (seekBar.getProgress()<activitySetLevels.get(position)){
                         sb.setProgress(activitySetLevels.get(position));
                     }
@@ -236,4 +239,5 @@ public class GoalSetActivity extends Activity {
             return convertView;
         }
     }
+
 }

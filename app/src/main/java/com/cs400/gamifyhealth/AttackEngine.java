@@ -152,8 +152,7 @@ public class AttackEngine {
 
         double percentage = (double)calculateAttackStrength() / 100;
 
-        //int type = generateAttackType();
-        int type = 0;
+        int type = generateAttackType();
 
         double fortsOwned = (double)objectsOwned[1];
 

@@ -117,17 +117,6 @@ public class GameFragment extends Fragment {
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
         getOccupiedIndices(mGrid);
-        //tester code: shared preferences isn't quite working as intended yet
-        //ideally, should store a population in sharedpreferences with key "population" and value 1 to represent initial population IF
-
-/*        AttackEngine a = new AttackEngine(this.getActivity());
-        a.printObjectsOwned();
-        System.out.println("attack 1");
-        a.attack();
-        System.out.println("objects according to attack engine");
-        a.printObjectsOwned();
-        System.out.println("objects according to db");
-  */
         inflateMap(V);
 
         Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
