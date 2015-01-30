@@ -110,13 +110,13 @@ public class GameFragment extends Fragment {
         //tester code: shared preferences isn't quite working as intended yet
         //ideally, should store a population in sharedpreferences with key "population" and value 1 to represent initial population IF
 
-        AttackEngine a = new AttackEngine(this.getActivity());
+       /* AttackEngine a = new AttackEngine(this.getActivity());
         a.printObjectsOwned();
         System.out.println("attack 1");
         a.attack();
         System.out.println("objects according to attack engine");
         a.printObjectsOwned();
-        System.out.println("objects according to db");
+        System.out.println("objects according to db");*/
         GridLayout mGrid = (GridLayout) V.findViewById(R.id.map);
 
         //Convert the screen size into a scale for calculating dp
