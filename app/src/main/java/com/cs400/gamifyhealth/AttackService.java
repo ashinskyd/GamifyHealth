@@ -106,7 +106,7 @@ public class AttackService extends Service {
         }
         msg.what = 0;
         mServiceHandler.sendMessage(msg);
-        Log.d("TAG","NEXT ATTACK IN :"+msg.arg1/60000);
+        Log.d("TAG","NEXT ATTACK IN :"+msg.arg1);
         return START_STICKY;
     }
 
@@ -123,7 +123,6 @@ public class AttackService extends Service {
 
     public int genTime() {
         return (randomGen.nextInt(2880) + 2880) * 60000;
-        //return 20000;
     }
 
     @Override
