@@ -26,6 +26,8 @@ public class AttackService extends Service {
     private static long remainingTime;
     private static long recentTime;
     private Random randomGen;
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor mEditor;
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -43,7 +45,7 @@ public class AttackService extends Service {
                 recentTime = System.currentTimeMillis();
             }
             Log.d("TAG", "Attack Posted!");
-            AttackService.postAttack(AttackService.this);
+            postAttack(AttackService.this);
             Message m = mServiceHandler.obtainMessage();
             m.arg1 = genTime();
             m.what = 0;
@@ -53,19 +55,24 @@ public class AttackService extends Service {
     }
 
     //Posts a notification of an attack
-    private static void postAttack(Context context) {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+    private void postAttack(Context context) {
+        int attacks = sharedPrefs.getInt("ATTACKS",0);
+        if (attacks<3){
+            mEditor.putInt("ATTACKS",attacks+1);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentTitle("My notification")
+                            .setContentText("Hello World!");
 
-        int mNotificationId = 001;
+            int mNotificationId = 001;
 // Gets an instance of the NotificationManager service
-        NotificationManager mNotifyMgr =
-                (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            NotificationManager mNotifyMgr =
+                    (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 // Builds the notification and issues it.
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            mEditor.commit();
+        }
     }
 
     @Override
@@ -93,11 +100,11 @@ public class AttackService extends Service {
         Log.d("TAG","STARTED");
         //Gets the most recent attack time interval (if available)
         //Only called when the service is being restarted
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        long time = sharedPref.getLong("REMAINING_TIME",0);
+        sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        mEditor = sharedPrefs.edit();
+        long time = sharedPrefs.getLong("REMAINING_TIME",0);
         int time2 = (int) time;
-        recentTime = sharedPref.getLong("LOGGED_TIME",0);
+        recentTime = sharedPrefs.getLong("LOGGED_TIME",0);
         if (time2!=0){
             time2-=System.currentTimeMillis()-recentTime;
             msg.arg1 = time2;
@@ -122,7 +129,8 @@ public class AttackService extends Service {
     }
 
     public int genTime() {
-        return (randomGen.nextInt(2880) + 2880) * 60000;
+        //return (randomGen.nextInt(2880) + 2880) * 60000;
+        return 30000;
     }
 
     @Override
@@ -134,10 +142,8 @@ public class AttackService extends Service {
     //Logs the most recent remaining time in shared prefs
     //Need this because the OS can suspend/restart a service and we need to know at what point this occured
     private void logTime() {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putLong("REMAINING_TIME",remainingTime);
-        editor.putLong("LOGGED_TIME",recentTime);
-        editor.commit();
+        mEditor.putLong("REMAINING_TIME",remainingTime);
+        mEditor.putLong("LOGGED_TIME",recentTime);
+        mEditor.commit();
     }
 }

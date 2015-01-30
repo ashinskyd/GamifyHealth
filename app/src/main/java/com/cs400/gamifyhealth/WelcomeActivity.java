@@ -22,33 +22,24 @@ public class WelcomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         boolean started = sharedPrefs.getBoolean("SERVICE_STARTED",false);
-        DBConnection datasource = new DBConnection(this);
-        datasource.open();
-        //how do we tell this is the first time the app has been opened
-        //we only want to create tables once
-        datasource.createTables();
-        datasource.insertObject("farm", 0, 0, "default");
-        datasource.insertObject("farm", 1, 0, "default");
-        datasource.insertObject("house", 1, 1, "mansion");
-        datasource.insertObject("house", 0, 1, "mansion");
-        //datasource.insertObject("house", 2, 2, "mansion");
-        /*datasource.insertObject("farm", 0, 1, "default");
-        datasource.insertObject("house", 1, 2, "hut");
-        datasource.insertObject("house", 1, 4, "hut");
-        datasource.insertObject("farm", 2, 1, "default");
-        datasource.insertObject("farm", 2, 4, "default");
-        datasource.insertObject("fort", 1, 3, "default");
-        datasource.insertObject("farm", 2, 2, "default");
-       */
-        ArrayList<Building> b = datasource.getObjectsOwned();
+
+        /*ArrayList<Building> b = datasource.getObjectsOwned();
         for (Building k : b){
             System.out.println("type " + k.type + " xpos " + k.xcoord + " y pos " + k.ycoord + " name " + k.name);
-        }
-        datasource.close();
+        }*/
+
         if (started){
             Intent intent = new Intent(this, NavigationDrawerMain.class);
             startActivity(intent);
         }else{
+            //how do we tell this is the first time the app has been opened
+            //we only want to create tables once
+            DBConnection datasource = new DBConnection(this);
+            datasource.open();
+            datasource.createTables();
+            datasource.insertObject("farm", 0, 0, "default");
+            datasource.insertObject("farm", 1, 1, "default");
+            datasource.close();
             setContentView(R.layout.activity_welcome);
             continueButton = (Button) findViewById(R.id.continueButton);
             continueButton.setOnClickListener(new View.OnClickListener() {

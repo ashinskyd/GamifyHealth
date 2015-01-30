@@ -53,9 +53,9 @@ public class GameFragment extends Fragment {
     private Button houseStore;
     private SharedPreferences sharedPrefs;
     private Set<Integer> occupiedIndices = new HashSet<Integer>();
-    private DBConnection dataSource;
     private GridLayout mGrid;
     private OnFragmentInteractionListener mListener;
+    private DBConnection dataSource;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -63,6 +63,7 @@ public class GameFragment extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
     public GameFragment() {
@@ -72,6 +73,7 @@ public class GameFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dataSource = new DBConnection(getActivity());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -84,14 +86,18 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_game, container, false);
         getActivity().getActionBar().setTitle("Game Page");
-        dataSource = new DBConnection(getActivity());
-        dataSource.open();
         //Set the population counter
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        int attacks = sharedPrefs.getInt("ATTACKS",0);
+        AttackEngine a = new AttackEngine(this.getActivity());
+        for (int i=0;i<attacks;i++){
+            Log.d("TAG","ATTACKED GEN");
+            a.attack();
+
+        }
         int population = sharedPrefs.getInt("POPULATION",1);
         TextView peopleCounter =(TextView) V.findViewById(R.id.people_counter);
         peopleCounter.setText(population+" People");
-
         //Set Credit Counter
         int credits = sharedPrefs.getInt("CREDITS",1);
         TextView creditCounter = (TextView) V.findViewById(R.id.credit_counter);
@@ -144,11 +150,13 @@ public class GameFragment extends Fragment {
                 tileIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("TAG","D: "+d);
                         int xCoord = d / 13;
                         int yCoord = d % 13;
                         tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
+                        dataSource.open();
                         dataSource.insertObject("Farm", xCoord, yCoord, "Default");
+                        dataSource.printObjectDB();
+                        dataSource.close();
                         UnregisterListeners();
                     }
                 });
@@ -197,7 +205,9 @@ public class GameFragment extends Fragment {
 
     private void getOccupiedIndices(GridLayout mGrid){
         //Method gets the users purchases and updates the collection of occupied indices
+        dataSource.open();
         ArrayList<Building> buildings = dataSource.getObjectsOwned();
+        dataSource.close();
         for (Building building: buildings){
             int index = (building.xcoord * mGrid.getRowCount()) + building.ycoord;
             occupiedIndices.add(index);

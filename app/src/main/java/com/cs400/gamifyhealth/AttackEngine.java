@@ -11,6 +11,7 @@ package com.cs400.gamifyhealth;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,23 +25,15 @@ public class AttackEngine {
     public String[] attackTypeArray;
     public int[] objectsOwned;
     public Activity activity;
+    private DBConnection datasource;
 
 
     public AttackEngine(Activity a){
         this.activity = a;
         System.out.println("Attack engine doing something");
         randomGen = new Random();
-        attackTypeArray = new String[] {"farms", "forts", "houses",  "people" };
-        DBConnection datasource = new DBConnection(a);
-        datasource.open();
-        objectsOwned = datasource.getObjectCounts();
-        datasource.close();
-        String pref_file_key = a.getString(R.string.preference_file_key);
-        SharedPreferences sharedPrefs = a.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
-        //ask Andy, how do we access sharedpreferences, store 1 int, help
-        int population = sharedPrefs.getInt("POPULATION", 1);
-        objectsOwned[3] = population;
-        System.out.println(Arrays.toString(objectsOwned));
+        datasource = new DBConnection(this.activity);
+
     }
 
     public void printObjectsOwned(){
@@ -57,7 +50,6 @@ public class AttackEngine {
 
 
     public int generateAttackType() {
-
         return randomGen.nextInt(4);
 
     }
@@ -132,23 +124,27 @@ public class AttackEngine {
         int[] test = datasource.getObjectCounts();
         System.out.println(Arrays.toString(test));
         datasource.close();
-
         String pref_file_key = activity.getString(R.string.preference_file_key);
         SharedPreferences sharedPrefs = activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
         mEditor.putInt("POPULATION", newPopulation);
+        mEditor.putInt("ATTACKS",sharedPrefs.getInt("ATTACKS",0)-1);
         mEditor.commit();
-
-
-
     }
 
 
 
     public void attack() {
-
+        String pref_file_key = this.activity.getString(R.string.preference_file_key);
+        SharedPreferences sharedPrefs = this.activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
+        //ask Andy, how do we access sharedpreferences, store 1 int, help
+        int population = sharedPrefs.getInt("POPULATION", 1);
+        datasource.open();
+        objectsOwned = datasource.getObjectCounts();
+        objectsOwned[3] = population;
+        datasource.close();
+        System.out.println(Arrays.toString(objectsOwned));
         int[] postAttack = new int[4];
-
         for (int i = 0; i<4; i++){
             postAttack[i] = objectsOwned[i];
         }
@@ -156,8 +152,7 @@ public class AttackEngine {
         double percentage = (double)calculateAttackStrength() / 100;
 
         int type = generateAttackType();
-
-        System.out.println("Doing " + percentage + " damage to " + attackTypeArray[type]);
+        Log.d("TAG", "ATTACKING: " +type);
 
         double fortsOwned = (double)objectsOwned[1];
 
@@ -208,7 +203,6 @@ public class AttackEngine {
             int newPopulation = postAttack[3];
             this.updateDB(farmsDamaged, fortsDamaged, housesDamaged, newPopulation);
             objectsOwned[type] = postAttack[type];
-
         }
 
     }

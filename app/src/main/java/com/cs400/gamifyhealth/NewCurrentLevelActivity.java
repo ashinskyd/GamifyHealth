@@ -73,7 +73,20 @@ public class NewCurrentLevelActivity extends Fragment {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("TAG", "BUTTON CLICKED");
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                StringBuilder activities = new StringBuilder();
+                activities.append(sharedPrefs.getString("ACTIVITIES", ""));
+                StringBuilder preselectedCurrentLevels = new StringBuilder();
+                preselectedCurrentLevels.append(sharedPrefs.getString("Activity_Prelim_Levels",""));
+                //Log.d("TAG","Levels: "+preselectedCurrentLevels.toString());
+                for (String s: addSetCopy){
+                    activities.append(s);
+                    preselectedCurrentLevels.append(currentLevel.get(s)).append(",");
+                }
+                editor.putString("ACTIVITIES",activities.toString());
+                editor.putString("Activity_Prelim_Levels",preselectedCurrentLevels.toString());
+                Log.d("TAG","ACTIVITIES: "+activities.toString());
+                editor.commit();
             }
         });
         Bundle b = getArguments();
