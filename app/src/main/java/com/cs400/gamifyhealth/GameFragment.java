@@ -89,14 +89,11 @@ public class GameFragment extends Fragment {
         //Set the population counter
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
-        AttackEngine a = new AttackEngine(this.getActivity());
-        if (attacks>0){
+        AttackEngine a = new AttackEngine(getActivity());
+        for (int i=0;i<attacks;i++){
             Log.d("TAG","ATTACKED GEN");
             a.attack();
         }
-
-
-
         int population = sharedPrefs.getInt("POPULATION",1);
         TextView peopleCounter =(TextView) V.findViewById(R.id.people_counter);
         peopleCounter.setText(population+" People");

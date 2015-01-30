@@ -29,9 +29,9 @@ public class AttackEngine {
 
 
     public AttackEngine(Activity a){
-        this.activity = a;
         System.out.println("Attack engine doing something");
         randomGen = new Random();
+        this.activity=a;
         datasource = new DBConnection(this.activity);
 
     }
