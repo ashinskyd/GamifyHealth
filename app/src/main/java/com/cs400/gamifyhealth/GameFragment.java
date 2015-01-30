@@ -90,11 +90,13 @@ public class GameFragment extends Fragment {
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
         AttackEngine a = new AttackEngine(this.getActivity());
-        for (int i=0;i<attacks;i++){
+        if (attacks>0){
             Log.d("TAG","ATTACKED GEN");
             a.attack();
-
         }
+
+
+
         int population = sharedPrefs.getInt("POPULATION",1);
         TextView peopleCounter =(TextView) V.findViewById(R.id.people_counter);
         peopleCounter.setText(population+" People");
@@ -154,7 +156,7 @@ public class GameFragment extends Fragment {
                         int yCoord = d % 13;
                         tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
                         dataSource.open();
-                        dataSource.insertObject("Farm", xCoord, yCoord, "Default");
+                        dataSource.insertObject("farm", xCoord, yCoord, "Default");
                         dataSource.printObjectDB();
                         dataSource.close();
                         UnregisterListeners();

@@ -58,7 +58,6 @@ public class AttackEngine {
     public void updateDB(int farmsDestroyed, int fortsDestroyed, int housesDestroyed, int newPopulation){
         System.out.println("I'm attempting damage");
         System.out.println(farmsDestroyed + " " + fortsDestroyed + " " + housesDestroyed);
-        DBConnection datasource = new DBConnection(activity);
         datasource.open();
         ArrayList<Building> objectLocs = datasource.getObjectsOwned();
         boolean farmsDone = true;
@@ -123,12 +122,14 @@ public class AttackEngine {
         System.out.println("new object counts");
         int[] test = datasource.getObjectCounts();
         System.out.println(Arrays.toString(test));
+        datasource.printObjectDB();
         datasource.close();
         String pref_file_key = activity.getString(R.string.preference_file_key);
         SharedPreferences sharedPrefs = activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
         mEditor.putInt("POPULATION", newPopulation);
-        mEditor.putInt("ATTACKS",sharedPrefs.getInt("ATTACKS",0)-1);
+        int attacks = sharedPrefs.getInt("ATTACKS",0)-1;
+        mEditor.putInt("ATTACKS",attacks);
         mEditor.commit();
     }
 
@@ -151,8 +152,8 @@ public class AttackEngine {
 
         double percentage = (double)calculateAttackStrength() / 100;
 
-        int type = generateAttackType();
-        Log.d("TAG", "ATTACKING: " +type);
+        //int type = generateAttackType();
+        int type = 0;
 
         double fortsOwned = (double)objectsOwned[1];
 
