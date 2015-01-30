@@ -147,7 +147,7 @@ public class GameFragment extends Fragment {
                         Log.d("TAG","D: "+d);
                         int xCoord = d / 13;
                         int yCoord = d % 13;
-                        tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
+                        tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
                         dataSource.insertObject("Farm", xCoord, yCoord, "Default");
                         UnregisterListeners();
                     }
@@ -183,7 +183,7 @@ public class GameFragment extends Fragment {
             final Button tileIcon = new Button(getActivity());
             tileIcon.setTag("space_" +c);
             if (occupiedIndices.contains(c)){
-                tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.crown));
+                tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
             }else{
                 tileIcon.setBackgroundColor(Color.TRANSPARENT);
             }
