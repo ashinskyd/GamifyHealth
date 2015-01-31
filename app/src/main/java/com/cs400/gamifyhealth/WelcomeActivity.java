@@ -37,8 +37,6 @@ public class WelcomeActivity extends Activity {
             DBConnection datasource = new DBConnection(this);
             datasource.open();
             datasource.createTables();
-            datasource.insertObject("farm", 0, 0, "default");
-            datasource.insertObject("farm", 1, 1, "default");
             datasource.close();
             setContentView(R.layout.activity_welcome);
             continueButton = (Button) findViewById(R.id.continueButton);
