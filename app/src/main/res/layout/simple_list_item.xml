@@ -9,7 +9,7 @@
         android:layout_height="40dp"
         android:id="@+id/imageView"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/crown" />
+        android:background="@drawable/sample" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,5 +25,7 @@
         android:textSize="20dp"
         android:layout_marginRight="20dp"
         android:textColor="#ff4b5dff"
-        android:paddingLeft="20dp" />
+        android:paddingLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp" />
 </LinearLayout>

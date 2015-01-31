@@ -12,6 +12,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,21 +44,17 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigationdrawerlayout);
-        boolean serviceStarted = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("SERVICE_STARTED",false);
-        if (!serviceStarted){
-            Intent intent = new Intent(this, AttackService.class);
-            startService(intent);
-        }
+        checkAttackService();
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean("SERVICE_STARTED", true);
         editor.commit();
 
-
-        itemTitles = new String[3];
+        itemTitles = new String[4];
         itemTitles[0] = "Main Game Page";
         itemTitles[1] = "Workout Entry";
         itemTitles[2] = "Edit Activities";
+        itemTitles[3] = "Check Current Goals";
         setTitle("Gamify your Health");
         ArrayList<String> itemTitles2 = new ArrayList<String>(Arrays.asList(itemTitles));
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -82,6 +79,8 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
         defaultTransaction.replace(R.id.content_frame,gameFragment);
         defaultTransaction.addToBackStack(null);
         defaultTransaction.commit();
+
+        //Otherwise, listen for navdrawer clicks
         mDrawerListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -108,11 +107,26 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
                         transaction.addToBackStack(null);
                         transaction.commit();
                         break;
+                    case 3:
+                        GoalDisplayFragment goalDisplayFragment = new GoalDisplayFragment();
+                        transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.content_frame, goalDisplayFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                        break;
                 }
                 mDrawerLayout.closeDrawer(mDrawerListView);
             }
         });
 
+    }
+
+    private void checkAttackService() {
+        boolean serviceStarted = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("SERVICE_STARTED",false);
+        if (!serviceStarted){
+            Intent intent = new Intent(this, AttackService.class);
+            startService(intent);
+        }
     }
 
 
