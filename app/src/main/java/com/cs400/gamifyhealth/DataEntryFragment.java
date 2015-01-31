@@ -169,12 +169,24 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
         }
         datasource.close();
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
-        Log.d("TAG", "DATE: "+dateFormat.format(cal.getTime()));
+        String currentDate = dateFormat.format(cal.getTime());
+        currentDate = currentDate.substring(currentDate.indexOf("-")+1);
+        String oldDate = sharedPrefs.getString("LAST_WORKOUT"," ");
+        CreditEngine creditEngine = new CreditEngine(getActivity());
+        if (!currentDate.equals(oldDate)){
+            SharedPreferences.Editor mEditor = sharedPrefs.edit();
+            mEditor.putString("LAST_WORKOUT",currentDate);
+            mEditor.commit();
+            creditEngine.postWorkout();
+            creditEngine.weeklyGoalCheck();
+            Log.d("TAG","BAD");
 
-        String date = sharedPrefs.getString("LAST_WORKOUT","");
-
+        }else{
+            creditEngine.weeklyGoalCheck();
+            Log.d("TAG","GOOD");
+        }
         FragmentTransaction transaction;
         GameFragment gameFragment = new GameFragment();
         transaction = getFragmentManager().beginTransaction();

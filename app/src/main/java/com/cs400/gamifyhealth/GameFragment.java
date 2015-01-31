@@ -206,7 +206,6 @@ public class GameFragment extends Fragment {
                     int drawable = houseIcons[Integer.parseInt(buildingMap.get(c).name)];
                     tileIcon.setBackground(getActivity().getResources().getDrawable(drawable));
                 }else{
-                    Log.d("TAG","In Here");
                     tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
                 }
             }else{

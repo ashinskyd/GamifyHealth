@@ -61,7 +61,6 @@ public class CreditEngine {
         DBConnection datasource = new DBConnection(activity);
         datasource.open();
         ArrayList<Goal> g = datasource.getGoals();
-        datasource.close();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         GregorianCalendar curDate = new GregorianCalendar(Locale.US);
         ArrayList<Goal> candidateGoals = new ArrayList<Goal>();
@@ -78,8 +77,6 @@ public class CreditEngine {
             start.setTime(d);
             int daysElapsed = 0;
             while (true) {
-
-
                 if (start.after(curDate)) {
                     break;
                 }
