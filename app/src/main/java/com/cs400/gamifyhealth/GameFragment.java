@@ -34,7 +34,9 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -53,12 +55,15 @@ public class GameFragment extends Fragment {
     private Button houseStore;
     private SharedPreferences sharedPrefs;
     private Set<Integer> occupiedIndices = new HashSet<Integer>();
+    private ArrayList<Building> buildingArrayList = new ArrayList<Building>();
+    private Map<Integer,Building> buildingMap = new HashMap<Integer, Building>();
     private GridLayout mGrid;
     private OnFragmentInteractionListener mListener;
     private DBConnection dataSource;
     private TextView peopleCounter;
     private TextView creditCounter;
     private int[] gridSize;
+    private int[] houseIcons;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -89,6 +94,13 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_game, container, false);
         getActivity().getActionBar().setTitle("Game Page");
+        houseIcons = new int[5];
+        houseIcons[0] = R.drawable.house1;
+        houseIcons[1] = R.drawable.house2;
+        houseIcons[2] = R.drawable.house3;
+        houseIcons[3] = R.drawable.house4;
+        houseIcons[4] = R.drawable.house5;
+
         //Set the population counter
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
@@ -151,9 +163,10 @@ public class GameFragment extends Fragment {
                     public void onClick(View view) {
                         int xCoord = d / gridSize[1];
                         int yCoord = d % gridSize[1];
-                        tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
+                        int i = getArguments().getInt("HOUSE_VALUE");
+                        tileIcon.setBackground(getActivity().getResources().getDrawable(houseIcons[i]));
                         dataSource.open();
-                        dataSource.insertObject("farm", xCoord, yCoord, "Default");
+                        dataSource.insertObject("house", xCoord, yCoord, Integer.toString(i));
                         dataSource.printObjectDB();
                         dataSource.close();
                         UnregisterListeners();
@@ -177,11 +190,9 @@ public class GameFragment extends Fragment {
     private void inflateMap(View v) {
         Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
         Bundle b = getArguments();
-
         DisplayMetrics dm = getResources().getDisplayMetrics();
         final float scale = getActivity().getResources().getDisplayMetrics().density;
         final GridLayout mGrid = (GridLayout) v.findViewById(R.id.map);
-
         //Here is where we will change the tile size based on zoom level. Current is hardcoded to 40
         int h = (int)(40 * scale);
         int c = -1;
@@ -191,7 +202,13 @@ public class GameFragment extends Fragment {
             final Button tileIcon = new Button(getActivity());
             tileIcon.setTag("space_" +c);
             if (occupiedIndices.contains(c)){
-                tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
+                if (buildingMap.get(c).type.equals("house")){
+                    int drawable = houseIcons[Integer.parseInt(buildingMap.get(c).name)];
+                    tileIcon.setBackground(getActivity().getResources().getDrawable(drawable));
+                }else{
+                    Log.d("TAG","In Here");
+                    tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
+                }
             }else{
                 tileIcon.setBackgroundColor(Color.TRANSPARENT);
             }
@@ -206,11 +223,12 @@ public class GameFragment extends Fragment {
     private void getOccupiedIndices(GridLayout mGrid){
         //Method gets the users purchases and updates the collection of occupied indices
         dataSource.open();
-        ArrayList<Building> buildings = dataSource.getObjectsOwned();
+        buildingArrayList = dataSource.getObjectsOwned();
         dataSource.close();
-        for (Building building: buildings){
+        for (Building building: buildingArrayList){
             int index = (building.xcoord * mGrid.getRowCount()) + building.ycoord;
             occupiedIndices.add(index);
+            buildingMap.put(index,building);
         }
     }
 
