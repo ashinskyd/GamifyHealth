@@ -17,7 +17,10 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -164,8 +167,14 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
         for (Workout w: workoutArray){
             datasource.insertWorkout(w);
         }
-        datasource.checkWorkoutDB();
         datasource.close();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        Log.d("TAG", "DATE: "+dateFormat.format(cal.getTime()));
+
+        String date = sharedPrefs.getString("LAST_WORKOUT","");
+
         FragmentTransaction transaction;
         GameFragment gameFragment = new GameFragment();
         transaction = getFragmentManager().beginTransaction();
