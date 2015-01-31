@@ -84,7 +84,9 @@ public class CreditEngine {
                 start.add(Calendar.DAY_OF_MONTH, 1);
             }
             if ((daysElapsed - 1) % 7 == 0){
-                candidateGoals.add(goal);
+                if ((daysElapsed - 1) != 0) {
+                    candidateGoals.add(goal);
+                }
             }
         }
         for (Goal h: candidateGoals){
