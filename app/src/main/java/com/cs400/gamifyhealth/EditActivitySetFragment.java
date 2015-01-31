@@ -166,8 +166,6 @@ public class EditActivitySetFragment extends Fragment {
             if (!removeSet.contains(temp)){
                 activitySet.add(temp);
                 currentLevelSet.add(currentLevel.get(i));
-
-
             }else{
                 removeSetCopy.add(temp2);
             }
