@@ -222,6 +222,7 @@ public class DBConnection{
         return b;
     }
 
+
     //returns a list of objects to owned to the game screen
     //so the player's environment can be reproduced after the game is closed
     public ArrayList<Building> getObjectsOwned(){
