@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -64,6 +65,7 @@ public class HouseStoreFragment extends Fragment {
         housesArray.add("Yurt");
         housesArray.add("Townhouse");
         housesArray.add("Yuen Hsi's Mansion");
+        housesArray.add("Yuen Hsi's Mansion");
         Button houseStore = (Button) V.findViewById(R.id.cottage_button);
         houseStore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +87,7 @@ public class HouseStoreFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("HOUSE_STORE",true);
+                bundle.putInt("HOUSE_VALUE",i);
                 FragmentTransaction transaction;
                 GameFragment gameFragment = new GameFragment();
                 transaction = getFragmentManager().beginTransaction();
@@ -134,8 +137,26 @@ public class HouseStoreFragment extends Fragment {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.store_custom_row_item, parent, false);
             TextView description = (TextView) convertView.findViewById(R.id.description);
-            description.setText("This is a placeholder for a description: "+houseList.get(position));
+            ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
+            switch (position){
+                case 0:
+                    image.setBackground(getResources().getDrawable(R.drawable.house1));
+                    break;
+                case 1:
+                    image.setBackground(getResources().getDrawable(R.drawable.house2));
+                    break;
+                case 2:
+                    image.setBackground(getResources().getDrawable(R.drawable.house3));
+                    break;
+                case 3:
+                    image.setBackground(getResources().getDrawable(R.drawable.house4));
+                    break;
+                case 4:
+                    image.setBackground(getResources().getDrawable(R.drawable.house5));
+                    break;
 
+            }
+            description.setText("This is a placeholder for a description: "+houseList.get(position));
             return convertView;
         }
     }
