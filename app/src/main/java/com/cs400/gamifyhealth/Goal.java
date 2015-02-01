@@ -13,7 +13,6 @@ public class Goal {
     // current week goal is kept the same as the current week, but it does not get incremented when the weekly goal is not met
     public int currentWeekGoal;
     public int duration;
-    public double slope;
 
     public Goal(String startDate, String name, String type, int startUnit, int goalUnit, int duration) {
         this.startDate = startDate;
@@ -24,11 +23,13 @@ public class Goal {
         this.currentWeek = 1;
         this.currentWeekGoal = 1;
         this.duration = duration;
-        this.slope = goalUnit / duration;
     }
 
     public double calculateCurrentGoal() {
-        return (this.currentWeekGoal * this.slope) + startUnit;
+        int weekDifference = currentWeek - currentWeekGoal;
+        double slope = (double) goalUnit/ ((double) duration - weekDifference);
+        return (double) ((this.currentWeekGoal * slope) + startUnit);
+
     }
 
     // this method is called when the user does not meet the weekly goal

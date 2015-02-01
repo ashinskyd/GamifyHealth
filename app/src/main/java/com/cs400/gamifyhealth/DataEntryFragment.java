@@ -181,11 +181,9 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             mEditor.commit();
             creditEngine.postWorkout();
             creditEngine.weeklyGoalCheck();
-            Log.d("TAG","BAD");
 
         }else{
             creditEngine.weeklyGoalCheck();
-            Log.d("TAG","GOOD");
         }
         FragmentTransaction transaction;
         GameFragment gameFragment = new GameFragment();

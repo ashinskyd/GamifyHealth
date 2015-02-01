@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 
@@ -29,7 +30,8 @@ public class GoalDisplayFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-
+    private String []types = {"(Distance)", "(Time)", "(Rate)" , "Reps"};
+    private String []units = {"Miles", "Hours", "Min/Mi" , "Reps"};
 
 
     public static GoalDisplayFragment newInstance(String param1, String param2) {
@@ -60,17 +62,28 @@ public class GoalDisplayFragment extends Fragment {
         View V = inflater.inflate(R.layout.fragment_goal_display, container, false);
         dataSource = new DBConnection(getActivity());
         dataSource.open();
+        dataSource.createTables();
+        Goal g = new Goal("2015-01-25", "Running","DTA-T",0,10,5);
+        try {
+            dataSource.insertGoal(g);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Workout w = new Workout("Running",1,"DTA-T");
+        Workout w2 = new Workout("Running",1,"DTA-T");
+        dataSource.insertWorkout(w);
+        dataSource.insertWorkout(w2);
+
+        dataSource.close();
+        CreditEngine creditEngine = new CreditEngine(getActivity());
+        creditEngine.weeklyGoalCheck();
+        dataSource.open();
+        dataSource.printGoalDB();
         goalSet = dataSource.getGoals();
         dataSource.close();
-        for (Goal g: goalSet){
-            Log.d("TAG", "ITEM1: "+g.name);
-            Log.d("TAG", "ITEM2: "+g.startDate);
-            Log.d("TAG", "ITEM3: "+g.currentWeek);
-            Log.d("TAG", "ITEM4: "+g.currentWeekGoal);
-            Log.d("TAG", "ITEM5: "+g.duration);
-        }
         mListView = (ListView) V.findViewById(R.id.goalSetListView);
-        mAdapter = new GoalProgressListAdapter(getActivity(),R.layout.goal_display_row,goalSet);
+        mAdapter = new GoalProgressListAdapter(getActivity().getApplicationContext(),R.layout.goal_display_row,goalSet);
         mListView.setAdapter(mAdapter);
         return V;
     }
@@ -78,6 +91,7 @@ public class GoalDisplayFragment extends Fragment {
     private class GoalProgressListAdapter extends ArrayAdapter<Goal>{
         private ArrayList<Goal> goalSet;
         private Context context;
+
         public GoalProgressListAdapter(Context Context, int resource, ArrayList<Goal> goals) {
             super(Context, resource, goals);
             goalSet = goals;
@@ -87,15 +101,43 @@ public class GoalDisplayFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.seekbar_row, parent, false);
-            TextView name =  (TextView) convertView.findViewById(R.id.nameTextView);
-            TextView finalGoal = (TextView) convertView.findViewById(R.id.finalgoalTextView);
-            TextView currentWeek = (TextView) convertView.findViewById(R.id.currentWeekTextview);
-            TextView duration = (TextView) convertView.findViewById(R.id.weekDurationTextView);
-            name.setText(goalSet.get(position).name);
-            finalGoal.setText(goalSet.get(position).currentWeekGoal);
-            currentWeek.setText(goalSet.get(position).currentWeek);
-            duration.setText(goalSet.get(position).duration);
+            convertView = inflater.inflate(R.layout.goal_display_row, parent, false);
+            TextView nameTextview =  (TextView) convertView.findViewById(R.id.nameTextView);
+            TextView weeklyGoalTextView = (TextView) convertView.findViewById(R.id.weeklygoalTextView);
+            TextView weekDateTextView = (TextView) convertView.findViewById(R.id.weekdateTextView);
+            TextView finalGoalTextView = (TextView) convertView.findViewById(R.id.finalgoalTextView);
+            TextView goalDurationTextView = (TextView) convertView.findViewById(R.id.durationTextView);
+
+            Goal g = goalSet.get(position);
+            String name = g.name;
+
+            String t = g.type;
+            String type;
+            String unit;
+            if (t.equals("DTA-T")|t.equals("TIM")){
+                 type = types[1];
+                unit = units[1];
+            }
+            else if( t.equals("DTA-R")){
+                type = types[2];
+                unit = units[2];
+            }
+            else if( t.equals("DTA-D")){
+                type = types[0];
+                unit = units[0];
+            }
+            else{
+                type = types[3];
+                unit = units[3];
+            }
+            name=name+" "+type;
+            nameTextview.setText(name);
+            //TODO: Calculate the current week date based on calender
+            double weeklyGoal = g.calculateCurrentGoal();
+            //weekDateTextView.setText(g.currentWeek);
+            weeklyGoalTextView.setText(Double.toString(weeklyGoal)+" "+unit);
+            finalGoalTextView.setText(g.goalUnit+" "+unit);
+            goalDurationTextView.setText(g.duration+" Weeks");
             return convertView;
         }
     }

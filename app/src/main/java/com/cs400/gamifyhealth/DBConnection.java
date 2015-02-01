@@ -209,7 +209,6 @@ public class DBConnection{
             System.out.println("goal met");
             weeklygoalmet = true;
         }
-        System.out.println("GOAL NOT MET");
         boolean goalmet = false;
         if (weeklygoalmet){
             if (g.duration == g.currentWeek){

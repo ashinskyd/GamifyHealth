@@ -76,8 +76,8 @@ public class CreditEngine {
             GregorianCalendar start = new GregorianCalendar();
             int daystoAdd = (goal.currentWeek * 7);
             start.setTime(d);
-            start.add(Calendar.DAY_OF_MONTH, daystoAdd + 1);
-            if (start.after(curDate)){
+            start.add(Calendar.DAY_OF_MONTH, daystoAdd);
+            if (curDate.after(start)){
                 candidateGoals.add(goal);
             }
         }
@@ -97,10 +97,16 @@ public class CreditEngine {
                     }
 
                 }
+                else if (b[1] == false){
+                    h.goalNotMet();
+                    datasource.removeGoal(h); //removes the copy based on name, type
+                    datasource.insertGoal(h);
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+        datasource.printGoalDB();
         datasource.close();
     }
 
