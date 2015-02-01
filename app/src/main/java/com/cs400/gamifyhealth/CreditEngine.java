@@ -74,19 +74,11 @@ public class CreditEngine {
                 e.printStackTrace();
             }
             GregorianCalendar start = new GregorianCalendar();
+            int daystoAdd = (goal.currentWeek * 7);
             start.setTime(d);
-            int daysElapsed = 0;
-            while (true) {
-                if (start.after(curDate)) {
-                    break;
-                }
-                daysElapsed++;
-                start.add(Calendar.DAY_OF_MONTH, 1);
-            }
-            if ((daysElapsed - 1) % 7 == 0){
-                if ((daysElapsed - 1) != 0) {
-                    candidateGoals.add(goal);
-                }
+            start.add(Calendar.DAY_OF_MONTH, daystoAdd + 1);
+            if (start.after(curDate)){
+                candidateGoals.add(goal);
             }
         }
         for (Goal h: candidateGoals){
