@@ -34,11 +34,15 @@ public class NewGoalSetFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
+
+    //use 2 arrays to keep track of activities to add/remove
     private ArrayList<String> addSet;
     private ArrayList<String> activitySet;
+
+    //Same scheme as GoalSetActivity for storing new goals
     private Map<String,Integer> goalMap;
     private Map<String,EditText> goalTimeEditTextMap;
     private ArrayList<Integer> activitySetLevels;
@@ -88,7 +92,16 @@ public class NewGoalSetFragment extends Fragment {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNewGoals();
+                Boolean proceed = false;
+                proceed = checkEntries();
+                if (proceed){
+                    addNewGoals();
+                }else{
+                    //If theres an input error, we don't proceed but throw a Toast
+                    Toast toast = Toast.makeText(getActivity(),"Please Enter a Duration of at least 4 weeks for each goal",Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
 
             }
         });
@@ -161,6 +174,25 @@ public class NewGoalSetFragment extends Fragment {
 
     }
 
+    //Checks that all entries are integers of at least 4 weeks for the Duraiton
+    private Boolean checkEntries() {
+        boolean flag = true;
+        for (int i=0;i<activitySet.size();i++){
+            if (!goalTimeEditTextMap.get(activitySet.get(i)).getText().toString().matches("[0-9]+")){
+                flag = false;
+                break;
+            }else{
+                if( Integer.parseInt(goalTimeEditTextMap.get(activitySet.get(i)).getText().toString())<4){
+                    flag = false;
+                    break;
+                }
+            }
+
+        }
+        return flag;
+    }
+
+    //See GoalSetActivity.class for Documentation
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
         public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList) {

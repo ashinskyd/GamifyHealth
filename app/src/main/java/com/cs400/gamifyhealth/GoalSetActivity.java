@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.text.ParseException;
@@ -37,13 +38,19 @@ import java.util.Set;
 
 
 public class GoalSetActivity extends Activity {
+
     private ListView mListView;
     private SharedPreferences sharedPrefs;
     private SeekBarAdapter mAdapter;
     private Button continueButton;
+
+    //Array of all activities user selected from sharedPrefs
     private ArrayList<String> activitySet;
+    //Array of all the starting levels for each activity in activitySet
     private ArrayList<Integer> activitySetLevels;
+    //Map to hold the goal unit for each activity
     private Map<String,Integer> goalLevelMap;
+    //Holds each activities duration EditText so we have access later
     private Map<String,EditText> goalTimeEditTextMap;
 
 
@@ -55,17 +62,24 @@ public class GoalSetActivity extends Activity {
         continueButton = (Button) findViewById(R.id.continueButton2);
         mListView = (ListView) findViewById(R.id.seekBarListView);
         sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+        //Gets the string of all the users current activities
         String[] activitySetString = sharedPrefs.getString("ACTIVITIES",null).split(",");
+        //Gets the starting unit for each activity
         String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
+
         goalTimeEditTextMap = new HashMap<String, EditText>();
         activitySet = new ArrayList<String>();
         activitySetLevels = new ArrayList<Integer>();
         goalLevelMap = new HashMap<String, Integer>();
+
+        //Puts the above information into the corresponding arraylists
         for (int i=0; i<activitySetString.length; i++){
             activitySet.add(i, activitySetString[i]);
             activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
+            //We record the users current level in the goalMap so they cannot chose a goal less than their current level
             goalLevelMap.put(activitySetString[i],Integer.parseInt(activityStartValString[i]));
         }
+
         mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row2,activitySet);
         mListView.setAdapter(mAdapter);
         continueButton.setOnClickListener(new View.OnClickListener() {
@@ -76,39 +90,69 @@ public class GoalSetActivity extends Activity {
                 GregorianCalendar c = new GregorianCalendar();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String date = sdf.format(c.getTime());
-                for (int i=0;i<activitySet.size();i++){
-                    int goalTarget = goalLevelMap.get(activitySet.get(i));
-                    int goalDuration = Integer.parseInt(goalTimeEditTextMap.get(activitySet.get(i)).getText().toString());
-                    int startValue = activitySetLevels.get(i);
-                    String activity = activitySet.get(i);
-                    int indexOfSpace = activity.indexOf(" ");
-                    String activityName = activity;
-                    if (indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)=='('){
-                        activityName = activity.substring(0,indexOfSpace);
-                    }else if(indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)!='('){
-                        activityName = activity.split("_")[0];
-                    }else{
-                        activityName = activity.split("_")[0];
-                    }
-                    String activityType = activity.split("_")[1];
-                    Goal g = new Goal(date,activityName,activityType,startValue,goalTarget,goalDuration);
-                    goalList.add(g);
-                }
-                DBConnection datasource = new DBConnection(GoalSetActivity.this);
-                datasource.open();
-                try{
-                    for (Goal g: goalList){
-                        datasource.insertGoal(g);
-                    }
-                }catch (ParseException e){
-                    Log.d("TAG","Exception Caught");
-                }
-                datasource.close();
 
-                Intent i = new Intent(getApplicationContext(),NavigationDrawerMain.class);
-                startActivity(i);
+                //Check that all entries are valid before proceding
+                Boolean proceed = false;
+                proceed = checkEntries();
+
+                //If the input is all valid, proceed to the game
+                if (proceed){
+                    for (int i=0;i<activitySet.size();i++){
+                        //Iterates through all the goals, adds to the DB
+                        int goalTarget = goalLevelMap.get(activitySet.get(i));
+                        int goalDuration = Integer.parseInt(goalTimeEditTextMap.get(activitySet.get(i)).getText().toString());
+                        int startValue = activitySetLevels.get(i);
+                        String activity = activitySet.get(i);
+                        int indexOfSpace = activity.indexOf(" ");
+                        String activityName = activity;
+                        if (indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)=='('){
+                            activityName = activity.substring(0,indexOfSpace);
+                        }else if(indexOfSpace!=-1 && activity.charAt(indexOfSpace+1)!='('){
+                            activityName = activity.split("_")[0];
+                        }else{
+                            activityName = activity.split("_")[0];
+                        }
+                        String activityType = activity.split("_")[1];
+                        Goal g = new Goal(date,activityName,activityType,startValue,goalTarget,goalDuration);
+                        goalList.add(g);
+                    }
+                    DBConnection datasource = new DBConnection(GoalSetActivity.this);
+                    datasource.open();
+                    try{
+                        for (Goal g: goalList){
+                            datasource.insertGoal(g);
+                        }
+                    }catch (ParseException e){
+                        Log.d("TAG","Exception Caught");
+                    }
+                    datasource.close();
+                    Intent i = new Intent(getApplicationContext(),NavigationDrawerMain.class);
+                    startActivity(i);
+                }else{
+                    //If theres an input error, we don't proceed but throw a Toast
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please Enter a Duration of at least 4 weeks for each goal",Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
+    }
+
+    //Checks that all entries are integers of at least 4 weeks for the Duraiton
+    private Boolean checkEntries() {
+        boolean flag = true;
+        for (int i=0;i<activitySet.size();i++){
+            if (!goalTimeEditTextMap.get(activitySet.get(i)).getText().toString().matches("[0-9]+")){
+                flag = false;
+                break;
+            }else{
+                if( Integer.parseInt(goalTimeEditTextMap.get(activitySet.get(i)).getText().toString())<4){
+                    flag = false;
+                    break;
+                }
+            }
+
+        }
+        return flag;
     }
 
     public void onBackPressed(){
@@ -116,6 +160,7 @@ public class GoalSetActivity extends Activity {
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 
+    //If we pause mid-entry, we save the intermediete data in sharedPrefs so the user won't have to reenter it
     public void onPause(){
         super.onPause();
         StringBuilder temp = new StringBuilder();
@@ -135,7 +180,7 @@ public class GoalSetActivity extends Activity {
         mEditor.commit();
     }
 
-
+    //Custom arrayadapter so we can have a seekbar and editText for each goal
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
         public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList) {
@@ -148,6 +193,8 @@ public class GoalSetActivity extends Activity {
             convertView = inflater.inflate(R.layout.seekbar_row2, parent, false);
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             EditText eT = (EditText) convertView.findViewById(R.id.editText2);
+
+            //Android Recycle Problem: If the user scrolls up/down ,we need to re-populated the editText based on what they previously enter
             if (goalTimeEditTextMap.get(activitySet.get(position))!=null){
                 eT.setText(goalTimeEditTextMap.get(activitySet.get(position)).getText().toString());
             }
@@ -156,8 +203,9 @@ public class GoalSetActivity extends Activity {
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView delta = (TextView) convertView.findViewById(R.id.deltatextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
-            oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)));
 
+            //Set the users currentLevel in the layout and set the text of the layout to correspond
+            oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)));
             if (activitySet.get(position).contains("_REP")) {
                 oldValue.setText(oldValue.getText().toString().concat(" Reps"));
             } else if (activitySet.get(position).contains("_TIM")) {
@@ -182,12 +230,18 @@ public class GoalSetActivity extends Activity {
                 delta.setText("-".concat(Integer.toString(delt)));
                 delta.setTextColor(Color.parseColor("#ff0000"));
             }
+
+            //When the seekbar is changed, we update the UI Accordingly
+            //We also update our Map<> so that we have a record of each activity and its goal
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+                    //Prohibits goal from being less than the starting value
                     if (seekBar.getProgress()<activitySetLevels.get(position)){
                         sb.setProgress(activitySetLevels.get(position));
                     }
+                    //Puts the data in our map
                     goalLevelMap.put(activitySet.get(position), seekBar.getProgress());
                     int delt = sb.getProgress()-activitySetLevels.get(position);
                     if (delt>=0){
@@ -221,6 +275,7 @@ public class GoalSetActivity extends Activity {
                 }
             });
 
+            //String parsing for our layout
             if (activitySet.get(position).contains("_REP")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
             } else if (activitySet.get(position).contains("_TIM")) {
