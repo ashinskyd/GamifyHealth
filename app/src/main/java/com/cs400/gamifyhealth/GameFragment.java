@@ -64,6 +64,7 @@ public class GameFragment extends Fragment {
     private TextView creditCounter;
     private int[] gridSize;
     private int[] houseIcons;
+    private Button farmStore;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -119,7 +120,9 @@ public class GameFragment extends Fragment {
         Bundle b = getArguments();
         if (b!=null && b.getBoolean("HOUSE_STORE")){
             //Register the listeners if we come from the store
-            RegisterListeners(mGrid);
+            RegisterListeners(mGrid, "House_Store" , b.getInt("HOUSE_VALUE"));
+        }else if (b!=null && b.getBoolean("FARM_STORE")){
+            RegisterListeners(mGrid, "Farm_Store" , b.getInt("FARM_VALUE"));
         }
         return V;
     }
@@ -135,6 +138,7 @@ public class GameFragment extends Fragment {
 
         //If we click the houseStore icon, we launch the store
         houseStore = (Button) V.findViewById(R.id.cottage_button);
+        farmStore = (Button) V.findViewById(R.id.wheat_button);
         houseStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,11 +150,24 @@ public class GameFragment extends Fragment {
                 transaction.commit();
             }
         });
+        farmStore.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction;
+                FarmStoreFragment farmStoreFragment = new FarmStoreFragment();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame, farmStoreFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+
+        });
         mGrid = (GridLayout) V.findViewById(R.id.map);
     }
 
 
-    private void RegisterListeners(GridLayout mGrid) {
+    private void RegisterListeners(GridLayout mGrid, final String storeValue, final int iconValue) {
         int indices = gridSize[0]*gridSize[1];
         int c=-1;
         for (int i = 0; i < indices; i++) {
@@ -163,12 +180,19 @@ public class GameFragment extends Fragment {
                     public void onClick(View view) {
                         int xCoord = d / gridSize[1];
                         int yCoord = d % gridSize[1];
-                        int i = getArguments().getInt("HOUSE_VALUE");
-                        tileIcon.setBackground(getActivity().getResources().getDrawable(houseIcons[i]));
-                        dataSource.open();
-                        dataSource.insertObject("house", xCoord, yCoord, Integer.toString(i));
-                        dataSource.printObjectDB();
-                        dataSource.close();
+                        if (storeValue.equals("House_Store")){
+                            tileIcon.setBackground(getActivity().getResources().getDrawable(houseIcons[iconValue]));
+                            dataSource.open();
+                            dataSource.insertObject("house", xCoord, yCoord, Integer.toString(iconValue));
+                            dataSource.printObjectDB();
+                            dataSource.close();
+                        }else if (storeValue.equals("Farm_Store")){
+                            tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.wheat));
+                            dataSource.open();
+                            dataSource.insertObject("farm", xCoord, yCoord, Integer.toString(iconValue));
+                            dataSource.printObjectDB();
+                            dataSource.close();
+                        }
                         UnregisterListeners();
                     }
                 });
@@ -205,6 +229,8 @@ public class GameFragment extends Fragment {
                 if (buildingMap.get(c).type.equals("house")){
                     int drawable = houseIcons[Integer.parseInt(buildingMap.get(c).name)];
                     tileIcon.setBackground(getActivity().getResources().getDrawable(drawable));
+                }else if(buildingMap.get(c).type.equals("farm")){
+                    tileIcon.setBackground(getResources().getDrawable(R.drawable.wheat));
                 }else{
                     tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
                 }
