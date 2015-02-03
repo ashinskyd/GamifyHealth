@@ -174,16 +174,16 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
         String currentDate = dateFormat.format(cal.getTime());
         currentDate = currentDate.substring(currentDate.indexOf("-")+1);
         String oldDate = sharedPrefs.getString("LAST_WORKOUT"," ");
-        CreditEngine creditEngine = new CreditEngine(getActivity());
+        EarningsEngine earningsEngine = new EarningsEngine(getActivity());
         if (!currentDate.equals(oldDate)){
             SharedPreferences.Editor mEditor = sharedPrefs.edit();
-            mEditor.putString("LAST_WORKOUT",currentDate);
+            mEditor.putString("LAST_WORKOUT", currentDate);
             mEditor.commit();
-            creditEngine.postWorkout();
-            creditEngine.weeklyGoalCheck();
+            earningsEngine.postWorkout();
+            earningsEngine.weeklyGoalCheck();
 
         }else{
-            creditEngine.weeklyGoalCheck();
+            earningsEngine.weeklyGoalCheck();
         }
         FragmentTransaction transaction;
         GameFragment gameFragment = new GameFragment();

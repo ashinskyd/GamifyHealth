@@ -19,11 +19,11 @@ import java.util.Locale;
 
 //todo: put credits in sharedprefs in such that a way that the value is only re-inserted for first time players
 
-public class CreditEngine {
+public class EarningsEngine {
     public Activity activity;
     public SharedPreferences sp;
 
-    public CreditEngine(Activity a){
+    public EarningsEngine(Activity a){
         //get credits/coins from sharedprefs
         this.activity = a;
         String pref_file_key = a.getString(R.string.preference_file_key);
@@ -32,7 +32,7 @@ public class CreditEngine {
 
 
     //called assuming a goal is completed for good
-    public void updateCredits(Goal g){
+    public void updateCredits (Goal g) {
         int creditsEarned = g.duration * 10;
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("CREDITS", sp.getInt("CREDITS", 0) + creditsEarned);

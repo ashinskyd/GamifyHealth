@@ -126,12 +126,12 @@ public class GameFragment extends Fragment {
 
     private void initUi(View V) {
         int population = sharedPrefs.getInt("POPULATION",1);
-        peopleCounter =(TextView) V.findViewById(R.id.people_counter);
-        peopleCounter.setText(population+" People");
+        peopleCounter = (TextView) V.findViewById(R.id.people_counter);
+        peopleCounter.setText(population + " People");
         //Set Credit Counter
         int credits = sharedPrefs.getInt("CREDITS",1);
         creditCounter = (TextView) V.findViewById(R.id.credit_counter);
-        creditCounter.setText(credits+" Credits");
+        creditCounter.setText(credits+ " Gold");
 
         //If we click the houseStore icon, we launch the store
         houseStore = (Button) V.findViewById(R.id.cottage_button);

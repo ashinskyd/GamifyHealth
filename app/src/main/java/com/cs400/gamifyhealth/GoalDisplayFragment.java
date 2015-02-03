@@ -5,14 +5,11 @@ package com.cs400.gamifyhealth;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -76,8 +73,8 @@ public class GoalDisplayFragment extends Fragment {
         dataSource.insertWorkout(w2);
 
         dataSource.close();
-        CreditEngine creditEngine = new CreditEngine(getActivity());
-        creditEngine.weeklyGoalCheck();
+        EarningsEngine earningsEngine = new EarningsEngine(getActivity());
+        earningsEngine.weeklyGoalCheck();
         dataSource.open();
         dataSource.printGoalDB();
         goalSet = dataSource.getGoals();
