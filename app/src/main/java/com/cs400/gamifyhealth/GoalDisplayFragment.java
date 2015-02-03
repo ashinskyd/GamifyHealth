@@ -60,6 +60,7 @@ public class GoalDisplayFragment extends Fragment {
         dataSource = new DBConnection(getActivity());
         dataSource.open();
         dataSource.createTables();
+        dataSource.insertObject("farm", 4, 4, "2");
         Goal g = new Goal("2015-01-25", "Running","DTA-T",0,10,5);
         try {
             dataSource.insertGoal(g);

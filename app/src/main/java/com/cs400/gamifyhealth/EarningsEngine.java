@@ -32,12 +32,47 @@ public class EarningsEngine {
 
 
     //called assuming a goal is completed for good
-    public void updateCredits (Goal g) {
+    public void updateCredits(Goal g) {
         int creditsEarned = g.duration * 10;
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("CREDITS", sp.getInt("CREDITS", 0) + creditsEarned);
         editor.commit();
 
+    }
+
+    public void updatePop() {
+
+        // Use database to determine population growth rate and capacity
+        int[] houseCapacities = {4,8,12,16,20};
+        int[] farmGrowths = {1,2,3,4,5};
+        int pop = sp.getInt("POPULATION", 1);
+        int popCap = 0;
+        int growth = 0;
+
+        System.out.println("Before population: "+pop);
+
+        DBConnection dataSource = new DBConnection(activity);
+        dataSource.open();
+        ArrayList<Building> buildings = dataSource.getObjectsOwned();
+        dataSource.close();
+        for (Building b: buildings) {
+            if (b.type.equals("house")) {
+                popCap += houseCapacities[Integer.parseInt(b.name)];
+            } else if (b.type.equals("farm")) {
+                growth += farmGrowths[Integer.parseInt(b.name)];
+            }
+        }
+        System.out.println("Popcap, growth = "+popCap+" "+growth);
+
+        // Update the population with new citizens based on farms, if it doesn't exceed capacity
+        if (pop < popCap) {
+            pop = Math.min(pop + growth, popCap);
+        }
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("POPULATION", pop);
+        editor.commit();
+
+        System.out.println("After population: " + pop);
     }
 
     //weekly bonus
