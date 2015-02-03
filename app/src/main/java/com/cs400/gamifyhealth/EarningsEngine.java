@@ -1,8 +1,13 @@
 package com.cs400.gamifyhealth;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,7 +76,7 @@ public class EarningsEngine {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("POPULATION", pop);
         editor.commit();
-
+        showInfoDialog(pop,"People");
         System.out.println("After population: " + pop);
     }
 
@@ -80,12 +85,26 @@ public class EarningsEngine {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("CREDITS", sp.getInt("CREDITS", 0) + 50);
         editor.commit();
+        showInfoDialog(50,"Credits");
     }
 
     public void postWorkout(){
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("CREDITS", sp.getInt("CREDITS", 0) + 10);
         editor.commit();
+        showInfoDialog(10,"Credits");
+    }
+
+    private void showInfoDialog(int amount,String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Nice Work!");
+        builder.setMessage("You had an increase of: "+amount+" "+type);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+        builder.show();
     }
 
     //return credits to add

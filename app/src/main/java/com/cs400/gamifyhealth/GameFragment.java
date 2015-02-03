@@ -49,7 +49,7 @@ public class GameFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
+    private View V;
     private String mParam1;
     private String mParam2;
     private Button houseStore;
@@ -93,8 +93,10 @@ public class GameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View V = inflater.inflate(R.layout.fragment_game, container, false);
+        V = inflater.inflate(R.layout.fragment_game, container, false);
         getActivity().getActionBar().setTitle("Game Page");
+
+        //Array of the house png's which we need to properly redraw the map
         houseIcons = new int[5];
         houseIcons[0] = R.drawable.house1;
         houseIcons[1] = R.drawable.house2;
@@ -102,21 +104,27 @@ public class GameFragment extends Fragment {
         houseIcons[3] = R.drawable.house4;
         houseIcons[4] = R.drawable.house5;
 
-        //Set the population counter
+        //Set the population counter and get (if any) attacks
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        gridSize = new int[2];
+        String gridSizeString = sharedPrefs.getString("GRID_SIZE","10,13");
+        gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
+        gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
+        return V;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         int attacks = sharedPrefs.getInt("ATTACKS",0);
         AttackEngine a = new AttackEngine(getActivity());
         for (int i=0;i<attacks;i++){
             a.attack();
         }
-        gridSize = new int[2];
-        String gridSizeString = sharedPrefs.getString("GRID_SIZE","10,13");
-        gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
-        gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
         initUi(V);
         getOccupiedIndices(mGrid);
         inflateMap(V);
-        Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
+        Boolean store; //Used to determine if (upon inflating) we are in the process of buying an item
         Bundle b = getArguments();
         if (b!=null && b.getBoolean("HOUSE_STORE")){
             //Register the listeners if we come from the store
@@ -124,7 +132,6 @@ public class GameFragment extends Fragment {
         }else if (b!=null && b.getBoolean("FARM_STORE")){
             RegisterListeners(mGrid, "Farm_Store" , b.getInt("FARM_VALUE"));
         }
-        return V;
     }
 
     private void initUi(View V) {
@@ -136,7 +143,7 @@ public class GameFragment extends Fragment {
         creditCounter = (TextView) V.findViewById(R.id.credit_counter);
         creditCounter.setText(credits+ " Gold");
 
-        //If we click the houseStore icon, we launch the store
+        //If we click the store icon, we launch the store
         houseStore = (Button) V.findViewById(R.id.cottage_button);
         farmStore = (Button) V.findViewById(R.id.wheat_button);
         houseStore.setOnClickListener(new View.OnClickListener() {
@@ -166,8 +173,13 @@ public class GameFragment extends Fragment {
         mGrid = (GridLayout) V.findViewById(R.id.map);
     }
 
-
+    /**
+     * @param mGrid The gridlayout of our game
+     * @param storeValue the type of store ie: farm/house/forts
+     * @param iconValue the specific level of item ie: house_1,house_2...
+     */
     private void RegisterListeners(GridLayout mGrid, final String storeValue, final int iconValue) {
+
         int indices = gridSize[0]*gridSize[1];
         int c=-1;
         for (int i = 0; i < indices; i++) {

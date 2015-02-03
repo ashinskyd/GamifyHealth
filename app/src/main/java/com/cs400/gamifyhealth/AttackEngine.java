@@ -9,6 +9,8 @@ package com.cs400.gamifyhealth;
 //database stores farms, fortifications, and houses
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.util.Log;
@@ -56,6 +58,9 @@ public class AttackEngine {
 
     //called post-attack
     public void updateDB(int farmsDestroyed, int fortsDestroyed, int housesDestroyed, int newPopulation){
+
+        /*** Gets a string based on attack type to  be used for the dialog ***/
+        String attackType = "";
         System.out.println("I'm attempting damage");
         System.out.println(farmsDestroyed + " " + fortsDestroyed + " " + housesDestroyed);
         datasource.open();
@@ -63,15 +68,20 @@ public class AttackEngine {
         boolean farmsDone = true;
         if (farmsDestroyed > 0){
             farmsDone = false;
+            attackType = "Farms Removed";
         }
         boolean fortsDone = true;
         if (fortsDestroyed > 0){
             fortsDone = false;
+            attackType = "Forts Removed";
         }
         boolean housesDone = true;
         if (housesDestroyed > 0){
             housesDone = false;
+            attackType = "Houses Removed";
         }
+
+        //If none of the above are attacked, must be people
         int farm = 0;
         int fort = 0;
         int house = 0;
@@ -131,8 +141,29 @@ public class AttackEngine {
         int attacks = sharedPrefs.getInt("ATTACKS",0)-1;
         mEditor.putInt("ATTACKS",attacks);
         mEditor.commit();
+
+        //If we remove no buildings, we must have removed some number of people
+        if (toRemove.size()==0){
+            showAttackDialog(newPopulation,"Is your new population");
+        }else{
+            showAttackDialog(toRemove.size(),attackType);
+        }
+
     }
 
+    private void showAttackDialog(int size, String attackType) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Oh No!");
+        builder.setMessage("You were attacked! You had: "+size+" "+attackType);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.show();
+
+    }
 
 
     public void attack() {
