@@ -65,6 +65,7 @@ public class GameFragment extends Fragment {
     private int[] gridSize;
     private int[] houseIcons;
     private Button farmStore;
+    private int credits;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -94,8 +95,6 @@ public class GameFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         V = inflater.inflate(R.layout.fragment_game, container, false);
-        getActivity().getActionBar().setTitle("Game Page");
-
         //Array of the house png's which we need to properly redraw the map
         houseIcons = new int[5];
         houseIcons[0] = R.drawable.house1;
@@ -116,6 +115,7 @@ public class GameFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+        credits = sharedPrefs.getInt("CREDITS",1);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
         AttackEngine a = new AttackEngine(getActivity());
         for (int i=0;i<attacks;i++){
@@ -128,10 +128,15 @@ public class GameFragment extends Fragment {
         Bundle b = getArguments();
         if (b!=null && b.getBoolean("HOUSE_STORE")){
             //Register the listeners if we come from the store
+            getActivity().getActionBar().setTitle("Select a position to place house");
             RegisterListeners(mGrid, "House_Store" , b.getInt("HOUSE_VALUE"));
+
         }else if (b!=null && b.getBoolean("FARM_STORE")){
             RegisterListeners(mGrid, "Farm_Store" , b.getInt("FARM_VALUE"));
+        }else{
+            getActivity().getActionBar().setTitle("Game Page");
         }
+
     }
 
     private void initUi(View V) {
@@ -139,7 +144,7 @@ public class GameFragment extends Fragment {
         peopleCounter = (TextView) V.findViewById(R.id.people_counter);
         peopleCounter.setText(population + " People");
         //Set Credit Counter
-        int credits = sharedPrefs.getInt("CREDITS",1);
+
         creditCounter = (TextView) V.findViewById(R.id.credit_counter);
         creditCounter.setText(credits+ " Gold");
 
@@ -179,7 +184,6 @@ public class GameFragment extends Fragment {
      * @param iconValue the specific level of item ie: house_1,house_2...
      */
     private void RegisterListeners(GridLayout mGrid, final String storeValue, final int iconValue) {
-
         int indices = gridSize[0]*gridSize[1];
         int c=-1;
         for (int i = 0; i < indices; i++) {
@@ -198,6 +202,9 @@ public class GameFragment extends Fragment {
                             dataSource.insertObject("house", xCoord, yCoord, Integer.toString(iconValue));
                             dataSource.printObjectDB();
                             dataSource.close();
+                            sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
+                            getActivity().getActionBar().setTitle("Game Page");
+                            creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
                         }else if (storeValue.equals("Farm_Store")){
                             tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.wheat));
                             dataSource.open();

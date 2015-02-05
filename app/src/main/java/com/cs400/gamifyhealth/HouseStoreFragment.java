@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ public class HouseStoreFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private int credits;
+    private boolean [] isSelectable;
+    private SharedPreferences sharedPrefs;
 
     public static HouseStoreFragment newInstance(String param1, String param2) {
         HouseStoreFragment fragment = new HouseStoreFragment();
@@ -61,9 +64,11 @@ public class HouseStoreFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_house_store, container, false);
-        credits = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getInt("CREDITS",0);
+        sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        credits = sharedPrefs.getInt("CREDITS",0);
         getActivity().getActionBar().setTitle("Purchase Houses");
         ArrayList<String> housesArray = new ArrayList<String>();
+        isSelectable = new boolean[5];
         housesArray.add("Hut 1234567889");
         housesArray.add("Yurt 123456789");
         housesArray.add("Townhouse");
@@ -103,16 +108,19 @@ public class HouseStoreFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("HOUSE_STORE",true);
-                bundle.putInt("HOUSE_VALUE",i);
-                FragmentTransaction transaction;
-                GameFragment gameFragment = new GameFragment();
-                transaction = getFragmentManager().beginTransaction();
-                gameFragment.setArguments(bundle);
-                transaction.replace(R.id.content_frame, gameFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (isSelectable[i]){
+
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("HOUSE_STORE",true);
+                    bundle.putInt("HOUSE_VALUE",i);
+                    FragmentTransaction transaction;
+                    GameFragment gameFragment = new GameFragment();
+                    transaction = getFragmentManager().beginTransaction();
+                    gameFragment.setArguments(bundle);
+                    transaction.replace(R.id.content_frame, gameFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
 
         });
@@ -145,7 +153,6 @@ public class HouseStoreFragment extends Fragment {
         }
 
         public View getView(final int position, View convertView, ViewGroup parent){
-
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.store_custom_row_item, parent, false);
             convertView.setEnabled(false);
@@ -153,19 +160,52 @@ public class HouseStoreFragment extends Fragment {
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
             switch (position){
                 case 0:
-                    image.setBackground(getResources().getDrawable(R.drawable.house1));
+                    if (credits<5){
+                        image.setBackground(getResources().getDrawable(R.drawable.house1_bw));
+                        isSelectable[position] = false;
+                    }else{
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house1));
+                    }
                     break;
                 case 1:
-                    image.setBackground(getResources().getDrawable(R.drawable.house2));
+                    if (credits<5){
+                        image.setBackground(getResources().getDrawable(R.drawable.house2_bw));
+                        isSelectable[position] = false;
+                    }else{
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house2));
+                    }
+
                     break;
                 case 2:
-                    image.setBackground(getResources().getDrawable(R.drawable.house3));
+                    if (credits<5){
+                        image.setBackground(getResources().getDrawable(R.drawable.house3_bw));
+                        isSelectable[position] = false;
+                    }else{
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house3));
+                    }
+
                     break;
                 case 3:
-                    image.setBackground(getResources().getDrawable(R.drawable.house4));
+                    if (credits<5){
+                        image.setBackground(getResources().getDrawable(R.drawable.house4_bw));
+                        isSelectable[position] = false;
+                    }else{
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house4));
+                    }
+
                     break;
                 case 4:
-                    image.setBackground(getResources().getDrawable(R.drawable.house5));
+                    if (credits<5){
+                        image.setBackground(getResources().getDrawable(R.drawable.house5_bw));
+                        isSelectable[position] = false;
+                    }else{
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house5));
+                    }
                     break;
 
             }
