@@ -145,7 +145,11 @@ public class AttackEngine {
 
         //If we remove no buildings, we must have removed some number of people
         if (toRemove.size()==0){
-            showAttackDialog(population-newPopulation,"People Removed");
+            if (population != newPopulation) {
+                showAttackDialog(population-newPopulation,"People Removed");
+            }else{
+                showAttackDialog(0,"You survived the attack with no casualties");
+            }
         }else{
             showAttackDialog(toRemove.size(),attackType);
         }
@@ -153,16 +157,28 @@ public class AttackEngine {
     }
 
     private void showAttackDialog(int size, String attackType) {
+        if (size==0){
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("Oh No!");
+            builder.setMessage(attackType);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            builder.show();
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("Oh No!");
+            builder.setMessage("You were attacked! You had: "+size+" "+attackType);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            builder.show();
+        }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Oh No!");
-        builder.setMessage("You were attacked! You had: "+size+" "+attackType);
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        builder.show();
 
     }
 
