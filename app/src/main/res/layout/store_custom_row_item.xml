@@ -8,7 +8,8 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:id="@+id/imageView"
-        android:background="@drawable/sword" />
+        android:background="@drawable/sword"
+         />
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,11 +24,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5000"
+        android:text="5"
         android:layout_gravity="center_vertical|right"
         android:id="@+id/textView2"
         android:autoText="false"
         android:textSize="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#ff4b5dff" />
+        android:textColor="#ff4b5dff"
+        android:gravity="right"
+        android:layout_marginRight="10dp" />
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,7 +33,7 @@ public class HouseStoreFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    private int credits;
 
     public static HouseStoreFragment newInstance(String param1, String param2) {
         HouseStoreFragment fragment = new HouseStoreFragment();
@@ -59,10 +61,11 @@ public class HouseStoreFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_house_store, container, false);
+        credits = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getInt("CREDITS",0);
         getActivity().getActionBar().setTitle("Purchase Houses");
         ArrayList<String> housesArray = new ArrayList<String>();
-        housesArray.add("Hut");
-        housesArray.add("Yurt");
+        housesArray.add("Hut 1234567889");
+        housesArray.add("Yurt 123456789");
         housesArray.add("Townhouse");
         housesArray.add("Yuen Hsi's Mansion");
         housesArray.add("Yuen Hsi's Mansion");
@@ -142,8 +145,10 @@ public class HouseStoreFragment extends Fragment {
         }
 
         public View getView(final int position, View convertView, ViewGroup parent){
+
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.store_custom_row_item, parent, false);
+            convertView.setEnabled(false);
             TextView description = (TextView) convertView.findViewById(R.id.description);
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
             switch (position){
