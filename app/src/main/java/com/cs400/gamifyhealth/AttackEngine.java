@@ -28,6 +28,7 @@ public class AttackEngine {
     public int[] objectsOwned;
     public Activity activity;
     private DBConnection datasource;
+    private int population;
 
 
     public AttackEngine(Activity a){
@@ -144,7 +145,7 @@ public class AttackEngine {
 
         //If we remove no buildings, we must have removed some number of people
         if (toRemove.size()==0){
-            showAttackDialog(newPopulation,"Is your new population");
+            showAttackDialog(population-newPopulation,"People Removed");
         }else{
             showAttackDialog(toRemove.size(),attackType);
         }
@@ -170,7 +171,7 @@ public class AttackEngine {
         String pref_file_key = this.activity.getString(R.string.preference_file_key);
         SharedPreferences sharedPrefs = this.activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
         //ask Andy, how do we access sharedpreferences, store 1 int, help
-        int population = sharedPrefs.getInt("POPULATION", 1);
+        population = sharedPrefs.getInt("POPULATION", 1);
         datasource.open();
         objectsOwned = datasource.getObjectCounts();
         objectsOwned[3] = population;
