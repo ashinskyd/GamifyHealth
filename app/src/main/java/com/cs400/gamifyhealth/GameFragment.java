@@ -114,9 +114,9 @@ public class GameFragment extends Fragment {
         //Set the population counter and get (if any) attacks
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         gridSize = new int[2];
-        String gridSizeString = sharedPrefs.getString("GRID_SIZE","10,13");
-        gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
-        gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
+        //String gridSizeString = sharedPrefs.getString("GRID_SIZE","4,5");
+        gridSize[0] = 4;    //Integer.parseInt(gridSizeString.split(",")[0]);
+        gridSize[1] = 5;    // Integer.parseInt(gridSizeString.split(",")[1]);
         return V;
     }
 
@@ -204,6 +204,8 @@ public class GameFragment extends Fragment {
             }
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
+        mGrid.setRowCount(gridSize[1]);
+        mGrid.setColumnCount(gridSize[0]);
     }
 
     /**
@@ -232,6 +234,7 @@ public class GameFragment extends Fragment {
                             dataSource.close();
                             sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
                             getActivity().getActionBar().setTitle("Game Page");
+
                             creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
                         }else if (storeValue.equals("Farm_Store")){
                             tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.wheat));
@@ -277,8 +280,10 @@ public class GameFragment extends Fragment {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         final float scale = getActivity().getResources().getDisplayMetrics().density;
         final GridLayout mGrid = (GridLayout) v.findViewById(R.id.map);
+        mGrid.setRowCount(gridSize[1]);
+        mGrid.setColumnCount(gridSize[0]);
         //Here is where we will change the tile size based on zoom level. Current is hardcoded to 40
-        int h = (int)(40 * scale);
+        int h = (int)(95 * scale);
         int c = -1;
         int indices = gridSize[0]*gridSize[1];
         for (int i=0;i<indices;i++) {
@@ -313,6 +318,7 @@ public class GameFragment extends Fragment {
         dataSource.close();
         for (Building building: buildingArrayList){
             int index = (building.xcoord * mGrid.getRowCount()) + building.ycoord;
+            Log.d("TAG","INDEX: "+index+"X: "+building.xcoord+"Y: "+building.ycoord);
             occupiedIndices.add(index);
             buildingMap.put(index,building);
         }

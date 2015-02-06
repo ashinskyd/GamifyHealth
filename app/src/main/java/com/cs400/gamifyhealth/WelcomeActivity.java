@@ -38,7 +38,7 @@ public class WelcomeActivity extends Activity {
             datasource.open();
             datasource.createTables();
             datasource.insertObject("house", 0, 0, "1");
-            datasource.insertObject("house", 1, 1, "1");
+            datasource.insertObject("house", 1, 0, "1");
             datasource.close();
             setContentView(R.layout.activity_welcome);
             continueButton = (Button) findViewById(R.id.continueButton);
