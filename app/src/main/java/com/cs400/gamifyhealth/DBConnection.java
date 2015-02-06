@@ -96,6 +96,7 @@ public class DBConnection{
         this.database.execSQL(command);
     }
 
+    //given an object, inserts a workout into the database
     public void insertWorkout(Workout w) {
         ContentValues values = new ContentValues();
         GregorianCalendar c = new GregorianCalendar();

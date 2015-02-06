@@ -73,6 +73,7 @@ public class FarmStoreFragment extends Fragment {
         farmsArray.add("Best Farm");
         Button farmStore = (Button) V.findViewById(R.id.wheat_button);
         Button houseStore = (Button) V.findViewById(R.id.cottage_button);
+        Button fortStore = (Button) V.findViewById(R.id.sword_button);
         houseStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +97,18 @@ public class FarmStoreFragment extends Fragment {
                 transaction.commit();
             }
         });
+        fortStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction;
+                FortStoreFragment fortStoreFragment = new FortStoreFragment();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame, fortStoreFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
         ListView farmListView = (ListView) V.findViewById(R.id.store_listView);
         FarmArrayAdapter mAdapter = new FarmArrayAdapter(getActivity(),R.layout.store_custom_row_item, farmsArray);
         farmListView.setAdapter(mAdapter);

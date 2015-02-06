@@ -34,6 +34,7 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -53,6 +54,7 @@ public class GameFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button houseStore;
+    private Button fortStore;
     private SharedPreferences sharedPrefs;
     private Set<Integer> occupiedIndices = new HashSet<Integer>();
     private ArrayList<Building> buildingArrayList = new ArrayList<Building>();
@@ -64,6 +66,7 @@ public class GameFragment extends Fragment {
     private TextView creditCounter;
     private int[] gridSize;
     private int[] houseIcons;
+    private int[] fortIcons;
     private Button farmStore;
     private int credits;
 
@@ -102,7 +105,12 @@ public class GameFragment extends Fragment {
         houseIcons[2] = R.drawable.house3;
         houseIcons[3] = R.drawable.house4;
         houseIcons[4] = R.drawable.house5;
-
+        fortIcons = new int[5];
+        fortIcons[0] = R.drawable.fort1;
+        fortIcons[1] = R.drawable.fort2;
+        fortIcons[2] = R.drawable.fort3;
+        fortIcons[3] = R.drawable.fort4;
+        fortIcons[4] = R.drawable.fort5;
         //Set the population counter and get (if any) attacks
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         gridSize = new int[2];
@@ -124,6 +132,7 @@ public class GameFragment extends Fragment {
         initUi(V);
         getOccupiedIndices(mGrid);
         inflateMap(V);
+
         Boolean store; //Used to determine if (upon inflating) we are in the process of buying an item
         Bundle b = getArguments();
         if (b!=null && b.getBoolean("HOUSE_STORE")){
@@ -131,10 +140,16 @@ public class GameFragment extends Fragment {
             getActivity().getActionBar().setTitle("Select a position to place house");
             RegisterListeners(mGrid, "House_Store" , b.getInt("HOUSE_VALUE"));
 
-        }else if (b!=null && b.getBoolean("FARM_STORE")){
+        }
+        else if (b!=null && b.getBoolean("FARM_STORE")){
             getActivity().getActionBar().setTitle("Select a position to place farm");
-            RegisterListeners(mGrid, "Farm_Store" , b.getInt("FARM_VALUE"));
-        }else{
+            RegisterListeners(mGrid, "Farm_Store", b.getInt("FARM_VALUE"));
+        }
+        else if (b!=null && b.getBoolean("FORT_STORE")){
+        getActivity().getActionBar().setTitle("Select a position to place farm");
+        RegisterListeners(mGrid, "Fort_Store" , b.getInt("FORT_VALUE"));
+        }
+        else{
             getActivity().getActionBar().setTitle("Game Page");
         }
 
@@ -152,6 +167,7 @@ public class GameFragment extends Fragment {
         //If we click the store icon, we launch the store
         houseStore = (Button) V.findViewById(R.id.cottage_button);
         farmStore = (Button) V.findViewById(R.id.wheat_button);
+        fortStore = (Button) V.findViewById(R.id.sword_button);
         houseStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,6 +191,17 @@ public class GameFragment extends Fragment {
                 transaction.commit();
             }
 
+        });
+        fortStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction;
+                FortStoreFragment fortStoreFragment = new FortStoreFragment();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame, fortStoreFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
     }
@@ -215,7 +242,17 @@ public class GameFragment extends Fragment {
                             sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
                             getActivity().getActionBar().setTitle("Game Page");
                             creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
-                        }
+                        } else if (storeValue.equals("Fort_Store")){
+                        tileIcon.setBackground(getActivity().getResources().getDrawable(fortIcons[iconValue]));
+                        dataSource.open();
+                        dataSource.insertObject("fort", xCoord, yCoord, Integer.toString(iconValue));
+                        dataSource.printObjectDB();
+                        dataSource.close();
+                        sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
+                        getActivity().getActionBar().setTitle("Game Page");
+                        creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
+                    }
+
                         UnregisterListeners();
                     }
                 });
@@ -254,8 +291,9 @@ public class GameFragment extends Fragment {
                     tileIcon.setBackground(getActivity().getResources().getDrawable(drawable));
                 }else if(buildingMap.get(c).type.equals("farm")){
                     tileIcon.setBackground(getResources().getDrawable(R.drawable.wheat));
-                }else{
-                    tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.sample));
+                }else if(buildingMap.get(c).type.equals("fort")){
+                    int drawable = fortIcons[Integer.parseInt(buildingMap.get(c).name)];
+                    tileIcon.setBackground(getActivity().getResources().getDrawable(drawable));
                 }
             }else{
                 tileIcon.setBackgroundColor(Color.TRANSPARENT);

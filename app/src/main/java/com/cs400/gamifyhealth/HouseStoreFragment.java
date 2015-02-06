@@ -76,6 +76,7 @@ public class HouseStoreFragment extends Fragment {
         housesArray.add("Yuen Hsi's Mansion");
         Button houseStore = (Button) V.findViewById(R.id.cottage_button);
         Button farmStore = (Button) V.findViewById(R.id.wheat_button);
+        Button fortStore = (Button) V.findViewById(R.id.sword_button);
 
         farmStore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +85,17 @@ public class HouseStoreFragment extends Fragment {
                 FarmStoreFragment farmStoreFragment = new FarmStoreFragment();
                 transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.content_frame, farmStoreFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+        fortStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction;
+                FortStoreFragment fortStoreFragment = new FortStoreFragment();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame, fortStoreFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
