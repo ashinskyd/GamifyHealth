@@ -3,6 +3,7 @@ package com.cs400.gamifyhealth;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -27,6 +28,11 @@ public class FarmStoreFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
+
+    private SharedPreferences sharedPrefs;
+    private boolean[] isSelectable;
+    private int credits;
+
 
     public static FarmStoreFragment newInstance(String param1, String param2) {
         FarmStoreFragment fragment = new FarmStoreFragment();
@@ -55,7 +61,11 @@ public class FarmStoreFragment extends Fragment {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.fragment_farm_store, container, false);
         getActivity().getActionBar().setTitle("Purchase Food Items");
+        sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        credits = sharedPrefs.getInt("CREDITS",0);
+        getActivity().getActionBar().setTitle("Purchase Farms");
         ArrayList<String> farmsArray = new ArrayList<String>();
+        isSelectable = new boolean[5];
         farmsArray.add("Bad Farm");
         farmsArray.add("OK Farm");
         farmsArray.add("Decent Farm");
@@ -93,16 +103,19 @@ public class FarmStoreFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("FARM_STORE", true);
-                bundle.putInt("FARM_VALUE", i);
-                FragmentTransaction transaction;
-                GameFragment gameFragment = new GameFragment();
-                transaction = getFragmentManager().beginTransaction();
-                gameFragment.setArguments(bundle);
-                transaction.replace(R.id.content_frame, gameFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (isSelectable[i]){
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("FARM_STORE", true);
+                    bundle.putInt("FARM_VALUE", i);
+                    FragmentTransaction transaction;
+                    GameFragment gameFragment = new GameFragment();
+                    transaction = getFragmentManager().beginTransaction();
+                    gameFragment.setArguments(bundle);
+                    transaction.replace(R.id.content_frame, gameFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+
             }
 
         });
@@ -135,23 +148,55 @@ public class FarmStoreFragment extends Fragment {
             convertView = inflater.inflate(R.layout.store_custom_row_item, parent, false);
             TextView description = (TextView) convertView.findViewById(R.id.description);
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
-            switch (position){
+            switch (position) {
                 case 0:
-                    image.setBackground(getResources().getDrawable(R.drawable.house1));
+                    if (credits < 5) {
+                        image.setBackground(getResources().getDrawable(R.drawable.house1_bw));
+                        isSelectable[position] = false;
+                    } else {
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house1));
+                    }
                     break;
                 case 1:
-                    image.setBackground(getResources().getDrawable(R.drawable.house2));
+                    if (credits < 5) {
+                        image.setBackground(getResources().getDrawable(R.drawable.house2_bw));
+                        isSelectable[position] = false;
+                    } else {
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house2));
+                    }
+
                     break;
                 case 2:
-                    image.setBackground(getResources().getDrawable(R.drawable.house3));
+                    if (credits < 5) {
+                        image.setBackground(getResources().getDrawable(R.drawable.house3_bw));
+                        isSelectable[position] = false;
+                    } else {
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house3));
+                    }
+
                     break;
                 case 3:
-                    image.setBackground(getResources().getDrawable(R.drawable.house4));
+                    if (credits < 5) {
+                        image.setBackground(getResources().getDrawable(R.drawable.house4_bw));
+                        isSelectable[position] = false;
+                    } else {
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house4));
+                    }
+
                     break;
                 case 4:
-                    image.setBackground(getResources().getDrawable(R.drawable.house5));
+                    if (credits < 5) {
+                        image.setBackground(getResources().getDrawable(R.drawable.house5_bw));
+                        isSelectable[position] = false;
+                    } else {
+                        isSelectable[position] = true;
+                        image.setBackground(getResources().getDrawable(R.drawable.house5));
+                    }
                     break;
-
             }
             description.setText("This is a placeholder for a farm description: " + farmList.get(position));
             return convertView;

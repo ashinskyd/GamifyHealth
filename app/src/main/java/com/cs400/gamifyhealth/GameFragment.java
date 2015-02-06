@@ -132,6 +132,7 @@ public class GameFragment extends Fragment {
             RegisterListeners(mGrid, "House_Store" , b.getInt("HOUSE_VALUE"));
 
         }else if (b!=null && b.getBoolean("FARM_STORE")){
+            getActivity().getActionBar().setTitle("Select a position to place farm");
             RegisterListeners(mGrid, "Farm_Store" , b.getInt("FARM_VALUE"));
         }else{
             getActivity().getActionBar().setTitle("Game Page");
@@ -211,6 +212,9 @@ public class GameFragment extends Fragment {
                             dataSource.insertObject("farm", xCoord, yCoord, Integer.toString(iconValue));
                             dataSource.printObjectDB();
                             dataSource.close();
+                            sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
+                            getActivity().getActionBar().setTitle("Game Page");
+                            creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
                         }
                         UnregisterListeners();
                     }
