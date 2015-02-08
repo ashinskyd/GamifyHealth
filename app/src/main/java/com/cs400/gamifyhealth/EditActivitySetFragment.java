@@ -129,7 +129,6 @@ public class EditActivitySetFragment extends Fragment {
         activityItems.add(new ActivityModel("Swimming (Time)",s.contains("Swimming (Time)")));
         activityItems.add(new ActivityModel("Swimming (Distance)",s.contains("Swimming (Distance)")));
         activityItems.add(new ActivityModel("Crunches",s.contains("Crunches")));
-        activityItems.add(new ActivityModel("Cycling", s.contains("Cycling")));
         activityItems.add(new ActivityModel("Pull-Ups",s.contains("Pull-Ups")));
         activityItems.add(new ActivityModel("Dips",s.contains("Dips")));
         activityItems.add(new ActivityModel("Push-Ups",s.contains("Push-Ups")));

@@ -206,6 +206,23 @@ public class GoalSetActivity extends Activity {
 
             //Set the users currentLevel in the layout and set the text of the layout to correspond
             oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)));
+            if (activitySet.get(position).toString().contains("_REP")){
+                sb.setMax(500);
+            }else if (activitySet.get(position).toString().contains("_TIM")){
+                sb.setMax(25);
+            }else{
+                if(activitySet.get(position).toString().contains("_DTA-T")){
+                    sb.setMax(25);
+                }else if(activitySet.get(position).toString().contains("_DTA-D")){
+                    if (activitySet.get(position).toString().contains("Swimming")) {
+                        sb.setMax(1000);
+                    } else if(activitySet.get(position).toString().contains("Running")) {
+                        sb.setMax(50);
+                    } else {
+                        sb.setMax(200);
+                    }
+                }
+            }
             if (activitySet.get(position).contains("_REP")) {
                 oldValue.setText(oldValue.getText().toString().concat(" Reps"));
             } else if (activitySet.get(position).contains("_TIM")) {
@@ -214,7 +231,11 @@ public class GoalSetActivity extends Activity {
                 if (activitySet.get(position).contains("_DTA-T")) {
                     oldValue.setText(oldValue.getText().toString().concat(" Hours"));
                 } else if (activitySet.get(position).contains("_DTA-D")) {
-                    oldValue.setText(oldValue.getText().toString().concat(" Miles"));
+                    if (activitySet.get(position).contains("Swimming")){
+                        oldValue.setText(oldValue.getText().toString().concat(" Laps"));
+                    }else{
+                        oldValue.setText(oldValue.getText().toString().concat(" Miles"));
+                    }
                 }
             }
             title.setText(activitySet.get(position).split("_")[0]);
@@ -261,7 +282,12 @@ public class GoalSetActivity extends Activity {
                         if (activitySet.get(position).contains("_DTA-T")) {
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
                         } else if (activitySet.get(position).contains("_DTA-D")) {
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                           if (activitySet.get(position).contains("Swimming")){
+                               progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
+                           }else{
+                               progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                           }
+
                         }
                     }
                 }
@@ -283,7 +309,9 @@ public class GoalSetActivity extends Activity {
             } else {
                 if (activitySet.get(position).contains("_DTA-T")) {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                } else {
+                }else if(activitySet.get(position).contains("Swimming")){
+                    progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                } else{
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
                 }
             }
