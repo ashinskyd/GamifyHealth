@@ -110,6 +110,23 @@ public class CurrentActivityLevel extends Activity {
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
             String temp = activityList.get(position).split("_")[0];
+            if (activityList.get(position).toString().contains("_REP")){
+                sb.setMax(500);
+            }else if (activityList.get(position).toString().contains("_TIM")){
+                sb.setMax(25);
+            }else{
+                if(activityList.get(position).toString().contains("_DTA-T")){
+                    sb.setMax(25);
+                }else if(activityList.get(position).toString().contains("_DTA-D")){
+                    if (activityList.get(position).toString().contains("Swimming")) {
+                        sb.setMax(1000);
+                    } else if(activityList.get(position).toString().contains("Running")) {
+                        sb.setMax(50);
+                    } else {
+                        sb.setMax(200);
+                    }
+                }
+            }
             title.setText(temp);
             //Required to set some text before proceding to avoid a null ptr
             progress.setText("HI");
@@ -130,7 +147,11 @@ public class CurrentActivityLevel extends Activity {
                         if(activityList.get(position).toString().contains("_DTA-T")){
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
                         }else if(activityList.get(position).toString().contains("_DTA-D")){
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                            if (activityList.get(position).toString().contains("Swimming")){
+                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
+                            } else {
+                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                            }
                         }
                     }
                 }
@@ -149,9 +170,11 @@ public class CurrentActivityLevel extends Activity {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
             }else if (activityList.get(position).contains("_TIM")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-            }else{
-                if (activityList.get(position).contains("_DTA-T")){
+            }else {
+                if (activityList.get(position).contains("_DTA-T")) {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
+                }else if(activityList.get(position).toString().contains("Swimming")){
+                    progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
                 }else{
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
                 }

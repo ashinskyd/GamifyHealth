@@ -53,11 +53,14 @@ public class SelectActivities extends Activity {
                             sb.append(activityItems.get(j).getName()).append("_REP").append(",");
                         }else if(dtaArray.contains(activityItems.get(j).getName())){
                             if(activityItems.get(j).getName().contains("Time")){
+
                                 sb.append(activityItems.get(j).getName()).append("_DTA-T").append(",");
                             }else{
+                                Log.d("TAG","NAME: "+activityItems.get(j).getName());
                                 sb.append(activityItems.get(j).getName()).append("_DTA-D").append(",");
                             }
                         }else{
+
                             sb.append(activityItems.get(j).getName()).append("_TIM").append(",");
                         }
                     }
@@ -76,7 +79,6 @@ public class SelectActivities extends Activity {
         activityItems.add(new ActivityModel("Swimming (Time)",false));
         activityItems.add(new ActivityModel("Swimming (Distance)",false));
         activityItems.add(new ActivityModel("Crunches",false));
-        activityItems.add(new ActivityModel("Cycling", false));
         activityItems.add(new ActivityModel("Pull-Ups",false));
         activityItems.add(new ActivityModel("Dips",false));
         activityItems.add(new ActivityModel("Push-Ups",false));

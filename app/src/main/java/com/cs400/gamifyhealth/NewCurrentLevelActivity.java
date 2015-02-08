@@ -153,37 +153,60 @@ public class NewCurrentLevelActivity extends Fragment {
 
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
-
-        public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList) {
-            super(context, textViewResourceId, activityList);
+        public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList){
+            super(context, textViewResourceId,activityList);
             this.context = context;
         }
 
-        public View getView(final int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent){
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.seekbar_row, parent, false);
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
-            String temp = addSet.get(position);
+            String temp = addSetCopy.get(position).split("_")[0];
+            if (addSetCopy.get(position).toString().contains("_REP")){
+                sb.setMax(500);
+            }else if (addSetCopy.get(position).toString().contains("_TIM")){
+                sb.setMax(25);
+            }else{
+                if(addSetCopy.get(position).toString().contains("_DTA-T")){
+                    sb.setMax(25);
+                }else if(addSetCopy.get(position).toString().contains("_DTA-D")){
+                    if (addSetCopy.get(position).toString().contains("Swimming")) {
+                        sb.setMax(1000);
+                    } else if(addSetCopy.get(position).toString().contains("Running")) {
+                        sb.setMax(50);
+                    } else {
+                        sb.setMax(200);
+                    }
+                }
+            }
             title.setText(temp);
             //Required to set some text before proceding to avoid a null ptr
             progress.setText("HI");
+            if(currentLevel.get(addSetCopy.get(position))!=null){
+                sb.setProgress(currentLevel.get(addSetCopy.get(position)));
+            }
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 //Listens for seekbar sliding
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     //When progress is changed, update our currentlevel map and adjust the textview to display the value
-                    currentLevel.put(addSetCopy.get(position), seekBar.getProgress());
-                    if (addSetCopy.get(position).contains("_REP")) {
+                    currentLevel.put(addSetCopy.get(position),seekBar.getProgress());
+                    if (addSetCopy.get(position).toString().contains("_REP")){
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-                    } else if (addSetCopy.get(position).contains("_TIM")) {
+                    }else if (addSetCopy.get(position).toString().contains("_TIM")){
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                    } else {
-                        if (addSetCopy.get(position).contains("_DTA-T")) {
+                    }else{
+                        if(addSetCopy.get(position).toString().contains("_DTA-T")){
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        } else if (addSetCopy.get(position).contains("_DTA-D")) {
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                        }else if(addSetCopy.get(position).toString().contains("_DTA-D")){
+                            if (addSetCopy.get(position).toString().contains("Swimming")){
+                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
+                            } else {
+                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                            }
                         }
                     }
                 }
@@ -198,21 +221,21 @@ public class NewCurrentLevelActivity extends Fragment {
             });
 
             //Adds the proper unit to the progress view
-            if (addSetCopy.get(position).contains("_REP")) {
+            if (addSetCopy.get(position).contains("_REP")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-            } else if (addSetCopy.get(position).contains("_TIM")) {
+            }else if (addSetCopy.get(position).contains("_TIM")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-            } else {
+            }else {
                 if (addSetCopy.get(position).contains("_DTA-T")) {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                } else {
+                }else if(addSetCopy.get(position).toString().contains("Swimming")){
+                    progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                }else{
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
                 }
             }
 
             return convertView;
         }
-
-
     }
 }

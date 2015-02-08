@@ -65,6 +65,8 @@ public class GameFragment extends Fragment {
     private TextView peopleCounter;
     private TextView creditCounter;
     private int[] gridSize;
+    private String[] gridZoomLevels;
+    private int[] iconSize;
     private int[] houseIcons;
     private int[] fortIcons;
     private Button farmStore;
@@ -114,25 +116,37 @@ public class GameFragment extends Fragment {
         //Set the population counter and get (if any) attacks
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         gridSize = new int[2];
-        //String gridSizeString = sharedPrefs.getString("GRID_SIZE","4,5");
-        gridSize[0] = 4;    //Integer.parseInt(gridSizeString.split(",")[0]);
-        gridSize[1] = 5;    // Integer.parseInt(gridSizeString.split(",")[1]);
+       /* gridZoomLevels[0] = "4,5";
+        gridZoomLevels[1] = "8,9";
+        gridZoomLevels[2] = "10,13";
+        */
         return V;
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        dataSource.open();
+        buildingArrayList = dataSource.getObjectsOwned();
+        dataSource.close();
+//        gridZoomLevels[0] = "4,5";
+  //      gridZoomLevels[1] = "10,13";
         credits = sharedPrefs.getInt("CREDITS",1);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
+        String gridSizeString = sharedPrefs.getString("GRID_SIZE","4,5");
+        gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
+        gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
         AttackEngine a = new AttackEngine(getActivity());
         for (int i=0;i<attacks;i++){
             a.attack();
         }
+        boolean resized = shouldResize();
+        if (resized){
+            resizeGrid();
+        }
         initUi(V);
         getOccupiedIndices(mGrid);
         inflateMap(V);
-
         Boolean store; //Used to determine if (upon inflating) we are in the process of buying an item
         Bundle b = getArguments();
         if (b!=null && b.getBoolean("HOUSE_STORE")){
@@ -153,6 +167,14 @@ public class GameFragment extends Fragment {
             getActivity().getActionBar().setTitle("Game Page");
         }
 
+    }
+
+    private void resizeGrid() {
+        for (Building b: buildingArrayList){
+            int x = b.xcoord;
+            int y = b.ycoord;
+
+        }
     }
 
     private void initUi(View V) {
@@ -234,8 +256,8 @@ public class GameFragment extends Fragment {
                             dataSource.close();
                             sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
                             getActivity().getActionBar().setTitle("Game Page");
-
                             creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
+
                         }else if (storeValue.equals("Farm_Store")){
                             tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.wheat));
                             dataSource.open();
@@ -270,6 +292,15 @@ public class GameFragment extends Fragment {
             c += 1;
             final Button tileIcon = (Button) mGrid.findViewWithTag("space_"+c);
             tileIcon.setOnClickListener(null);
+        }
+
+    }
+
+    private boolean shouldResize(){
+        if (buildingArrayList.size()>= (gridSize[0]*gridSize[1]-1)){
+            return true;
+        }else{
+            return false;
         }
 
     }
@@ -313,9 +344,7 @@ public class GameFragment extends Fragment {
 
     private void getOccupiedIndices(GridLayout mGrid){
         //Method gets the users purchases and updates the collection of occupied indices
-        dataSource.open();
-        buildingArrayList = dataSource.getObjectsOwned();
-        dataSource.close();
+
         for (Building building: buildingArrayList){
             int index = (building.xcoord * mGrid.getRowCount()) + building.ycoord;
             Log.d("TAG","INDEX: "+index+"X: "+building.xcoord+"Y: "+building.ycoord);

@@ -192,7 +192,7 @@ public class NewGoalSetFragment extends Fragment {
         return flag;
     }
 
-    //See GoalSetActivity.class for Documentation
+    //Custom arrayadapter so we can have a seekbar and editText for each goal
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
         public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList) {
@@ -205,6 +205,8 @@ public class NewGoalSetFragment extends Fragment {
             convertView = inflater.inflate(R.layout.seekbar_row2, parent, false);
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             EditText eT = (EditText) convertView.findViewById(R.id.editText2);
+
+            //Android Recycle Problem: If the user scrolls up/down ,we need to re-populated the editText based on what they previously enter
             if (goalTimeEditTextMap.get(activitySet.get(position))!=null){
                 eT.setText(goalTimeEditTextMap.get(activitySet.get(position)).getText().toString());
             }
@@ -213,7 +215,26 @@ public class NewGoalSetFragment extends Fragment {
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView delta = (TextView) convertView.findViewById(R.id.deltatextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
+
+            //Set the users currentLevel in the layout and set the text of the layout to correspond
             oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)));
+            if (activitySet.get(position).toString().contains("_REP")){
+                sb.setMax(500);
+            }else if (activitySet.get(position).toString().contains("_TIM")){
+                sb.setMax(25);
+            }else{
+                if(activitySet.get(position).toString().contains("_DTA-T")){
+                    sb.setMax(25);
+                }else if(activitySet.get(position).toString().contains("_DTA-D")){
+                    if (activitySet.get(position).toString().contains("Swimming")) {
+                        sb.setMax(1000);
+                    } else if(activitySet.get(position).toString().contains("Running")) {
+                        sb.setMax(50);
+                    } else {
+                        sb.setMax(200);
+                    }
+                }
+            }
             if (activitySet.get(position).contains("_REP")) {
                 oldValue.setText(oldValue.getText().toString().concat(" Reps"));
             } else if (activitySet.get(position).contains("_TIM")) {
@@ -222,7 +243,11 @@ public class NewGoalSetFragment extends Fragment {
                 if (activitySet.get(position).contains("_DTA-T")) {
                     oldValue.setText(oldValue.getText().toString().concat(" Hours"));
                 } else if (activitySet.get(position).contains("_DTA-D")) {
-                    oldValue.setText(oldValue.getText().toString().concat(" Miles"));
+                    if (activitySet.get(position).contains("Swimming")){
+                        oldValue.setText(oldValue.getText().toString().concat(" Laps"));
+                    }else{
+                        oldValue.setText(oldValue.getText().toString().concat(" Miles"));
+                    }
                 }
             }
             title.setText(activitySet.get(position).split("_")[0]);
@@ -238,13 +263,18 @@ public class NewGoalSetFragment extends Fragment {
                 delta.setText("-".concat(Integer.toString(delt)));
                 delta.setTextColor(Color.parseColor("#ff0000"));
             }
+
+            //When the seekbar is changed, we update the UI Accordingly
+            //We also update our Map<> so that we have a record of each activity and its goal
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                    //TODO: Verfiy this
+
+                    //Prohibits goal from being less than the starting value
                     if (seekBar.getProgress()<activitySetLevels.get(position)){
                         sb.setProgress(activitySetLevels.get(position));
                     }
+                    //Puts the data in our map
                     goalLevelMap.put(activitySet.get(position), seekBar.getProgress());
                     int delt = sb.getProgress()-activitySetLevels.get(position);
                     if (delt>=0){
@@ -264,7 +294,12 @@ public class NewGoalSetFragment extends Fragment {
                         if (activitySet.get(position).contains("_DTA-T")) {
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
                         } else if (activitySet.get(position).contains("_DTA-D")) {
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                            if (activitySet.get(position).contains("Swimming")){
+                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
+                            }else{
+                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                            }
+
                         }
                     }
                 }
@@ -278,6 +313,7 @@ public class NewGoalSetFragment extends Fragment {
                 }
             });
 
+            //String parsing for our layout
             if (activitySet.get(position).contains("_REP")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
             } else if (activitySet.get(position).contains("_TIM")) {
@@ -285,7 +321,9 @@ public class NewGoalSetFragment extends Fragment {
             } else {
                 if (activitySet.get(position).contains("_DTA-T")) {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                } else {
+                }else if(activitySet.get(position).contains("Swimming")){
+                    progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                } else{
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
                 }
             }
