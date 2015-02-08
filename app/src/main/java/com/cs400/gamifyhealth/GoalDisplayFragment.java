@@ -86,6 +86,8 @@ public class GoalDisplayFragment extends Fragment {
         goalSet = dataSource.getGoals();
         dataSource.close();
 
+
+
         //TESTER CODE, NEEDS TO BE REMOVED EVENTUALLY
         /*
         *****************

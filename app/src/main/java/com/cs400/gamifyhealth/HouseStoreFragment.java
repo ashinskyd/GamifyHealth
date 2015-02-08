@@ -36,6 +36,7 @@ public class HouseStoreFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private int credits;
     private boolean [] isSelectable;
+    private static int[] prices = {10, 20, 30, 40, 50};
     private SharedPreferences sharedPrefs;
 
     public static HouseStoreFragment newInstance(String param1, String param2) {
@@ -170,9 +171,12 @@ public class HouseStoreFragment extends Fragment {
             convertView.setEnabled(false);
             TextView description = (TextView) convertView.findViewById(R.id.description);
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
+            TextView priceText = (TextView) convertView.findViewById(R.id.priceText);
+            int price = prices[position];
+            priceText.setText(Integer.toString(price));
             switch (position){
                 case 0:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.house1_bw));
                         isSelectable[position] = false;
                     }else{
@@ -181,7 +185,7 @@ public class HouseStoreFragment extends Fragment {
                     }
                     break;
                 case 1:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.house2_bw));
                         isSelectable[position] = false;
                     }else{
@@ -191,7 +195,7 @@ public class HouseStoreFragment extends Fragment {
 
                     break;
                 case 2:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.house3_bw));
                         isSelectable[position] = false;
                     }else{
@@ -201,7 +205,7 @@ public class HouseStoreFragment extends Fragment {
 
                     break;
                 case 3:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.house4_bw));
                         isSelectable[position] = false;
                     }else{
@@ -211,7 +215,7 @@ public class HouseStoreFragment extends Fragment {
 
                     break;
                 case 4:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.house5_bw));
                         isSelectable[position] = false;
                     }else{

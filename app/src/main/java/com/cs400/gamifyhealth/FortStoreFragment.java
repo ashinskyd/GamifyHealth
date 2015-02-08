@@ -36,6 +36,7 @@ public class FortStoreFragment extends Fragment {
     private int credits;
     private boolean [] isSelectable;
     private SharedPreferences sharedPrefs;
+    private int[] prices = {10, 20, 30, 40, 50};
 
     public static FortStoreFragment newInstance(String param1, String param2) {
         FortStoreFragment fragment = new FortStoreFragment();
@@ -171,9 +172,12 @@ public class FortStoreFragment extends Fragment {
             convertView.setEnabled(false);
             TextView description = (TextView) convertView.findViewById(R.id.description);
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
+            TextView priceText = (TextView) convertView.findViewById(R.id.priceText);
+            int price = prices[position];
+            priceText.setText(Integer.toString(price));
             switch (position){
                 case 0:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.fort1_bw));
                         isSelectable[position] = false;
                     }else{
@@ -182,7 +186,7 @@ public class FortStoreFragment extends Fragment {
                     }
                     break;
                 case 1:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.fort2_bw));
                         isSelectable[position] = false;
                     }else{
@@ -192,7 +196,7 @@ public class FortStoreFragment extends Fragment {
 
                     break;
                 case 2:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.fort3_bw));
                         isSelectable[position] = false;
                     }else{
@@ -202,7 +206,7 @@ public class FortStoreFragment extends Fragment {
 
                     break;
                 case 3:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.fort4_bw));
                         isSelectable[position] = false;
                     }else{
@@ -212,7 +216,7 @@ public class FortStoreFragment extends Fragment {
 
                     break;
                 case 4:
-                    if (credits<5){
+                    if (credits<price){
                         image.setBackground(getResources().getDrawable(R.drawable.fort5_bw));
                         isSelectable[position] = false;
                     }else{

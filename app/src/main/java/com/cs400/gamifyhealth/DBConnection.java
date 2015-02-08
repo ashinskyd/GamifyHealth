@@ -89,6 +89,7 @@ public class DBConnection{
 
 
 
+
     //in order for this to work, we must prevent the user from adding to goals of the same name and type
     //ie no two goals of the same thing measuring the same thing at the same time
     public void removeGoal(Goal g){
@@ -394,6 +395,10 @@ public class DBConnection{
         cursor.close();
     }
 
-
+    //repositions all existing building objects once the table is expanded by two squares on each side
+    public void expandObjectTable(){
+        String query = "update objects set xposition = xposition + 2,  yposition = yposition + 2 ;";
+        this.database.execSQL(query);
+    }
 
 }

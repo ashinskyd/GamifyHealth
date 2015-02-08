@@ -64,10 +64,13 @@ public class GameFragment extends Fragment {
     private DBConnection dataSource;
     private TextView peopleCounter;
     private TextView creditCounter;
+    private int[] housePrices = {10, 20, 30, 40, 50};
+    private int[] farmPrices = {10, 20, 30, 40, 50};
+    private int[] fortPrices = {10, 20, 30, 40, 50};
+    private int[] houseIcons = {R.drawable.house1, R.drawable.house2, R.drawable.house3, R.drawable.house4, R.drawable.house5};
+    private int[] farmIcons = {R.drawable.farm1, R.drawable.farm2, R.drawable.farm3, R.drawable.farm4, R.drawable.farm5};
+    private int[] fortIcons = {R.drawable.fort1, R.drawable.fort2, R.drawable.fort3, R.drawable.fort4, R.drawable.fort5};
     private int[] gridSize;
-    private int[] houseIcons;
-    private int[] fortIcons;
-    private int[] farmIcons;
     private Button farmStore;
     private int credits;
 
@@ -100,24 +103,6 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         V = inflater.inflate(R.layout.fragment_game, container, false);
         //Array of the house png's which we need to properly redraw the map
-        houseIcons = new int[5];
-        houseIcons[0] = R.drawable.house1;
-        houseIcons[1] = R.drawable.house2;
-        houseIcons[2] = R.drawable.house3;
-        houseIcons[3] = R.drawable.house4;
-        houseIcons[4] = R.drawable.house5;
-        fortIcons = new int[5];
-        fortIcons[0] = R.drawable.fort1;
-        fortIcons[1] = R.drawable.fort2;
-        fortIcons[2] = R.drawable.fort3;
-        fortIcons[3] = R.drawable.fort4;
-        fortIcons[4] = R.drawable.fort5;
-        farmIcons = new int[5];
-        farmIcons[0] = R.drawable.farm1;
-        farmIcons[1] = R.drawable.farm2;
-        farmIcons[2] = R.drawable.farm3;
-        farmIcons[3] = R.drawable.farm4;
-        farmIcons[4] = R.drawable.farm5;
         //Set the population counter and get (if any) attacks
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         gridSize = new int[2];
@@ -239,7 +224,8 @@ public class GameFragment extends Fragment {
                             dataSource.insertObject("house", xCoord, yCoord, Integer.toString(iconValue));
                             dataSource.printObjectDB();
                             dataSource.close();
-                            sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
+                            int price = housePrices[iconValue];
+                            sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
                             getActivity().getActionBar().setTitle("Game Page");
 
                             creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
@@ -249,18 +235,20 @@ public class GameFragment extends Fragment {
                             dataSource.insertObject("farm", xCoord, yCoord, Integer.toString(iconValue));
                             dataSource.printObjectDB();
                             dataSource.close();
-                            sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
+                            int price = farmPrices[iconValue];
+                            sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
                             getActivity().getActionBar().setTitle("Game Page");
                             creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
                         } else if (storeValue.equals("Fort_Store")){
-                        tileIcon.setBackground(getActivity().getResources().getDrawable(fortIcons[iconValue]));
-                        dataSource.open();
-                        dataSource.insertObject("fort", xCoord, yCoord, Integer.toString(iconValue));
-                        dataSource.printObjectDB();
-                        dataSource.close();
-                        sharedPrefs.edit().putInt("CREDITS", credits-5).commit();
-                        getActivity().getActionBar().setTitle("Game Page");
-                        creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
+                            tileIcon.setBackground(getActivity().getResources().getDrawable(fortIcons[iconValue]));
+                            dataSource.open();
+                            dataSource.insertObject("fort", xCoord, yCoord, Integer.toString(iconValue));
+                            dataSource.printObjectDB();
+                            dataSource.close();
+                            int price = fortPrices[iconValue];
+                            sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
+                            getActivity().getActionBar().setTitle("Game Page");
+                            creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
                     }
 
                         UnregisterListeners();
