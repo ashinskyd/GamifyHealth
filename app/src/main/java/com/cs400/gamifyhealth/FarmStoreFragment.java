@@ -164,50 +164,50 @@ public class FarmStoreFragment extends Fragment {
             switch (position) {
                 case 0:
                     if (credits < 5) {
-                        image.setBackground(getResources().getDrawable(R.drawable.house1_bw));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm1_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
-                        image.setBackground(getResources().getDrawable(R.drawable.house1));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm1));
                     }
                     break;
                 case 1:
                     if (credits < 5) {
-                        image.setBackground(getResources().getDrawable(R.drawable.house2_bw));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm2_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
-                        image.setBackground(getResources().getDrawable(R.drawable.house2));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm2));
                     }
 
                     break;
                 case 2:
                     if (credits < 5) {
-                        image.setBackground(getResources().getDrawable(R.drawable.house3_bw));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm3_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
-                        image.setBackground(getResources().getDrawable(R.drawable.house3));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm3));
                     }
 
                     break;
                 case 3:
                     if (credits < 5) {
-                        image.setBackground(getResources().getDrawable(R.drawable.house4_bw));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm4_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
-                        image.setBackground(getResources().getDrawable(R.drawable.house4));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm4));
                     }
 
                     break;
                 case 4:
                     if (credits < 5) {
-                        image.setBackground(getResources().getDrawable(R.drawable.house5_bw));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm5_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
-                        image.setBackground(getResources().getDrawable(R.drawable.house5));
+                        image.setBackground(getResources().getDrawable(R.drawable.farm5));
                     }
                     break;
             }

@@ -62,7 +62,7 @@ public class FortStoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View V = inflater.inflate(R.layout.fragment_house_store, container, false);
+        View V = inflater.inflate(R.layout.fragment_fort_store, container, false);
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         credits = sharedPrefs.getInt("CREDITS",0);
         getActivity().getActionBar().setTitle("Purchase Fortifications");
@@ -100,7 +100,7 @@ public class FortStoreFragment extends Fragment {
                 transaction.commit();
             }
         });
-        //TODO: DD SWORD BUTTON 2 XML DECLARATION
+        fortStore.setBackground(getResources().getDrawable(R.drawable.sword_button2));
         fortStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

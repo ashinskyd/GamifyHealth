@@ -69,6 +69,7 @@ public class GameFragment extends Fragment {
     private int[] iconSize;
     private int[] houseIcons;
     private int[] fortIcons;
+    private int[] farmIcons;
     private Button farmStore;
     private int credits;
 
@@ -113,6 +114,12 @@ public class GameFragment extends Fragment {
         fortIcons[2] = R.drawable.fort3;
         fortIcons[3] = R.drawable.fort4;
         fortIcons[4] = R.drawable.fort5;
+        farmIcons = new int[5];
+        farmIcons[0] = R.drawable.farm1;
+        farmIcons[1] = R.drawable.farm2;
+        farmIcons[2] = R.drawable.farm3;
+        farmIcons[3] = R.drawable.farm4;
+        farmIcons[4] = R.drawable.farm5;
         //Set the population counter and get (if any) attacks
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         gridSize = new int[2];
@@ -259,7 +266,7 @@ public class GameFragment extends Fragment {
                             creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
 
                         }else if (storeValue.equals("Farm_Store")){
-                            tileIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.wheat));
+                            tileIcon.setBackground(getActivity().getResources().getDrawable(farmIcons[iconValue]));
                             dataSource.open();
                             dataSource.insertObject("farm", xCoord, yCoord, Integer.toString(iconValue));
                             dataSource.printObjectDB();
@@ -326,7 +333,8 @@ public class GameFragment extends Fragment {
                     int drawable = houseIcons[Integer.parseInt(buildingMap.get(c).name)];
                     tileIcon.setBackground(getActivity().getResources().getDrawable(drawable));
                 }else if(buildingMap.get(c).type.equals("farm")){
-                    tileIcon.setBackground(getResources().getDrawable(R.drawable.wheat));
+                    int drawable = farmIcons[Integer.parseInt(buildingMap.get(c).name)];
+                    tileIcon.setBackground(getActivity().getResources().getDrawable(drawable));
                 }else if(buildingMap.get(c).type.equals("fort")){
                     int drawable = fortIcons[Integer.parseInt(buildingMap.get(c).name)];
                     tileIcon.setBackground(getActivity().getResources().getDrawable(drawable));
