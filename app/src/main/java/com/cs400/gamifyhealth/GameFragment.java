@@ -73,6 +73,8 @@ public class GameFragment extends Fragment {
     private int[] gridSize;
     private Button farmStore;
     private int credits;
+    private int[] imageSizes;
+    private int zoomCounter;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -106,25 +108,33 @@ public class GameFragment extends Fragment {
         //Set the population counter and get (if any) attacks
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         gridSize = new int[2];
-        //String gridSizeString = sharedPrefs.getString("GRID_SIZE","4,5");
-        gridSize[0] = 4;    //Integer.parseInt(gridSizeString.split(",")[0]);
-        gridSize[1] = 5;    // Integer.parseInt(gridSizeString.split(",")[1]);
+        imageSizes = new int[3];
         return V;
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        String gridSizeString = sharedPrefs.getString("GRID_SIZE","4,5");
+        gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
+        gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
+        imageSizes[0] = 100;
+        imageSizes[1] = 50;
         credits = sharedPrefs.getInt("CREDITS",1);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
+        zoomCounter = sharedPrefs.getInt("ZOOM_COUNTER",0);
+        Log.d("TAG","ZOOM: "+zoomCounter);
         AttackEngine a = new AttackEngine(getActivity());
         for (int i=0;i<attacks;i++){
             a.attack();
         }
+        dataSource.open();
+        buildingArrayList = dataSource.getObjectsOwned();
+        dataSource.close();
+        calculateMapSize();
         initUi(V);
         getOccupiedIndices(mGrid);
         inflateMap(V);
-
         Boolean store; //Used to determine if (upon inflating) we are in the process of buying an item
         Bundle b = getArguments();
         if (b!=null && b.getBoolean("HOUSE_STORE")){
@@ -145,6 +155,26 @@ public class GameFragment extends Fragment {
             getActivity().getActionBar().setTitle("Game Page");
         }
 
+    }
+
+
+    //Method deterimes if there is not enough space in current grid and resizes to the next level if it needs to
+    private void calculateMapSize() {
+       if (buildingArrayList.size()>=(gridSize[0]*gridSize[1]-1)){
+           Log.d("TAG","INDEXES: "+gridSize[0]*gridSize[1]);
+           Log.d("TAG","Size: "+buildingArrayList.size());
+            gridSize[0]+=4;
+            gridSize[1]+=6;
+            zoomCounter = zoomCounter +1;
+            SharedPreferences.Editor mEditor = sharedPrefs.edit();
+            mEditor.putString("GRID_SIZE",Integer.toString(gridSize[0])+","+gridSize[1]).commit();
+            mEditor.putInt("ZOOM_COUNTER",zoomCounter);
+            mEditor.commit();
+            dataSource.open();
+            dataSource.expandObjectTable();
+            buildingArrayList = dataSource.getObjectsOwned();
+            dataSource.close();
+        }
     }
 
     private void initUi(View V) {
@@ -278,7 +308,7 @@ public class GameFragment extends Fragment {
         mGrid.setRowCount(gridSize[1]);
         mGrid.setColumnCount(gridSize[0]);
         //Here is where we will change the tile size based on zoom level. Current is hardcoded to 40
-        int h = (int)(95 * scale);
+        int h = (int)(imageSizes[zoomCounter] * scale);
         int c = -1;
         int indices = gridSize[0]*gridSize[1];
         for (int i=0;i<indices;i++) {
@@ -309,11 +339,8 @@ public class GameFragment extends Fragment {
 
     private void getOccupiedIndices(GridLayout mGrid){
         //Method gets the users purchases and updates the collection of occupied indices
-        dataSource.open();
-        buildingArrayList = dataSource.getObjectsOwned();
-        dataSource.close();
         for (Building building: buildingArrayList){
-            int index = (building.xcoord * mGrid.getRowCount()) + building.ycoord;
+            int index = (building.xcoord * gridSize[1]) + building.ycoord;
             Log.d("TAG","INDEX: "+index+"X: "+building.xcoord+"Y: "+building.ycoord);
             occupiedIndices.add(index);
             buildingMap.put(index,building);

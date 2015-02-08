@@ -210,6 +210,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
 
 
     //Same custom adapter from currentActivityLevel. Used to populate listview
+    //Inner class is a custom adapter for our listview. It uses a custom layout to inflate
     private class SeekBarAdapter extends ArrayAdapter<String> {
         private Context context;
         public SeekBarAdapter(Context context, int textViewResourceId, ArrayList<String> activityList){
@@ -223,13 +224,35 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
-
             String temp = activityList.get(position).split("_")[0];
+            if (activityList.get(position).toString().contains("_REP")){
+                sb.setMax(500);
+            }else if (activityList.get(position).toString().contains("_TIM")){
+                sb.setMax(25);
+            }else{
+                if(activityList.get(position).toString().contains("_DTA-T")){
+                    sb.setMax(25);
+                }else if(activityList.get(position).toString().contains("_DTA-D")){
+                    if (activityList.get(position).toString().contains("Swimming")) {
+                        sb.setMax(1000);
+                    } else if(activityList.get(position).toString().contains("Running")) {
+                        sb.setMax(50);
+                    } else {
+                        sb.setMax(200);
+                    }
+                }
+            }
             title.setText(temp);
+            //Required to set some text before proceding to avoid a null ptr
             progress.setText("HI");
+            if(currentLevel.get(activityList.get(position))!=null){
+                sb.setProgress(currentLevel.get(activityList.get(position)));
+            }
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                //Listens for seekbar sliding
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    //When progress is changed, update our currentlevel map and adjust the textview to display the value
                     currentLevel.put(activityList.get(position),seekBar.getProgress());
                     if (activityList.get(position).toString().contains("_REP")){
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
@@ -239,10 +262,13 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
                         if(activityList.get(position).toString().contains("_DTA-T")){
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
                         }else if(activityList.get(position).toString().contains("_DTA-D")){
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                            if (activityList.get(position).toString().contains("Swimming")){
+                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
+                            } else {
+                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
+                            }
                         }
                     }
-                    //TODO: Keep track of the progress for all the types somehow, then save it somewhere...
                 }
 
                 @Override
@@ -254,13 +280,16 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
                 }
             });
 
+            //Adds the proper unit to the progress view
             if (activityList.get(position).contains("_REP")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
             }else if (activityList.get(position).contains("_TIM")){
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-            }else{
-                if (activityList.get(position).contains("_DTA-T")){
+            }else {
+                if (activityList.get(position).contains("_DTA-T")) {
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
+                }else if(activityList.get(position).toString().contains("Swimming")){
+                    progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
                 }else{
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
                 }
@@ -269,9 +298,5 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             return convertView;
         }
     }
-
-
-
-
 
 }

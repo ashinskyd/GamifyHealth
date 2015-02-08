@@ -37,8 +37,12 @@ public class WelcomeActivity extends Activity {
             DBConnection datasource = new DBConnection(this);
             datasource.open();
             datasource.createTables();
-            datasource.insertObject("house", 0, 0, "1");
-            datasource.insertObject("house", 1, 0, "1");
+            for (int i=0;i<4;i++){
+                for (int j=0;j<4;j++){
+                    datasource.insertObject("house",i,j,"1");
+                }
+
+            }
             datasource.close();
             setContentView(R.layout.activity_welcome);
             continueButton = (Button) findViewById(R.id.continueButton);
@@ -57,7 +61,7 @@ public class WelcomeActivity extends Activity {
             int iPop = 2;
             SharedPreferences.Editor editor = sharedPrefs.edit();
             editor.putInt("POPULATION", iPop);
-            editor.putInt("CREDITS", 100);
+            editor.putInt("CREDITS", 1000);
             editor.commit();
         }
 

@@ -397,7 +397,7 @@ public class DBConnection{
 
     //repositions all existing building objects once the table is expanded by two squares on each side
     public void expandObjectTable(){
-        String query = "update objects set xposition = xposition + 2,  yposition = yposition + 2 ;";
+        String query = "update objects set xposition = xposition + 2,  yposition = yposition + 3 ;";
         this.database.execSQL(query);
     }
 
