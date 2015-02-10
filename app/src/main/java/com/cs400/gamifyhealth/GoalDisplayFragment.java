@@ -3,6 +3,7 @@ package com.cs400.gamifyhealth;
 
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -56,43 +57,15 @@ public class GoalDisplayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().getActionBar().setTitle("Goal Display");
+
         View V = inflater.inflate(R.layout.fragment_goal_display, container, false);
 
-        //TESTER CODE, NEEDS TO BE REMOVED EVENTUALLY
-        /*
-        *****************
-         */
         dataSource = new DBConnection(getActivity());
-        dataSource.open();
-        dataSource.createTables();
-        dataSource.insertObject("farm", 4, 4, "2");
-        Goal g = new Goal("2015-01-25", "Running","DTA-T",0,10,5);
-        try {
-            dataSource.insertGoal(g);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Workout w = new Workout("Running",1,"DTA-T");
-        Workout w2 = new Workout("Running",1,"DTA-T");
-        dataSource.insertWorkout(w);
-        dataSource.insertWorkout(w2);
-        dataSource.close();
-
         EarningsEngine earningsEngine = new EarningsEngine(getActivity());
         earningsEngine.weeklyGoalCheck();
         dataSource.open();
-        dataSource.printGoalDB();
         goalSet = dataSource.getGoals();
         dataSource.close();
-
-
-
-        //TESTER CODE, NEEDS TO BE REMOVED EVENTUALLY
-        /*
-        *****************
-         */
-
 
 
 
