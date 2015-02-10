@@ -20,13 +20,10 @@ public class WelcomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Check if the game has already been started, if it has been setup then skip startup
         SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         boolean started = sharedPrefs.getBoolean("SERVICE_STARTED",false);
-
-        /*ArrayList<Building> b = datasource.getObjectsOwned();
-        for (Building k : b){
-            System.out.println("type " + k.type + " xpos " + k.xcoord + " y pos " + k.ycoord + " name " + k.name);
-        }*/
 
         if (started){
             Intent intent = new Intent(this, NavigationDrawerMain.class);
@@ -37,15 +34,18 @@ public class WelcomeActivity extends Activity {
             DBConnection datasource = new DBConnection(this);
             datasource.open();
             datasource.createTables();
+
             for (int i=0;i<4;i++){
                 for (int j=0;j<4;j++){
                     datasource.insertObject("house",i,j,"1");
                 }
-
             }
             datasource.close();
+
             setContentView(R.layout.activity_welcome);
             continueButton = (Button) findViewById(R.id.continueButton);
+            //Sets the ocntinue button to proceed to next step
+            //Also changes default animation scheme
             continueButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -58,9 +58,11 @@ public class WelcomeActivity extends Activity {
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 }
             });
-            int iPop = 2;
+
+            //Gives the user a default population and credit amount
+            int initialPopulation = 2;
             SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.putInt("POPULATION", iPop);
+            editor.putInt("POPULATION", initialPopulation);
             editor.putInt("CREDITS", 1000);
             editor.commit();
         }

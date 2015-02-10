@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
@@ -118,12 +120,11 @@ public class GameFragment extends Fragment {
         String gridSizeString = sharedPrefs.getString("GRID_SIZE","4,5");
         gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
         gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
-        imageSizes[0] = 100;
-        imageSizes[1] = 50;
+        imageSizes[0] = 95;
+        imageSizes[1] = 45;
         credits = sharedPrefs.getInt("CREDITS",1);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
         zoomCounter = sharedPrefs.getInt("ZOOM_COUNTER",0);
-        Log.d("TAG","ZOOM: "+zoomCounter);
         AttackEngine a = new AttackEngine(getActivity());
         for (int i=0;i<attacks;i++){
             a.attack();
@@ -161,10 +162,8 @@ public class GameFragment extends Fragment {
     //Method deterimes if there is not enough space in current grid and resizes to the next level if it needs to
     private void calculateMapSize() {
        if (buildingArrayList.size()>=(gridSize[0]*gridSize[1]-1)){
-           Log.d("TAG","INDEXES: "+gridSize[0]*gridSize[1]);
-           Log.d("TAG","Size: "+buildingArrayList.size());
             gridSize[0]+=4;
-            gridSize[1]+=6;
+            gridSize[1]+=5;
             zoomCounter = zoomCounter +1;
             SharedPreferences.Editor mEditor = sharedPrefs.edit();
             mEditor.putString("GRID_SIZE",Integer.toString(gridSize[0])+","+gridSize[1]).commit();
@@ -303,12 +302,16 @@ public class GameFragment extends Fragment {
         Boolean store; //Used to determine if (upon inflating) we are in the process of buying a store
         Bundle b = getArguments();
         DisplayMetrics dm = getResources().getDisplayMetrics();
-        final float scale = getActivity().getResources().getDisplayMetrics().density;
+        final float scale = getActivity().getResources().getDisplayMetrics().density+0.5f;
         final GridLayout mGrid = (GridLayout) v.findViewById(R.id.map);
         mGrid.setRowCount(gridSize[1]);
         mGrid.setColumnCount(gridSize[0]);
         //Here is where we will change the tile size based on zoom level. Current is hardcoded to 40
         int h = (int)(imageSizes[zoomCounter] * scale);
+        Point size = new Point();
+        getActivity().getWindowManager().getDefaultDisplay().getSize(size);
+        int x = size.x;
+        Log.d("TAG","X: "+x);
         int c = -1;
         int indices = gridSize[0]*gridSize[1];
         for (int i=0;i<indices;i++) {
@@ -329,8 +332,7 @@ public class GameFragment extends Fragment {
             }else{
                 tileIcon.setBackgroundColor(Color.TRANSPARENT);
             }
-            tileIcon.setLayoutParams(new ViewGroup.LayoutParams(h,h));
-            //upon a tile being clicked, if we came from the store, we just se the
+            tileIcon.setLayoutParams(new LinearLayout.LayoutParams(x/gridSize[0],x/gridSize[0]));
             mGrid.addView(tileIcon,c);
         }
 
