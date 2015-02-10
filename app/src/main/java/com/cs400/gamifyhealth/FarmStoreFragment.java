@@ -32,7 +32,7 @@ public class FarmStoreFragment extends Fragment {
     private SharedPreferences sharedPrefs;
     private boolean[] isSelectable;
     private int credits;
-    private int[] prices = {10, 20, 30, 40, 50};
+    private int[] prices = {20, 38, 54, 68, 80};
 
 
     public static FarmStoreFragment newInstance(String param1, String param2) {
