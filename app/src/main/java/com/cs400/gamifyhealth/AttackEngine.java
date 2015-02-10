@@ -279,7 +279,7 @@ public class AttackEngine {
         }
         double severity = this.generateSeverity();
 
-        double percentage = 11 + (6.0 * severity);
+        double percentage = (11 + (6.0 * severity))/100.0;
 
         int type = generateAttackType();
 
