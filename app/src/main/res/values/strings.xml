@@ -26,15 +26,15 @@
     <string name="farm3">A powerful storm washed away valuable farmland and equipment. Your village\'s farms took moderate damage.</string>
     <string name="farm4">Your village was attacked by dragons! Your village\'s farms suffered significant losses.</string>
     <string name="farm5">A wildfire burned through your crops. Your village\'s farms took heavy damage.</string>
-    <string name="fort1">Your village contracted itching disease</string>
-    <string name="fort2">Your village contracted itching disease</string>
-    <string name="fort3">Your village contracted itching disease</string>
-    <string name="fort4">Your village contracted itching disease</string>
-    <string name="fort5">Your village contracted itching disease</string>
-    <string name="houses1">Your village contracted itching disease</string>
-    <string name="houses2">Your village contracted itching disease</string>
-    <string name="houses3">Your village contracted itching disease</string>
-    <string name="houses4">Your village contracted itching disease</string>
-    <string name="houses5">Your village contracted itching disease</string>
+    <string name="fort1">A freakishly large and ferocious bear has rampaged through the village. Your fortifications took a little damage.</string>
+    <string name="fort2">Bandits have raided your village and stolen valuable weapons. Your fortifications have been significantly weakened.</string>
+    <string name="fort3">A tribe of barbarians has attacked your village. No lives were lost, but your fortifications took moderate damage.</string>
+    <string name="fort4">Your people favor Pacifism. Your fortifications have suffered significant losses.</string>
+    <string name="fort5">A neighboring kingdom has attacked your village. You\'ve fended off the enemy, but your village\'s fortifications have been heavily damaged.</string>
+    <string name="houses1">Heavy rain has caused massive flooding throughout the village. Your houses took a little damage.</string>
+    <string name="houses2">A lightening strike to a thatched roof caused a fire to break out. Your houses took significant damage.</string>
+    <string name="houses3">The housing bubble burst. Families now face foreclosure and demolition of their homes. Your houses have taken moderate damage.</string>
+    <string name="houses4">Your village has a growing termite infestation. Your houses have been greatly damaged.</string>
+    <string name="houses5">A pack of giants has trampled through your village. Your houses have been heavily damaged.</string>
 
 </resources>
