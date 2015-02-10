@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -62,10 +63,9 @@ public class AttackService extends Service {
             mEditor.putInt("ATTACKS",attacks+1);
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.drawable.ic_launcher)
-                            .setContentTitle("Attack!")
+                            .setContentTitle("Gamify Your Health")
+                            .setSmallIcon(R.drawable.attack_icon)
                             .setContentText("Your City Has Been Damaged!");
-
             int mNotificationId = 001;
 // Gets an instance of the NotificationManager service
             NotificationManager mNotifyMgr =
@@ -130,8 +130,8 @@ public class AttackService extends Service {
     }
 
     public int genTime() {
-        //return 30*1000;
-        return (randomGen.nextInt(2880) + 2880) * 60000;
+        return 30*1000;
+        //return (randomGen.nextInt(2880) + 2880) * 60000;
     }
 
     @Override
