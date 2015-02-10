@@ -132,15 +132,15 @@ public class GameFragment extends Fragment {
         //Register the listeners if we come from the store
         if (b!=null && b.getBoolean("HOUSE_STORE")){
             getActivity().getActionBar().setTitle("Select a position to place house");
-            RegisterListeners(mGrid, "House_Store" , b.getInt("HOUSE_VALUE"));
+            RegisterListeners("House_Store" , b.getInt("HOUSE_VALUE"));
         }
         else if (b!=null && b.getBoolean("FARM_STORE")){
             getActivity().getActionBar().setTitle("Select a position to place farm");
-            RegisterListeners(mGrid, "Farm_Store", b.getInt("FARM_VALUE"));
+            RegisterListeners("Farm_Store", b.getInt("FARM_VALUE"));
         }
         else if (b!=null && b.getBoolean("FORT_STORE")){
             getActivity().getActionBar().setTitle("Select a position to place farm");
-            RegisterListeners(mGrid, "Fort_Store" , b.getInt("FORT_VALUE"));
+            RegisterListeners("Fort_Store" , b.getInt("FORT_VALUE"));
         }
         else{
             getActivity().getActionBar().setTitle("Game Page");
@@ -215,15 +215,15 @@ public class GameFragment extends Fragment {
             }
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
+        mGrid.removeAllViews();
         //Set the gridsize based on the zoom level
     }
 
     /**
-     * @param mGrid The gridlayout of our game
      * @param storeValue the type of store ie: farm/house/forts
      * @param iconValue the specific level of item ie: house_1,house_2...
      */
-    private void RegisterListeners(GridLayout mGrid, final String storeValue, final int iconValue) {
+    private void RegisterListeners(final String storeValue, final int iconValue) {
         int indices = gridSize[0]*gridSize[1];
         int index=-1;
         for (int i = 0; i < indices; i++) {
@@ -290,9 +290,6 @@ public class GameFragment extends Fragment {
 
     //Populates the map with all of the icons based on the items in a user's object DB
     private void inflateMap(View v) {
-        final GridLayout mGrid = (GridLayout) v.findViewById(R.id.map);
-        mGrid.setRowCount(gridSize[1]);
-        //mGrid.setColumnCount(gridSize[0]);
         //Here is where we will change the tile size based on zoom level. We calculate the px based on the user's display and the number of rows/columns
         Point size = new Point();
         getActivity().getWindowManager().getDefaultDisplay().getSize(size);
@@ -318,8 +315,11 @@ public class GameFragment extends Fragment {
                 tileIcon.setBackgroundColor(Color.TRANSPARENT);
             }
             tileIcon.setLayoutParams(new ViewGroup.LayoutParams(x/gridSize[0],x/gridSize[0]));
+
             mGrid.addView(tileIcon,index);
         }
+        mGrid.setRowCount(gridSize[1]);
+        mGrid.setColumnCount(gridSize[0]);
 
     }
 
