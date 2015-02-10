@@ -46,9 +46,9 @@ public class GameFragment extends Fragment {
     private TextView peopleCounter;
     private TextView creditCounter;
     //These are arrays of item prices so we know how much to deduct from a user's credit when they purchase something
-    private int[] housePrices = {10, 20, 30, 40, 50};
-    private int[] farmPrices = {10, 20, 30, 40, 50};
-    private int[] fortPrices = {10, 20, 30, 40, 50};
+    private int[] housePrices = {25, 48, 69, 88, 105};
+    private int[] farmPrices = {20, 38, 54, 68, 80};
+    private int[] fortPrices = {50, 95, 135, 170, 200};
     //These arrays keep track of all the icons we use to inflate our map
     private int[] houseIcons = {R.drawable.house1, R.drawable.house2, R.drawable.house3, R.drawable.house4, R.drawable.house5};
     private int[] farmIcons = {R.drawable.farm1, R.drawable.farm2, R.drawable.farm3, R.drawable.farm4, R.drawable.farm5};
@@ -216,9 +216,6 @@ public class GameFragment extends Fragment {
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
         //Set the gridsize based on the zoom level
-        mGrid.setRowCount(gridSize[1]);
-        Log.d("TAG", "GRID X: " + gridSize[0] + " Y: " + gridSize[1]);
-        mGrid.setColumnCount(gridSize[0]);
     }
 
     /**
@@ -295,7 +292,7 @@ public class GameFragment extends Fragment {
     private void inflateMap(View v) {
         final GridLayout mGrid = (GridLayout) v.findViewById(R.id.map);
         mGrid.setRowCount(gridSize[1]);
-        mGrid.setColumnCount(gridSize[0]);
+        //mGrid.setColumnCount(gridSize[0]);
         //Here is where we will change the tile size based on zoom level. We calculate the px based on the user's display and the number of rows/columns
         Point size = new Point();
         getActivity().getWindowManager().getDefaultDisplay().getSize(size);

@@ -36,7 +36,7 @@ public class FortStoreFragment extends Fragment {
     private int credits;
     private boolean [] isSelectable;
     private SharedPreferences sharedPrefs;
-    private int[] prices = {10, 20, 30, 40, 50};
+    private int[] prices = {50, 95, 135, 170, 200};
 
     public static FortStoreFragment newInstance(String param1, String param2) {
         FortStoreFragment fragment = new FortStoreFragment();

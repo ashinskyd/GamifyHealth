@@ -36,7 +36,7 @@ public class HouseStoreFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private int credits;
     private boolean [] isSelectable;
-    private static int[] prices = {10, 20, 30, 40, 50};
+    private static int[] prices = {25, 48, 69, 88, 105};
     private SharedPreferences sharedPrefs;
 
     public static HouseStoreFragment newInstance(String param1, String param2) {
