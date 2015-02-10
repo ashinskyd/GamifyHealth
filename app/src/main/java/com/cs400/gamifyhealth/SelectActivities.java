@@ -44,7 +44,6 @@ public class SelectActivities extends Activity {
             @Override
             public void onClick(View view) {
                 if (canProceed()){
-
                     Intent i = new Intent(getApplicationContext(),CurrentActivityLevel.class );
                     final AlphaAnimation buttonClick = new AlphaAnimation(1F,0.8F);
                     view.startAnimation(buttonClick);
@@ -81,9 +80,7 @@ public class SelectActivities extends Activity {
                     startActivity(i);
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 }else{
-                    Toast toast = new Toast(getApplicationContext());
-                    toast.setText("Please Select at least 1 activity");
-                    toast.setDuration(Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please Select at least 1 activity",Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -95,6 +92,8 @@ public class SelectActivities extends Activity {
         activityItems.add(new ActivityModel("Running (Distance)", false));
         activityItems.add(new ActivityModel("Swimming (Time)",false));
         activityItems.add(new ActivityModel("Swimming (Distance)",false));
+        activityItems.add(new ActivityModel("Cycling (Time)",false));
+        activityItems.add(new ActivityModel("Cycling (Distance)",false));
         activityItems.add(new ActivityModel("Crunches",false));
         activityItems.add(new ActivityModel("Pull-Ups",false));
         activityItems.add(new ActivityModel("Dips",false));
@@ -104,8 +103,9 @@ public class SelectActivities extends Activity {
         activityItems.add(new ActivityModel("Soccer",false));
         activityItems.add(new ActivityModel("Football",false));
         activityItems.add(new ActivityModel("Squash",false));
-        activityItems.add(new ActivityModel("Cycling (Time)",false));
-        activityItems.add(new ActivityModel("Cycling (Distance)",false));
+        activityItems.add(new ActivityModel("Disk",false));
+        activityItems.add(new ActivityModel("Generic Cardio",false));
+
         activityItems.add(new ActivityModel("Ping Pong",false));
         checkBoxAdapter = new CheckBoxAdapter(getApplicationContext(),R.layout.checkbox_layout,activityItems);
         activitiesListView.setAdapter(checkBoxAdapter);
@@ -150,6 +150,7 @@ public class SelectActivities extends Activity {
                 return true;
             }
         }
+        Log.d("TAG","ERE");
         return false;
     }
 

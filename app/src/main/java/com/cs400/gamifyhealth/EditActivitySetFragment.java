@@ -127,6 +127,8 @@ public class EditActivitySetFragment extends Fragment {
         activityItems.add(new ActivityModel("Running (Distance)", s.contains("Running (Distance)")));
         activityItems.add(new ActivityModel("Swimming (Time)",s.contains("Swimming (Time)")));
         activityItems.add(new ActivityModel("Swimming (Distance)",s.contains("Swimming (Distance)")));
+        activityItems.add(new ActivityModel("Cycling (Time)",s.contains("Cycling (Time)")));
+        activityItems.add(new ActivityModel("Cycling (Distance)",s.contains("Cycling (Distance)")));
         activityItems.add(new ActivityModel("Crunches",s.contains("Crunches")));
         activityItems.add(new ActivityModel("Pull-Ups",s.contains("Pull-Ups")));
         activityItems.add(new ActivityModel("Dips",s.contains("Dips")));
@@ -135,8 +137,7 @@ public class EditActivitySetFragment extends Fragment {
         activityItems.add(new ActivityModel("Squats",s.contains("Squats")));
         activityItems.add(new ActivityModel("Soccer",s.contains("Soccer")));
         activityItems.add(new ActivityModel("Squash", s.contains("Squash")));
-        activityItems.add(new ActivityModel("Cycling (Time)",s.contains("Cycling (Time)")));
-        activityItems.add(new ActivityModel("Cycling (Distance)",s.contains("Cycling (Distance)")));
+        activityItems.add(new ActivityModel("Generic Cardio",false));
         CheckBoxAdapter adapter = new CheckBoxAdapter(getActivity().getApplicationContext(),R.layout.checkbox_layout,activityItems);
         ListView activitiesListView = (ListView) V.findViewById(R.id.activityListView);
         activitiesListView.setAdapter(adapter);

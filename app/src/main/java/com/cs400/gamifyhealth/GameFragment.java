@@ -216,7 +216,6 @@ public class GameFragment extends Fragment {
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
         mGrid.removeAllViews();
-        //Set the gridsize based on the zoom level
     }
 
     /**

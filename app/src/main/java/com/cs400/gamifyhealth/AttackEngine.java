@@ -166,7 +166,7 @@ public class AttackEngine {
         if (size==0){
             //If we attack people, but don't have any to remove, just display a notice
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("Oh No!");
+            builder.setTitle("Congratulations!");
             builder.setMessage(attackType);
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
