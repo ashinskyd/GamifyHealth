@@ -58,8 +58,12 @@ public class AttackEngine {
 
     }
 
+    public double generateSeverity(){
+        return randomGen.nextInt(4);
+    }
+
     //called post-attack
-    public void updateDB(int farmsDestroyed, int fortsDestroyed, int housesDestroyed, int newPopulation){
+    public void updateDB(int farmsDestroyed, int fortsDestroyed, int housesDestroyed, int newPopulation, double severity){
 
         /*** Gets a string based on attack type to  be used for the dialog ***/
         String attackType = "";
@@ -147,18 +151,18 @@ public class AttackEngine {
         //If we remove no buildings, we must have removed some number of people
         if (toRemove.size()==0){
             if (population != newPopulation) {
-                showAttackDialog(population-newPopulation,"People Removed");
+                showAttackDialog(population-newPopulation,"People Removed", (int) severity);
             }else{
-                showAttackDialog(0,"You survived the attack with no casualties");
+                showAttackDialog(0,"You survived the attack with no casualties", (int)  severity);
             }
         }else{
-            showAttackDialog(toRemove.size(),attackType);
+            showAttackDialog(toRemove.size(),attackType, (int) severity);
         }
 
     }
 
     //Displays a dialog with a simple message anytime a user's city is attacked
-    private void showAttackDialog(int size, String attackType) {
+    private void showAttackDialog(int size, String attackType, int severity) {
         if (size==0){
             //If we attack people, but don't have any to remove, just display a notice
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -177,14 +181,68 @@ public class AttackEngine {
             builder.setTitle("Oh No!");
             String message;
             if (attackType.contains("Farms")){
-                message = activity.getString(R.string.farm1);
-                builder.setMessage(message+" You had: "+size+" "+attackType);
+                if (severity == 1) {
+                    message = activity.getString(R.string.farm1);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 2){
+                    message = activity.getString(R.string.farm2);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 3){
+                    message = activity.getString(R.string.farm3);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 4){
+                    message = activity.getString(R.string.farm4);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 5){
+                    message = activity.getString(R.string.farm5);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
             }else if (attackType.contains("Houses")){
-                message = activity.getString(R.string.houses1);
-                builder.setMessage(message+" You had: "+size+" "+attackType);
+                if (severity == 1) {
+                    message = activity.getString(R.string.houses1);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 2){
+                    message = activity.getString(R.string.houses2);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 3){
+                    message = activity.getString(R.string.houses3);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 4){
+                    message = activity.getString(R.string.houses4);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 5){
+                    message = activity.getString(R.string.houses5);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
             }else{
-                message = activity.getString(R.string.fort1);
-                builder.setMessage(message+" You had: "+size+" "+attackType);
+                if (severity == 1) {
+                    message = activity.getString(R.string.fort1);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 2){
+                    message = activity.getString(R.string.fort2);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 3){
+                    message = activity.getString(R.string.fort3);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 4){
+                    message = activity.getString(R.string.fort4);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
+                if (severity == 5){
+                    message = activity.getString(R.string.fort5);
+                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                }
             }
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 //When they click the Ok button, relaunch the fragment so it draws the map properly
@@ -219,8 +277,9 @@ public class AttackEngine {
         for (int i = 0; i<4; i++){
             postAttack[i] = objectsOwned[i];
         }
+        double severity = this.generateSeverity();
 
-        double percentage = (double)calculateAttackStrength() / 100;
+        double percentage = 11 + (6.0 * severity);
 
         int type = generateAttackType();
 
@@ -271,7 +330,8 @@ public class AttackEngine {
             int fortsDamaged = objectsOwned[1] - postAttack[1];
             int housesDamaged = objectsOwned[2] - postAttack[2];
             int newPopulation = postAttack[3];
-            this.updateDB(farmsDamaged, fortsDamaged, housesDamaged, newPopulation);
+            severity = severity + 1;
+            this.updateDB(farmsDamaged, fortsDamaged, housesDamaged, newPopulation, severity);
             objectsOwned[type] = postAttack[type];
         }
 
