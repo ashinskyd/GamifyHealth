@@ -48,7 +48,6 @@ public class EditActivitySetFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private ArrayList<ActivityModel> activityItems;
-    private OnFragmentInteractionListener mListener;
     private Button continueButton;
     private ArrayList<String> orignalSet;
     private ArrayList<String> addSet;
@@ -224,7 +223,6 @@ public class EditActivitySetFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
 

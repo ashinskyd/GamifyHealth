@@ -18,6 +18,7 @@ import android.os.Process;
 
 import java.util.Random;
 
+//Class is a service which runs on a background thread and calculates random attacks over 48 or so hours
 public class AttackService extends Service {
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
@@ -62,8 +63,8 @@ public class AttackService extends Service {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.ic_launcher)
-                            .setContentTitle("My notification")
-                            .setContentText("Hello World!");
+                            .setContentTitle("Attack!")
+                            .setContentText("Your City Has Been Damaged!");
 
             int mNotificationId = 001;
 // Gets an instance of the NotificationManager service

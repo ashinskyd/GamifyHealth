@@ -1,6 +1,5 @@
 package com.cs400.gamifyhealth;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -12,29 +11,22 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class NavigationDrawerMain extends FragmentActivity implements DataEntryFragment.OnFragmentInteractionListener, EditActivitySetFragment.OnFragmentInteractionListener {
+public class NavigationDrawerMain extends FragmentActivity {
     private String[] itemTitles;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -51,19 +43,22 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
         editor.putBoolean("SERVICE_STARTED", true);
         editor.commit();
 
-        itemTitles = new String[4];
-        itemTitles[0] = "Main Game Page";
+        //Items populated in our navDrawer's listview
+        itemTitles = new String[5];
+        itemTitles[0] = "Game Page";
         itemTitles[1] = "Workout Entry";
         itemTitles[2] = "Edit Activities";
         itemTitles[3] = "Check Current Goals";
+        itemTitles[4] = "Settings";
+
         setTitle("Gamify your Health");
         ArrayList<String> itemTitles2 = new ArrayList<String>(Arrays.asList(itemTitles));
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerListView = (ListView) findViewById(R.id.left_drawer);
         mFrame = (FrameLayout) findViewById(R.id.content_frame);
-        //ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this,R.layout.simple_list_item, itemTitles);
         NavDrawerAdapter mAdapter = new NavDrawerAdapter(this,R.layout.simple_list_item,itemTitles2);
         mDrawerListView.setAdapter(mAdapter);
+        //Some navDrawerSetup that we needed to override
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -115,6 +110,9 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
                         transaction.addToBackStack(null);
                         transaction.commit();
                         break;
+                    case 4:
+                        //TODO: Need to implement a settings page
+                        break;
                 }
                 mDrawerLayout.closeDrawer(mDrawerListView);
             }
@@ -123,6 +121,7 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
     }
 
     private void checkAttackService() {
+        //Check that the service is started
         boolean serviceStarted = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("SERVICE_STARTED",false);
         if (!serviceStarted){
             Intent intent = new Intent(this, AttackService.class);
@@ -155,15 +154,13 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
         mDrawerToggle.syncState();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-       Log.d("TAG","Fragment Changed!");
-    }
+
     @Override
     public void onBackPressed() {
         return;
     }
 
+    //Custom adapter to inflate the NavDrawer with an imageView
     private class NavDrawerAdapter extends BaseAdapter {
         private ArrayList<String> mList;
         private ImageView mImage;
@@ -197,6 +194,24 @@ public class NavigationDrawerMain extends FragmentActivity implements DataEntryF
                 convertView = mInflater.inflate(R.layout.simple_list_item, null);
             }
             mText = (TextView) convertView.findViewById(R.id.navdrawer_item);
+            mImage = (ImageView) convertView.findViewById(R.id.imageView);
+            switch (position){
+                case 0:
+                    mImage.setBackground(getResources().getDrawable(R.drawable.game_icon));
+                    break;
+                case 1:
+                    mImage.setBackground(getResources().getDrawable(R.drawable.runner_icon));
+                    break;
+                case 2:
+                    mImage.setBackground(getResources().getDrawable(R.drawable.menus_icon));
+                    break;
+                case 3:
+                    mImage.setBackground(getResources().getDrawable(R.drawable.goal_progress_icon));
+                    break;
+                case 4:
+                    mImage.setBackground(getResources().getDrawable(R.drawable.settings_icon));
+                    break;
+            }
             mText.setText(mList.get(position));
             return convertView;
         }

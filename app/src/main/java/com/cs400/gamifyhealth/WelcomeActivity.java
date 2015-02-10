@@ -5,15 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 
-
+//This is our App's entryPoint and starts the main setup process
 public class WelcomeActivity extends Activity {
     private Button continueButton;
 
@@ -29,12 +26,12 @@ public class WelcomeActivity extends Activity {
             Intent intent = new Intent(this, NavigationDrawerMain.class);
             startActivity(intent);
         }else{
-            //how do we tell this is the first time the app has been opened
-            //we only want to create tables once
+            //If it's the first time a user is starting our app, we need to init the database for storage
             DBConnection datasource = new DBConnection(this);
             datasource.open();
             datasource.createTables();
 
+            //TODO: This is just for testing we need to remove this before deploying!
             for (int i=0;i<4;i++){
                 for (int j=0;j<4;j++){
                     datasource.insertObject("house",i,j,"1");

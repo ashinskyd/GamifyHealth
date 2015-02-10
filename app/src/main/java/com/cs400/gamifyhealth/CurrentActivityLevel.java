@@ -106,24 +106,26 @@ public class CurrentActivityLevel extends Activity {
         public View getView(final int position, View convertView, ViewGroup parent){
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.seekbar_row, parent, false);
-            final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
+            final SeekBar mSeekBar = (SeekBar) convertView.findViewById(R.id.seekBar);
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
             String temp = activityList.get(position).split("_")[0];
+
+            //Sets the scale of the seekbar based on the specific type of activity
             if (activityList.get(position).toString().contains("_REP")){
-                sb.setMax(500);
+                mSeekBar.setMax(500);
             }else if (activityList.get(position).toString().contains("_TIM")){
-                sb.setMax(25);
+                mSeekBar.setMax(25);
             }else{
                 if(activityList.get(position).toString().contains("_DTA-T")){
-                    sb.setMax(25);
+                    mSeekBar.setMax(25);
                 }else if(activityList.get(position).toString().contains("_DTA-D")){
                     if (activityList.get(position).toString().contains("Swimming")) {
-                        sb.setMax(1000);
+                        mSeekBar.setMax(1000);
                     } else if(activityList.get(position).toString().contains("Running")) {
-                        sb.setMax(50);
+                        mSeekBar.setMax(50);
                     } else {
-                        sb.setMax(200);
+                        mSeekBar.setMax(200);
                     }
                 }
             }
@@ -131,23 +133,23 @@ public class CurrentActivityLevel extends Activity {
             //Required to set some text before proceding to avoid a null ptr
             progress.setText("HI");
             if(currentLevel.get(activityList.get(position))!=null){
-                sb.setProgress(currentLevel.get(activityList.get(position)));
+                mSeekBar.setProgress(currentLevel.get(activityList.get(position)));
             }
-            sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 //Listens for seekbar sliding
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     //When progress is changed, update our currentlevel map and adjust the textview to display the value
-                    currentLevel.put(activityList.get(position),seekBar.getProgress());
-                    if (activityList.get(position).toString().contains("_REP")){
-                        progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-                    }else if (activityList.get(position).toString().contains("_TIM")){
-                        progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                    }else{
-                        if(activityList.get(position).toString().contains("_DTA-T")){
+                    currentLevel.put(activityList.get(position), seekBar.getProgress());
+                    if (activityList.get(position).toString().contains("_REP")) {
+                        progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Reps"));
+                    } else if (activityList.get(position).toString().contains("_TIM")) {
+                        progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Hours"));
+                    } else {
+                        if (activityList.get(position).toString().contains("_DTA-T")) {
                             progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        }else if(activityList.get(position).toString().contains("_DTA-D")){
-                            if (activityList.get(position).toString().contains("Swimming")){
+                        } else if (activityList.get(position).toString().contains("_DTA-D")) {
+                            if (activityList.get(position).toString().contains("Swimming")) {
                                 progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
                             } else {
                                 progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
@@ -167,19 +169,18 @@ public class CurrentActivityLevel extends Activity {
 
             //Adds the proper unit to the progress view
             if (activityList.get(position).contains("_REP")){
-                progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
+                progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Reps"));
             }else if (activityList.get(position).contains("_TIM")){
-                progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
+                progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Hours"));
             }else {
                 if (activityList.get(position).contains("_DTA-T")) {
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
+                    progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Hours"));
                 }else if(activityList.get(position).toString().contains("Swimming")){
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                    progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Laps"));
                 }else{
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
+                    progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Miles"));
                 }
             }
-
             return convertView;
         }
     }

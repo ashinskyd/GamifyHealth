@@ -10,6 +10,7 @@ package com.cs400.gamifyhealth;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Context;
@@ -156,8 +157,10 @@ public class AttackEngine {
 
     }
 
+    //Displays a dialog with a simple message anytime a user's city is attacked
     private void showAttackDialog(int size, String attackType) {
         if (size==0){
+            //If we attack people, but don't have any to remove, just display a notice
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle("Oh No!");
             builder.setMessage(attackType);
@@ -167,13 +170,32 @@ public class AttackEngine {
                 }
             });
             builder.show();
+
         }else{
+            //Sets the dialog's message to be some preconstructed string we made
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle("Oh No!");
-            builder.setMessage("You were attacked! You had: "+size+" "+attackType);
+            String message;
+            if (attackType.contains("Farms")){
+                message = activity.getString(R.string.farm1);
+                builder.setMessage(message+" You had: "+size+" "+attackType);
+            }else if (attackType.contains("Houses")){
+                message = activity.getString(R.string.houses1);
+                builder.setMessage(message+" You had: "+size+" "+attackType);
+            }else{
+                message = activity.getString(R.string.fort1);
+                builder.setMessage(message+" You had: "+size+" "+attackType);
+            }
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                //When they click the Ok button, relaunch the fragment so it draws the map properly
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    FragmentTransaction transaction;
+                    GameFragment gameFragment = new GameFragment();
+                    transaction = activity.getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_frame, gameFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
             });
             builder.show();

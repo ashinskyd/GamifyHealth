@@ -116,6 +116,7 @@ public class GoalSetActivity extends Activity {
                         Goal g = new Goal(date,activityName,activityType,startValue,goalTarget,goalDuration);
                         goalList.add(g);
                     }
+                    //Puts each goal in the database
                     DBConnection datasource = new DBConnection(GoalSetActivity.this);
                     datasource.open();
                     try{
