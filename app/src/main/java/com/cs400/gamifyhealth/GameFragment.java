@@ -106,7 +106,9 @@ public class GameFragment extends Fragment {
         AttackEngine a = new AttackEngine(getActivity());
         //Attack and remove the notification
         for (int i=0;i<attacks;i++){
-            a.attack();
+            synchronized (this){
+                a.attack();
+            }
             NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
             manager.cancelAll();
         }
@@ -115,9 +117,14 @@ public class GameFragment extends Fragment {
         buildingArrayList = dataSource.getObjectsOwned();
         dataSource.close();
         //Check if we need to resize the map before initializing the Ui
-        calculateMapSize();
-        initUi(gameFrameView);
-        getOccupiedIndices(mGrid);
+        synchronized (this){
+            calculateMapSize();
+        }synchronized (this){
+            initUi(gameFrameView);
+        }
+        synchronized (this){
+            getOccupiedIndices(mGrid);
+        }
         inflateMap(gameFrameView);
         //If we are passed a bundle, retrive it
         //NOTE: This is used to determine if we come from a store or we're just showing the map
