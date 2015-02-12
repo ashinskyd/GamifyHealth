@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Enter Goal Times and Distances:"
+        android:text="Enter Your Weekly Goal Times and Distances and a Duration of At Least 4 Weeks:"
         android:textSize="25sp"
         android:gravity="center_horizontal"
         android:id="@+id/textView"

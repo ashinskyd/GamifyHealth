@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,23 +139,37 @@ public class NavigationDrawerMain extends FragmentActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        // call ActionBarDrawerToggle.onOptionsItemSelected(), if it returns true
-        // then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.navigation_drawer_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        switch (item.getItemId()){
+            case R.id.action_help:
+                HelpFragment HelpFragment = new HelpFragment();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame, HelpFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onBackPressed() {

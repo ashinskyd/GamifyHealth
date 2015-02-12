@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Check All relevant activities: "
+        android:text="Check all activities you currently do or want to start doing: "
         android:id="@+id/textView"
         android:textSize="25sp"
         android:paddingTop="10sp"

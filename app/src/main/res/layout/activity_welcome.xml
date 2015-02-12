@@ -10,10 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="30dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-
-        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/welcome_textview"
         android:textSize="30sp" />
 
     <Button
