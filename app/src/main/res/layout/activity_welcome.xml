@@ -5,15 +5,11 @@
     tools:context=".WelcomeActivity"
     android:background="@android:color/background_light">
 
-    <TextView
-        android:text="@string/intro_string"
-        android:layout_width="match_parent"
+    <WebView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:id="@+id/welcome_textview"
-        android:textSize="30sp" />
+        android:layout_above="@+id/continueButton"
+        android:id="@+id/welcome_webView" />
 
     <Button
         android:layout_width="match_parent"

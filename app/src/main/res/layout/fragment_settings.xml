@@ -16,6 +16,14 @@
             android:text="Enable Safe Mode"
             android:id="@+id/safe_switch" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description 1"
+            android:layout_toRightOf="@+id/safe_switch"
+            android:id="@+id/description1_textView"
+            android:paddingLeft="10dp" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

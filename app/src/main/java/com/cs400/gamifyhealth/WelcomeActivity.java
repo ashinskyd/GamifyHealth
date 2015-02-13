@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -17,7 +18,6 @@ import android.widget.TextView;
 //This is our App's entryPoint and starts the main setup process
 public class WelcomeActivity extends Activity {
     private Button continueButton;
-    private TextView welcomeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,8 @@ public class WelcomeActivity extends Activity {
             DBConnection datasource = new DBConnection(this);
             datasource.open();
             datasource.createTables();
-            datasource.insertObject("house", 0, 0, "1");
-            datasource.insertObject("farm", 0, 1, "1");
+            datasource.insertObject("house", 0, 0, "0");
+            datasource.insertObject("farm", 0, 1, "0");
             datasource.close();
             setContentView(R.layout.activity_welcome);
             continueButton = (Button) findViewById(R.id.continueButton);
@@ -54,9 +54,8 @@ public class WelcomeActivity extends Activity {
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             });
-            welcomeText = (TextView) findViewById(R.id.welcome_textview);
-            welcomeText.setMovementMethod(new ScrollingMovementMethod());
-            //welcomeText.setText(Html.fromHtml());
+            WebView webview = (WebView) findViewById(R.id.welcome_webView);
+            webview.loadUrl("file:///android_asset/tester.html");
 
         }
         //Gives the user a default population and credit amount
