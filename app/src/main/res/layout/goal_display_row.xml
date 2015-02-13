@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
         android:id="@+id/nameTextView"
+        android:paddingRight="10dp"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Final Goal"
+        android:id="@+id/finalgoalTextView"
+        android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:textColor="@android:color/black" />
 
@@ -23,27 +34,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="By Date"
-        android:id="@+id/weekdateTextView"
+        android:text="relativeProgress"
+        android:id="@+id/progressText"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:textColor="@android:color/black" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Final Goal"
-        android:id="@+id/finalgoalTextView"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End Date"
-        android:id="@+id/durationTextView"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textColor="@android:color/black" />
 </LinearLayout>
