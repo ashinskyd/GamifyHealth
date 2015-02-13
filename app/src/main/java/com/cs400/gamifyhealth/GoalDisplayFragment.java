@@ -92,6 +92,7 @@ public class GoalDisplayFragment extends Fragment {
             context = Context;
         }
 
+        //TODO: ADD SWIMMING FIX SO IT DOESN'T SHOW MILES WHEN IT SHOULD LAPS
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(context);
