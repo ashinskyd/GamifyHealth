@@ -35,6 +35,8 @@ public class NavigationDrawerMain extends FragmentActivity {
     private ListView mDrawerListView;
     private FrameLayout mFrame;
     private AttackService attackService;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

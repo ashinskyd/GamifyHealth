@@ -1,35 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/relativeLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:id="@+id/imageView"
-        android:background="@drawable/sword"
-         />
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/sword" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/min_people_textview"
+        android:layout_toRightOf="@id/imageView"
         android:text="PLACEHOLDER"
         android:id="@+id/description"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="70"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5"
-        android:layout_gravity="center_vertical|right"
         android:id="@+id/priceText"
-        android:autoText="false"
+        android:textSize="20dp"
+        android:layout_toLeftOf="@+id/coin_imageView"
+        android:textColor="#ff4b5dff"
+        />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/money_bag"
+        android:layout_alignParentRight="true"
+        android:id="@+id/coin_imageView"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10000"
+        android:id="@+id/min_people_textview"
+        android:layout_toLeftOf="@+id/people_cost_imageview"
+        android:layout_below="@id/priceText"
         android:textSize="20dp"
         android:textColor="#ff4b5dff"
-        android:gravity="right"
-        android:layout_marginRight="10dp" />
-</LinearLayout>
+        />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/running_man"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/coin_imageView"
+        android:id="@+id/people_cost_imageview"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp" />
+
+</RelativeLayout>

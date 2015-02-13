@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -166,14 +167,18 @@ public class FarmStoreFragment extends Fragment {
             TextView description = (TextView) convertView.findViewById(R.id.description);
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
             TextView priceText = (TextView) convertView.findViewById(R.id.priceText);
+            TextView minpeopleText = (TextView) convertView.findViewById(R.id.min_people_textview);
             int price = prices[position];
             int threshold = thresholds[position];
             priceText.setText(Integer.toString(price));
+            minpeopleText.setText(Integer.toString(threshold));
             switch (position) {
                 case 0:
                     if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm1_bw));
                         isSelectable[position] = false;
+                        priceText.setTextColor(Color.BLACK);
+                        minpeopleText.setTextColor(Color.BLACK);
                     } else {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm1));
@@ -183,6 +188,8 @@ public class FarmStoreFragment extends Fragment {
                 case 1:
                     if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm2_bw));
+                        priceText.setTextColor(Color.BLACK);
+                        minpeopleText.setTextColor(Color.BLACK);
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
@@ -193,6 +200,8 @@ public class FarmStoreFragment extends Fragment {
                 case 2:
                     if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm3_bw));
+                        priceText.setTextColor(Color.BLACK);
+                        minpeopleText.setTextColor(Color.BLACK);
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
@@ -203,6 +212,8 @@ public class FarmStoreFragment extends Fragment {
                 case 3:
                     if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm4_bw));
+                        priceText.setTextColor(Color.BLACK);
+                        minpeopleText.setTextColor(Color.BLACK);
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
@@ -213,6 +224,8 @@ public class FarmStoreFragment extends Fragment {
                 case 4:
                     if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm5_bw));
+                        priceText.setTextColor(Color.BLACK);
+                        minpeopleText.setTextColor(Color.BLACK);
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
