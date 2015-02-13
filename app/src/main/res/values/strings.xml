@@ -39,5 +39,21 @@
     <string name="houses3">The housing bubble burst. Families now face foreclosure and demolition of their homes. Your houses have taken moderate damage.</string>
     <string name="houses4">Your village has a growing termite infestation. Your houses have been greatly damaged.</string>
     <string name="houses5">A pack of giants has trampled through your village. Your houses have been heavily damaged.</string>
+    <string name="houseDescription1">A virtually rodent-free enclosure. The perfect starter home for your village\'s families.</string>
+    <string name="houseDescription2">Are your villagers sick of sleeping on the floor in their huts? Try this compact, cozy dwelling featuring multiple rooms and mattresses.</string>
+    <string name="houseDescription3">Have you always dreamed of having horses and sheep right outside your window? This house is not equipped for stabling animals, but it\'s got plenty of rustic charm! And windows!</string>
+    <string name="houseDescription4">description default</string>
+    <string name="houseDescription5">Now that\'s a big house. I bet you could fit a dragon in here. But maybe don\'t try that; not exactly fire-proof.</string>
+    <string name="farmDescription1">A whole field of wheat. Perfect for making bread. Peasants love bread.</string>
+    <string name="farmDescription2">Mmm. Corn. Your villagers will eat this up.</string>
+    <string name="farmDescription3">A diverse patch of vegetables sure to keep your people healthy.</string>
+    <string name="farmDescription4">A place to keep your cows and sheep and horses. For milking? Shearing? Eating? You decide.</string>
+    <string name="farmDescription5">What a beautiful way to spend the day - strolling through the apple trees with sun on your face... The villagers are going to love this place.</string>
+    <string name="fortDescription1">description default</string>
+    <string name="fortDescription2">description default</string>
+    <string name="fortDescription3">description default</string>
+    <string name="fortDescription4">description default</string>
+    <string name="fortDescription5">description default</string>
+
 
 </resources>
