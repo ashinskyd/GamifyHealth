@@ -74,9 +74,9 @@ public class FortStoreFragment extends Fragment {
         isSelectable = new boolean[5];
         fortArray.add("Balista");
         fortArray.add("Broken Wall");
-        fortArray.add("Tower");
-        fortArray.add("Castle");
-        fortArray.add("Big Castle");
+        fortArray.add("Guard Tower");
+        fortArray.add("Weapon Stores");
+        fortArray.add("Fortress");
         Button houseStore = (Button) V.findViewById(R.id.cottage_button);
         Button farmStore = (Button) V.findViewById(R.id.wheat_button);
         Button fortStore = (Button) V.findViewById(R.id.sword_button);
@@ -188,6 +188,7 @@ public class FortStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort1));
                     }
+                    description.setText(getResources().getString(R.string.fortDescription1));
                     break;
                 case 1:
                     if (credits < price || population < threshold){
@@ -197,7 +198,7 @@ public class FortStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort2));
                     }
-
+                    description.setText(getResources().getString(R.string.fortDescription2));
                     break;
                 case 2:
                     if (credits < price || population < threshold){
@@ -207,7 +208,7 @@ public class FortStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort3));
                     }
-
+                    description.setText(getResources().getString(R.string.fortDescription3));
                     break;
                 case 3:
                     if (credits < price || population < threshold){
@@ -217,7 +218,7 @@ public class FortStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort4));
                     }
-
+                    description.setText(getResources().getString(R.string.fortDescription4));
                     break;
                 case 4:
                     if (credits < price || population < threshold){
@@ -227,10 +228,10 @@ public class FortStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort5));
                     }
+                    description.setText(getResources().getString(R.string.fortDescription5));
                     break;
 
             }
-            description.setText("This is a placeholder for a description: " + fortList.get(position));
             return convertView;
         }
     }

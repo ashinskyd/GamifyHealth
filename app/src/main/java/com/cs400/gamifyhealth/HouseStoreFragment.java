@@ -187,6 +187,7 @@ public class HouseStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house1));
                     }
+                    description.setText(getResources().getString(R.string.houseDescription1));
                     break;
                 case 1:
                     if (credits < price || population < threshold){
@@ -196,7 +197,7 @@ public class HouseStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house2));
                     }
-
+                    description.setText(getResources().getString(R.string.houseDescription2));
                     break;
                 case 2:
                     if (credits < price || population < threshold){
@@ -206,7 +207,7 @@ public class HouseStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house3));
                     }
-
+                    description.setText(getResources().getString(R.string.houseDescription3));
                     break;
                 case 3:
                     if (credits < price || population < threshold){
@@ -216,7 +217,7 @@ public class HouseStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house4));
                     }
-
+                    description.setText(getResources().getString(R.string.houseDescription4));
                     break;
                 case 4:
                     if (credits < price || population < threshold){
@@ -226,10 +227,10 @@ public class HouseStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house5));
                     }
+                    description.setText(getResources().getString(R.string.houseDescription5));
                     break;
 
             }
-            description.setText("This is a placeholder for a description: "+houseList.get(position));
             return convertView;
         }
     }
