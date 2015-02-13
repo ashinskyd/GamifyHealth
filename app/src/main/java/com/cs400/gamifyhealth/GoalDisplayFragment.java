@@ -154,7 +154,7 @@ public class GoalDisplayFragment extends Fragment {
             dataSource.open();
             double progress = dataSource.checkGoalProgress(g);
             dataSource.close();
-            String ps = "Progress This Week: " + Double.toString(progress) + " " + curU;
+            String ps = "Progress This Week: " + Double.toString(progress) + curU;
             weeklyProgressTextView.setText(ps);
             weeklyGoalTextView.setText(wg);
             finalGoalTextView.setText(fg);
