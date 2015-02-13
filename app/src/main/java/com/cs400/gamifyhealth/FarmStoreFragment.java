@@ -65,7 +65,7 @@ public class FarmStoreFragment extends Fragment {
         View V = inflater.inflate(R.layout.fragment_farm_store, container, false);
         getActivity().getActionBar().setTitle("Purchase Food Items");
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        credits = sharedPrefs.getInt("CREDITS",0);
+        credits = sharedPrefs.getInt("CREDITS", 0);
         population = sharedPrefs.getInt("POPULATION",0);
         getActivity().getActionBar().setTitle("Purchase Farms");
         ArrayList<String> farmsArray = new ArrayList<String>();
@@ -178,6 +178,7 @@ public class FarmStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm1));
                     }
+                    description.setText(getResources().getString(R.string.farmDescription1));
                     break;
                 case 1:
                     if (credits < price || population < threshold) {
@@ -187,7 +188,7 @@ public class FarmStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm2));
                     }
-
+                    description.setText(getResources().getString(R.string.farmDescription2));
                     break;
                 case 2:
                     if (credits < price || population < threshold) {
@@ -197,7 +198,7 @@ public class FarmStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm3));
                     }
-
+                    description.setText(getResources().getString(R.string.farmDescription3));
                     break;
                 case 3:
                     if (credits < price || population < threshold) {
@@ -207,7 +208,7 @@ public class FarmStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm4));
                     }
-
+                    description.setText(getResources().getString(R.string.farmDescription4));
                     break;
                 case 4:
                     if (credits < price || population < threshold) {
@@ -217,9 +218,9 @@ public class FarmStoreFragment extends Fragment {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm5));
                     }
+                    description.setText(getResources().getString(R.string.farmDescription5));
                     break;
             }
-            description.setText("This is a placeholder for a farm description: " + farmList.get(position));
             return convertView;
         }
     }
