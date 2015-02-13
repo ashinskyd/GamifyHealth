@@ -113,7 +113,11 @@ public class NavigationDrawerMain extends FragmentActivity {
                         transaction.commit();
                         break;
                     case 4:
-                        //TODO: Need to implement a settings page
+                        SettingsFragment settingsFragment = new SettingsFragment();
+                        transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.content_frame, settingsFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                         break;
                 }
                 mDrawerLayout.closeDrawer(mDrawerListView);

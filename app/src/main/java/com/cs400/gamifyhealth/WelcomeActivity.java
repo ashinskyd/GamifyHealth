@@ -56,7 +56,7 @@ public class WelcomeActivity extends Activity {
             });
             welcomeText = (TextView) findViewById(R.id.welcome_textview);
             welcomeText.setMovementMethod(new ScrollingMovementMethod());
-            welcomeText.setText(Html.fromHtml(getString(R.string.tester)));
+            //welcomeText.setText(Html.fromHtml());
 
         }
         //Gives the user a default population and credit amount

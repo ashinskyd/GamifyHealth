@@ -10,22 +10,19 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- *
- */
-public class HelpFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
 
-    public HelpFragment() {
+    public SettingsFragment() {
+        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View V = inflater.inflate(R.layout.fragment_help, container, false);
-        WebView webview = (WebView) V.findViewById(R.id.webView);
+        View V = inflater.inflate(R.layout.fragment_settings, container, false);
+        WebView webview = (WebView) V.findViewById(R.id.about_webView);
         webview.loadUrl("file:///android_asset/About_Text.html");
         return V;
     }
