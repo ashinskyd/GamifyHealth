@@ -32,7 +32,9 @@ public class FarmStoreFragment extends Fragment {
     private SharedPreferences sharedPrefs;
     private boolean[] isSelectable;
     private int credits;
+    private int population;
     private int[] prices = {20, 38, 54, 68, 80};
+    private int[] thresholds = {1, 15, 30, 45, 60};
 
 
     public static FarmStoreFragment newInstance(String param1, String param2) {
@@ -63,7 +65,8 @@ public class FarmStoreFragment extends Fragment {
         View V = inflater.inflate(R.layout.fragment_farm_store, container, false);
         getActivity().getActionBar().setTitle("Purchase Food Items");
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        credits = sharedPrefs.getInt("CREDITS",0);
+        credits = sharedPrefs.getInt("CREDITS", 0);
+        population = sharedPrefs.getInt("POPULATION",0);
         getActivity().getActionBar().setTitle("Purchase Farms");
         ArrayList<String> farmsArray = new ArrayList<String>();
         isSelectable = new boolean[5];
@@ -164,58 +167,60 @@ public class FarmStoreFragment extends Fragment {
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
             TextView priceText = (TextView) convertView.findViewById(R.id.priceText);
             int price = prices[position];
+            int threshold = thresholds[position];
             priceText.setText(Integer.toString(price));
             switch (position) {
                 case 0:
-                    if (credits < price) {
+                    if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm1_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm1));
                     }
+                    description.setText(getResources().getString(R.string.farmDescription1));
                     break;
                 case 1:
-                    if (credits < price) {
+                    if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm2_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm2));
                     }
-
+                    description.setText(getResources().getString(R.string.farmDescription2));
                     break;
                 case 2:
-                    if (credits < price) {
+                    if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm3_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm3));
                     }
-
+                    description.setText(getResources().getString(R.string.farmDescription3));
                     break;
                 case 3:
-                    if (credits < price) {
+                    if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm4_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm4));
                     }
-
+                    description.setText(getResources().getString(R.string.farmDescription4));
                     break;
                 case 4:
-                    if (credits < price) {
+                    if (credits < price || population < threshold) {
                         image.setBackground(getResources().getDrawable(R.drawable.farm5_bw));
                         isSelectable[position] = false;
                     } else {
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.farm5));
                     }
+                    description.setText(getResources().getString(R.string.farmDescription5));
                     break;
             }
-            description.setText("This is a placeholder for a farm description: " + farmList.get(position));
             return convertView;
         }
     }
