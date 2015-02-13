@@ -34,9 +34,11 @@ public class FortStoreFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private int credits;
+    private int population;
     private boolean [] isSelectable;
     private SharedPreferences sharedPrefs;
     private int[] prices = {50, 95, 135, 170, 200};
+    private int[] thresholds = {1, 25, 50, 75, 100};
 
     public static FortStoreFragment newInstance(String param1, String param2) {
         FortStoreFragment fragment = new FortStoreFragment();
@@ -66,14 +68,15 @@ public class FortStoreFragment extends Fragment {
         View V = inflater.inflate(R.layout.fragment_fort_store, container, false);
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         credits = sharedPrefs.getInt("CREDITS",0);
+        population = sharedPrefs.getInt("POPULATION",0);
         getActivity().getActionBar().setTitle("Purchase Fortifications");
         ArrayList<String> fortArray = new ArrayList<String>();
         isSelectable = new boolean[5];
         fortArray.add("Balista");
         fortArray.add("Broken Wall");
-        fortArray.add("Tower");
-        fortArray.add("Castle");
-        fortArray.add("Big Castle");
+        fortArray.add("Guard Tower");
+        fortArray.add("Weapon Stores");
+        fortArray.add("Fortress");
         Button houseStore = (Button) V.findViewById(R.id.cottage_button);
         Button farmStore = (Button) V.findViewById(R.id.wheat_button);
         Button fortStore = (Button) V.findViewById(R.id.sword_button);
@@ -174,59 +177,61 @@ public class FortStoreFragment extends Fragment {
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
             TextView priceText = (TextView) convertView.findViewById(R.id.priceText);
             int price = prices[position];
+            int threshold = thresholds[position];
             priceText.setText(Integer.toString(price));
             switch (position){
                 case 0:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort1_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort1));
                     }
+                    description.setText(getResources().getString(R.string.fortDescription1));
                     break;
                 case 1:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort2_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort2));
                     }
-
+                    description.setText(getResources().getString(R.string.fortDescription2));
                     break;
                 case 2:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort3_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort3));
                     }
-
+                    description.setText(getResources().getString(R.string.fortDescription3));
                     break;
                 case 3:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort4_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort4));
                     }
-
+                    description.setText(getResources().getString(R.string.fortDescription4));
                     break;
                 case 4:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort5_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort5));
                     }
+                    description.setText(getResources().getString(R.string.fortDescription5));
                     break;
 
             }
-            description.setText("This is a placeholder for a description: " + fortList.get(position));
             return convertView;
         }
     }

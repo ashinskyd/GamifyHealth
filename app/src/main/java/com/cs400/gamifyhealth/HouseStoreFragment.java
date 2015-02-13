@@ -35,8 +35,10 @@ public class HouseStoreFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private int credits;
+    private int population;
     private boolean [] isSelectable;
     private static int[] prices = {25, 48, 69, 88, 105};
+    private static int[] thresholds = {1, 20, 40, 60, 80, 100};
     private SharedPreferences sharedPrefs;
 
     public static HouseStoreFragment newInstance(String param1, String param2) {
@@ -67,6 +69,7 @@ public class HouseStoreFragment extends Fragment {
         View V = inflater.inflate(R.layout.fragment_house_store, container, false);
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         credits = sharedPrefs.getInt("CREDITS",0);
+        population = sharedPrefs.getInt("POPULATION",0);
         getActivity().getActionBar().setTitle("Purchase Houses");
         ArrayList<String> housesArray = new ArrayList<String>();
         isSelectable = new boolean[5];
@@ -173,59 +176,61 @@ public class HouseStoreFragment extends Fragment {
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
             TextView priceText = (TextView) convertView.findViewById(R.id.priceText);
             int price = prices[position];
+            int threshold = thresholds[position];
             priceText.setText(Integer.toString(price));
             switch (position){
                 case 0:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.house1_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house1));
                     }
+                    description.setText(getResources().getString(R.string.houseDescription1));
                     break;
                 case 1:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.house2_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house2));
                     }
-
+                    description.setText(getResources().getString(R.string.houseDescription2));
                     break;
                 case 2:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.house3_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house3));
                     }
-
+                    description.setText(getResources().getString(R.string.houseDescription3));
                     break;
                 case 3:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.house4_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house4));
                     }
-
+                    description.setText(getResources().getString(R.string.houseDescription4));
                     break;
                 case 4:
-                    if (credits<price){
+                    if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.house5_bw));
                         isSelectable[position] = false;
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.house5));
                     }
+                    description.setText(getResources().getString(R.string.houseDescription5));
                     break;
 
             }
-            description.setText("This is a placeholder for a description: "+houseList.get(position));
             return convertView;
         }
     }

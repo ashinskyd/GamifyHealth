@@ -131,6 +131,88 @@ public class DBConnection{
                 values);
     }
 
+    //used for the goal display screen, for a given goal, shows a user's relative progress
+    public double checkGoalProgress(Goal g){
+        String[] allColumns = {W_DATE,W_NAME, W_TIME, W_DIST,
+                W_RAT, W_REP, W_TYPE};
+        int cursorChecks = 0;
+        String t = g.type;
+        Double goal = g.calculateCurrentGoal();
+        if (t.equals("REP")){
+            cursorChecks = 5;
+        }
+        else if (t.equals("TIM")){
+            cursorChecks = 2;
+        }
+        else if (t.equals("DTA-T")){
+            cursorChecks = 2;
+        }
+        else if (t.equals("DTA-R")){
+            cursorChecks = 4;
+        }
+        else if (t.equals("DTA-D")){
+            cursorChecks  = 3;
+        }
+        double sum = 0;
+        int count = 0;
+        String startdate =  g.startDate;
+        System.out.println("goal date" + g.startDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Date d = null;
+        try {
+            d = sdf.parse(startdate);
+        }
+        catch(ParseException e){
+            System.out.println("bad date");
+        }
+        GregorianCalendar start = new GregorianCalendar();
+        GregorianCalendar endDate = new GregorianCalendar();
+        start.setTime(d);
+        endDate.setTime(d);
+        Cursor cur = database.query(TABLE_2,
+                allColumns, null, null, null, null, null);
+        cur.moveToFirst();
+        if (g.currentWeek > 1){
+            start.add(Calendar.DAY_OF_MONTH, 7 * (g.currentWeek - 1));
+        }
+        endDate.add(Calendar.DAY_OF_MONTH, 7 * g.currentWeek);
+
+        while (cur.isAfterLast() == false) {
+            String tdate = cur.getString(0);
+            Date td = null;
+            try {
+                td = sdf.parse(tdate);
+            }
+            catch(ParseException e){
+                System.out.println("bad date");
+            }
+            GregorianCalendar temp = new GregorianCalendar();
+            temp.setTime(td);
+            System.out.println("temp" + temp.toString());
+            if (temp.before(endDate) == true|temp.compareTo(endDate) == 0){
+                //adjust for when they have the same date
+                if (temp.after(start) == true| temp.compareTo(start) == 0){
+                    System.out.println(g.name);
+                    System.out.println(cur.getString(1));
+                    if (cur.getString(1).equals(g.name)){
+                        sum = sum + cur.getInt(cursorChecks);
+                        count++;
+                    }
+                }
+            }
+            cur.moveToNext();
+        }
+        cur.close();
+        if (t.equals("DTA-R") == false){
+            return sum;
+        }
+        else{
+            return sum/count;
+        }
+    }
+
+
+
     //returns a pair of booleans
     //first is the weekly goal met?
     //second is the goal completed?
@@ -168,11 +250,10 @@ public class DBConnection{
         Cursor cur = database.query(TABLE_2,
                 allColumns, null, null, null, null, null);
         cur.moveToFirst();
-        endDate.add(Calendar.DAY_OF_MONTH, 7);
-        System.out.println("endDate" + endDate.toString());
-        System.out.println("startDate" + startdate.toString());
-        //start date  = d
-
+        if (g.currentWeek > 1){
+            start.add(Calendar.DAY_OF_MONTH, 7 * (g.currentWeek - 1));
+        }
+        endDate.add(Calendar.DAY_OF_MONTH, 7 * g.currentWeek);
         while (cur.isAfterLast() == false) {
             String tdate = cur.getString(0);
             System.out.println("we're parsing " + cur.getString(0));
@@ -214,7 +295,7 @@ public class DBConnection{
         boolean goalmet = false;
         if (weeklygoalmet){
             if (g.duration == g.currentWeek){
-                weeklygoalmet = true;
+                goalmet = true;
             }
         }
         boolean[] b = new boolean[2];

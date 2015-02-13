@@ -2,6 +2,7 @@ package com.cs400.gamifyhealth;
 
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -14,7 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 
 public class GoalDisplayFragment extends Fragment {
@@ -29,7 +35,8 @@ public class GoalDisplayFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private String []types = {"(Distance)", "(Time)", "(Rate)" , "Reps"};
-    private String []units = {"Miles", "Hours", "Min/Mi" , "Reps"};
+    private String []units = {" miles per week ", " hours per week ", " min/mile average " , " reps per week "};
+    private String []curUnits = {" miles", " hours", " min/mile average" , " reps"};
 
 
     public static GoalDisplayFragment newInstance(String param1, String param2) {
@@ -85,15 +92,15 @@ public class GoalDisplayFragment extends Fragment {
             context = Context;
         }
 
+        //TODO: ADD SWIMMING FIX SO IT DOESN'T SHOW MILES WHEN IT SHOULD LAPS
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.goal_display_row, parent, false);
             TextView nameTextview =  (TextView) convertView.findViewById(R.id.nameTextView);
             TextView weeklyGoalTextView = (TextView) convertView.findViewById(R.id.weeklygoalTextView);
-            TextView weekDateTextView = (TextView) convertView.findViewById(R.id.weekdateTextView);
             TextView finalGoalTextView = (TextView) convertView.findViewById(R.id.finalgoalTextView);
-            TextView goalDurationTextView = (TextView) convertView.findViewById(R.id.durationTextView);
+            TextView weeklyProgressTextView = (TextView) convertView.findViewById(R.id.progressText);
 
             Goal g = goalSet.get(position);
             String name = g.name;
@@ -101,30 +108,56 @@ public class GoalDisplayFragment extends Fragment {
             String t = g.type;
             String type;
             String unit;
+            String curU;
             if (t.equals("DTA-T")|t.equals("TIM")){
                  type = types[1];
                 unit = units[1];
+                curU = curUnits[1];
             }
             else if( t.equals("DTA-R")){
                 type = types[2];
                 unit = units[2];
+                curU = curUnits[2];
             }
             else if( t.equals("DTA-D")){
                 type = types[0];
                 unit = units[0];
+                curU = curUnits[0];
             }
             else{
                 type = types[3];
                 unit = units[3];
+                curU = curUnits[3];
             }
             name=name+" "+type;
             nameTextview.setText(name);
-            //TODO: Calculate the current week date based on calender
+            String f = this.getContext().getString(R.string.finalgoalstring);
+            String w = this.getContext().getString(R.string.weeklygoalstring);
+            double finalGoal = g.goalUnit;
             double weeklyGoal = g.calculateCurrentGoal();
-            //weekDateTextView.setText(g.currentWeek);
-            weeklyGoalTextView.setText(Double.toString(weeklyGoal)+" "+unit);
-            finalGoalTextView.setText(g.goalUnit+" "+unit);
-            goalDurationTextView.setText(g.duration+" Weeks");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date d = null;
+            try {
+                d = sdf.parse(g.startDate);
+            }
+            catch(ParseException e){
+                System.out.println("You broke the date");
+            }
+            GregorianCalendar weeklyDate = new GregorianCalendar();
+            GregorianCalendar finalDate = new GregorianCalendar();
+            weeklyDate.setTime(d);
+            finalDate.setTime(d);
+            weeklyDate.add(Calendar.DAY_OF_MONTH, 7 * g.currentWeek);
+            finalDate.add(Calendar.DAY_OF_MONTH, 7 * g.duration);
+            String wg = w + " " +  Double.toString(weeklyGoal) + unit + "by " + sdf.format(weeklyDate.getTime());
+            String fg = f + " " +  Double.toString(finalGoal) + unit + "by " + sdf.format(finalDate.getTime());
+            dataSource.open();
+            double progress = dataSource.checkGoalProgress(g);
+            dataSource.close();
+            String ps = "Progress This Week: " + Double.toString(progress) + " " + curU;
+            weeklyProgressTextView.setText(ps);
+            weeklyGoalTextView.setText(wg);
+            finalGoalTextView.setText(fg);
             return convertView;
         }
     }
