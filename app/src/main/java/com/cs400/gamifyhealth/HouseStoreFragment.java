@@ -73,11 +73,11 @@ public class HouseStoreFragment extends Fragment {
         getActivity().getActionBar().setTitle("Purchase Houses");
         ArrayList<String> housesArray = new ArrayList<String>();
         isSelectable = new boolean[5];
-        housesArray.add("Hut 1234567889");
-        housesArray.add("Yurt 123456789");
-        housesArray.add("Townhouse");
+        housesArray.add("Hut");
+        housesArray.add("Cottage");
+        housesArray.add("Ranch House");
         housesArray.add("Yuen Hsi's Mansion");
-        housesArray.add("Yuen Hsi's Mansion");
+        housesArray.add("Noble's Estate");
         Button houseStore = (Button) V.findViewById(R.id.cottage_button);
         Button farmStore = (Button) V.findViewById(R.id.wheat_button);
         Button fortStore = (Button) V.findViewById(R.id.sword_button);

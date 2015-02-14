@@ -71,11 +71,11 @@ public class FarmStoreFragment extends Fragment {
         getActivity().getActionBar().setTitle("Purchase Farms");
         ArrayList<String> farmsArray = new ArrayList<String>();
         isSelectable = new boolean[5];
-        farmsArray.add("Bad Farm");
-        farmsArray.add("OK Farm");
-        farmsArray.add("Decent Farm");
-        farmsArray.add("Amazing Farm");
-        farmsArray.add("Best Farm");
+        farmsArray.add("Wheat Field");
+        farmsArray.add("Vegetable Patch");
+        farmsArray.add("Pasture");
+        farmsArray.add("Corn");
+        farmsArray.add("Orchard");
         Button farmStore = (Button) V.findViewById(R.id.wheat_button);
         Button houseStore = (Button) V.findViewById(R.id.cottage_button);
         Button fortStore = (Button) V.findViewById(R.id.sword_button);
