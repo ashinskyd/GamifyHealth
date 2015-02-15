@@ -56,14 +56,15 @@ public class WelcomeActivity extends Activity {
             });
             WebView webview = (WebView) findViewById(R.id.welcome_webView);
             webview.loadUrl("file:///android_asset/tester.html");
+            //Gives the user a default population and credit amount
+            int initialPopulation = 2;
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putInt("POPULATION", initialPopulation);
+            editor.putInt("CREDITS", 100);
+            editor.commit();
+
 
         }
-        //Gives the user a default population and credit amount
-        int initialPopulation = 2;
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.putInt("POPULATION", initialPopulation);
-        editor.putInt("CREDITS", 100);
-        editor.commit();
 
 
         /*Workout w = new Workout("Running", 5, "DTA-D");
