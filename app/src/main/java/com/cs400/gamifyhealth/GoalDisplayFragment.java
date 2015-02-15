@@ -127,9 +127,17 @@ public class GoalDisplayFragment extends Fragment {
                 curU = curUnits[2];
             }
             else if( t.equals("DTA-D")){
-                type = types[0];
-                unit = units[0];
-                curU = curUnits[0];
+                if (g.name.equals("Swimming")){
+                    type = types[0];
+                    unit = " laps per week ";
+                    curU = " laps ";
+                }
+                else {
+                    type = types[0];
+                    unit = units[0];
+                    curU = curUnits[0];
+                }
+
             }
             else{
                 type = types[3];
