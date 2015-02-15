@@ -57,6 +57,7 @@ public class GameFragment extends Fragment {
     private Button farmStore;
     private int credits;
     private int zoomCounter;
+    private int peopleCapacity;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -115,6 +116,7 @@ public class GameFragment extends Fragment {
         dataSource.open();
         //arraylist of all the users buildings
         buildingArrayList = dataSource.getObjectsOwned();
+        peopleCapacity = dataSource.getPopulationCap();
         dataSource.close();
         //Check if we need to resize the map before initializing the Ui
         synchronized (this){
@@ -171,10 +173,10 @@ public class GameFragment extends Fragment {
     private void initUi(View V) {
         int population = sharedPrefs.getInt("POPULATION",1);
         peopleCounter = (TextView) V.findViewById(R.id.people_counter);
-        peopleCounter.setText(population + " People");
+        peopleCounter.setText(population+"/"+peopleCapacity);
         //Set Credit Counter
         creditCounter = (TextView) V.findViewById(R.id.credit_counter);
-        creditCounter.setText(credits+ " Gold");
+        creditCounter.setText(Integer.toString(credits));
         houseStore = (Button) V.findViewById(R.id.cottage_button);
         farmStore = (Button) V.findViewById(R.id.wheat_button);
         fortStore = (Button) V.findViewById(R.id.sword_button);
@@ -246,7 +248,7 @@ public class GameFragment extends Fragment {
                             int price = housePrices[iconValue];
                             sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
                             getActivity().getActionBar().setTitle("Game Page");
-                            creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
+
                         }else if (storeValue.equals("Farm_Store")){
                             tileIcon.setBackground(getActivity().getResources().getDrawable(farmIcons[iconValue]));
                             dataSource.open();
@@ -256,7 +258,7 @@ public class GameFragment extends Fragment {
                             int price = farmPrices[iconValue];
                             sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
                             getActivity().getActionBar().setTitle("Game Page");
-                            creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
+
                         } else if (storeValue.equals("Fort_Store")){
                             tileIcon.setBackground(getActivity().getResources().getDrawable(fortIcons[iconValue]));
                             dataSource.open();
@@ -266,8 +268,9 @@ public class GameFragment extends Fragment {
                             int price = fortPrices[iconValue];
                             sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
                             getActivity().getActionBar().setTitle("Game Page");
-                            creditCounter.setText(sharedPrefs.getInt("CREDITS",1)+" Gold");
+
                         }
+                        creditCounter.setText(Integer.toString(sharedPrefs.getInt("CREDITS",1)));
                         UnregisterListeners();
                     }
                 });
