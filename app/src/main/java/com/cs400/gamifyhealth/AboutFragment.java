@@ -26,9 +26,14 @@ public class AboutFragment extends Fragment {
         View V = inflater.inflate(R.layout.fragment_about, container, false);
         WebView webview = (WebView) V.findViewById(R.id.about_webView);
         webview.loadUrl("file:///android_asset/About_Text.html");
+        NavigationDrawerMain.settingsFragmentLaunched = true;
         return V;
     }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        NavigationDrawerMain.settingsFragmentLaunched = false;
+    }
 }
 

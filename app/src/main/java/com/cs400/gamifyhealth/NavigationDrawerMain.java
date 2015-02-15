@@ -35,7 +35,7 @@ public class NavigationDrawerMain extends FragmentActivity {
     private ListView mDrawerListView;
     private FrameLayout mFrame;
     private AttackService attackService;
-    private boolean settingsFragmentLaunched=false;
+    public static boolean settingsFragmentLaunched=false;
 
 
     @Override
@@ -93,7 +93,7 @@ public class NavigationDrawerMain extends FragmentActivity {
                         transaction.replace(R.id.content_frame, gameFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-                        settingsFragmentLaunched = false;
+
                         break;
                     case 1:
                         DataEntryFragment mFragment = new DataEntryFragment();
@@ -101,7 +101,7 @@ public class NavigationDrawerMain extends FragmentActivity {
                         transaction.replace(R.id.content_frame, mFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-                        settingsFragmentLaunched = false;
+
                         break;
                     case 2:
                         EditActivitySetFragment mFragment2 = new EditActivitySetFragment();
@@ -109,7 +109,7 @@ public class NavigationDrawerMain extends FragmentActivity {
                         transaction.replace(R.id.content_frame, mFragment2);
                         transaction.addToBackStack(null);
                         transaction.commit();
-                        settingsFragmentLaunched = false;
+
                         break;
                     case 3:
                         GoalDisplayFragment goalDisplayFragment = new GoalDisplayFragment();
@@ -117,7 +117,7 @@ public class NavigationDrawerMain extends FragmentActivity {
                         transaction.replace(R.id.content_frame, goalDisplayFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-                        settingsFragmentLaunched = false;
+
                         break;
                     case 4:
                         SettingsFragment settingsFragment = new SettingsFragment();
@@ -125,10 +125,11 @@ public class NavigationDrawerMain extends FragmentActivity {
                         transaction.replace(R.id.content_frame, settingsFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-                        settingsFragmentLaunched = true;
+
                         break;
                 }
                 mDrawerLayout.closeDrawer(mDrawerListView);
+                settingsFragmentLaunched = false;
             }
         });
 
