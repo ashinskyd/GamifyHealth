@@ -8,8 +8,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
+        android:textSize="15dp"
         android:id="@+id/nameTextView"
-        android:paddingRight="10dp"
         android:textColor="@android:color/black"
         android:layout_gravity="center_horizontal" />
 

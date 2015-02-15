@@ -26,15 +26,9 @@ public class Goal {
     }
 
     public double calculateCurrentGoal() {
-        if (startUnit == goalUnit){
-            return startUnit;
-        }
-        else {
-            int weekDifference = currentWeek - currentWeekGoal;
-            double slope = (double) goalUnit / ((double) duration - weekDifference);
-            return (double) ((this.currentWeekGoal * slope) + startUnit);
-        }
-
+        int weekDifference = currentWeek - currentWeekGoal;
+        double slope = (double) (goalUnit - startUnit) / ((double) duration - weekDifference);
+        return (double) ((this.currentWeekGoal * slope) + startUnit);
     }
 
     // this method is called when the user does not meet the weekly goal
