@@ -176,14 +176,20 @@ public class FortStoreFragment extends Fragment {
             TextView description = (TextView) convertView.findViewById(R.id.description);
             ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
             TextView priceText = (TextView) convertView.findViewById(R.id.priceText);
+            TextView minpeopleText = (TextView) convertView.findViewById(R.id.min_people_textview);
+            ImageView minPeopleImageView = (ImageView) convertView.findViewById(R.id.people_cost_imageview);
+            ImageView creditImageView = (ImageView) convertView.findViewById(R.id.coin_imageView);
             int price = prices[position];
             int threshold = thresholds[position];
             priceText.setText(Integer.toString(price));
+            minpeopleText.setText(Integer.toString(threshold));
             switch (position){
                 case 0:
                     if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort1_bw));
                         isSelectable[position] = false;
+                        creditImageView.setBackground(getResources().getDrawable(R.drawable.money_bag_bw));
+                        minPeopleImageView.setBackground(getResources().getDrawable(R.drawable.walking_man_bw));
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort1));
@@ -194,6 +200,8 @@ public class FortStoreFragment extends Fragment {
                     if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort2_bw));
                         isSelectable[position] = false;
+                        creditImageView.setBackground(getResources().getDrawable(R.drawable.money_bag_bw));
+                        minPeopleImageView.setBackground(getResources().getDrawable(R.drawable.walking_man_bw));
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort2));
@@ -204,6 +212,8 @@ public class FortStoreFragment extends Fragment {
                     if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort3_bw));
                         isSelectable[position] = false;
+                        creditImageView.setBackground(getResources().getDrawable(R.drawable.money_bag_bw));
+                        minPeopleImageView.setBackground(getResources().getDrawable(R.drawable.walking_man_bw));
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort3));
@@ -214,6 +224,8 @@ public class FortStoreFragment extends Fragment {
                     if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort4_bw));
                         isSelectable[position] = false;
+                        creditImageView.setBackground(getResources().getDrawable(R.drawable.money_bag_bw));
+                        minPeopleImageView.setBackground(getResources().getDrawable(R.drawable.walking_man_bw));
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort4));
@@ -224,6 +236,8 @@ public class FortStoreFragment extends Fragment {
                     if (credits < price || population < threshold){
                         image.setBackground(getResources().getDrawable(R.drawable.fort5_bw));
                         isSelectable[position] = false;
+                        creditImageView.setBackground(getResources().getDrawable(R.drawable.money_bag_bw));
+                        minPeopleImageView.setBackground(getResources().getDrawable(R.drawable.walking_man_bw));
                     }else{
                         isSelectable[position] = true;
                         image.setBackground(getResources().getDrawable(R.drawable.fort5));

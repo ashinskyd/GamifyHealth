@@ -37,6 +37,7 @@ public class DBConnection{
     public static final String W_RAT = "rate";
     public static final String W_REP = "reps";
     public static final String W_TYPE = "type";
+    private int[] houseCapacities = {4,8,12,16,20};
 
     public DBConnection(Context c) {
         this.helper = new SQLiteHelper(c);
@@ -87,7 +88,21 @@ public class DBConnection{
                 values);
     }
 
-
+    public int getPopulationCap(){
+        String[] allColumns = {"type","xposition", "yposition", "name"};
+        int capacity =0;
+        Cursor cursor = database.query("objects",
+                allColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String type = cursor.getString(0);
+            if (type.equals("house")){
+                capacity += houseCapacities[Integer.parseInt(cursor.getString(3))];
+            }
+            cursor.moveToNext();
+        }
+        return capacity;
+    }
 
 
     //in order for this to work, we must prevent the user from adding to goals of the same name and type
@@ -104,7 +119,6 @@ public class DBConnection{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String s = sdf.format(c.getTime());
         System.out.println(s);
-
         values.put(W_DATE, s);
         values.put(W_NAME, w.getName());
         String t = w.getType();

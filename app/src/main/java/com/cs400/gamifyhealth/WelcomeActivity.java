@@ -40,7 +40,7 @@ public class WelcomeActivity extends Activity {
             datasource.close();
             setContentView(R.layout.activity_welcome);
             continueButton = (Button) findViewById(R.id.continueButton);
-            //Sets the ocntinue button to proceed to next step
+            //Sets the continue button to proceed to next step
             //Also changes default animation scheme
             continueButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -62,8 +62,6 @@ public class WelcomeActivity extends Activity {
             editor.putInt("POPULATION", initialPopulation);
             editor.putInt("CREDITS", 100);
             editor.commit();
-
-
         }
 
 

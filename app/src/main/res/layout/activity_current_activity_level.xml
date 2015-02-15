@@ -11,7 +11,7 @@ android:showDividers="none">
         android:text="Enter Your Current Weekly Times and Distances : "
         android:textSize="25sp"
         android:gravity="center_horizontal"
-        android:id="@+id/textView"
+        android:id="@+id/reset_description"
         android:paddingBottom="30dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -22,7 +22,7 @@ android:showDividers="none">
         android:id="@+id/seekBarListView"
         android:divider="@null"
         android:dividerHeight="30dp"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/reset_description"
         android:layout_above="@+id/continueButton2"
         />
 
