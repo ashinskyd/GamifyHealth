@@ -59,6 +59,7 @@ public class GameFragment extends Fragment {
     private int zoomCounter;
     private int peopleCapacity;
 
+
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
