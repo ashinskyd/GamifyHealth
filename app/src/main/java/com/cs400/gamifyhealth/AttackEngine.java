@@ -149,68 +149,72 @@ public class AttackEngine {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle("Oh No!");
             String message;
+            String suffix = "";
             if (attackType.contains("farm")){
+                suffix = "farms removed.";
                 if (severity == 1) {
                     message = activity.getString(R.string.farm1);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.farm2);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.farm3);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.farm4);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.farm5);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
             }else if (attackType.contains("house")){
                 if (severity == 1) {
+                    suffix = "houses removed.";
                     message = activity.getString(R.string.houses1);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.houses2);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.houses3);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.houses4);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.houses5);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
             }else{
+                suffix = "forts removed.";
                 if (severity == 1) {
                     message = activity.getString(R.string.fort1);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.fort2);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.fort3);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.fort4);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.fort5);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
             }
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
