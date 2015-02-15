@@ -7,12 +7,16 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,6 +105,9 @@ public class GoalDisplayFragment extends Fragment {
             TextView weeklyGoalTextView = (TextView) convertView.findViewById(R.id.weeklygoalTextView);
             TextView finalGoalTextView = (TextView) convertView.findViewById(R.id.finalgoalTextView);
             TextView weeklyProgressTextView = (TextView) convertView.findViewById(R.id.progressText);
+            TextView progressTextView = (TextView) convertView.findViewById(R.id.progress_textview);
+
+            ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
             Goal g = goalSet.get(position);
             String name = g.name;
@@ -158,6 +165,16 @@ public class GoalDisplayFragment extends Fragment {
             weeklyProgressTextView.setText(ps);
             weeklyGoalTextView.setText(wg);
             finalGoalTextView.setText(fg);
+
+            //TODO: Calculate the percentage then display
+
+            int percentage = (int) ((progress/weeklyGoal)*100);
+            if (percentage>100){
+                percentage=100;
+            }
+            progressBar.setMax(100);
+            progressBar.setProgress((int) percentage);
+            Log.d("TAG", "PROGRESS: " + percentage);
             return convertView;
         }
     }

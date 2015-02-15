@@ -89,7 +89,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             activityList.add(i,activities[i]);
             activitySetLevels.add(i,Integer.parseInt(activityStartValString[i]));
             //Adds the activity and the given level to our arrays
-            currentLevel.put(activities[i],Integer.parseInt(activityStartValString[i]));
+            currentLevel.put(activities[i],0);
         }
         mListView = (ListView) V.findViewById(R.id.seekBarListView);
         mAdapter = new SeekBarAdapter(getActivity().getApplicationContext(),R.layout.seekbar_row,activityList);

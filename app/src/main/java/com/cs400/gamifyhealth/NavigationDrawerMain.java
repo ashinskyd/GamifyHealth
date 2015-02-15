@@ -177,8 +177,14 @@ public class NavigationDrawerMain extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onBackPressed() {
+        FragmentTransaction defaultTransaction = getFragmentManager().beginTransaction();
+        GameFragment gameFragment = new GameFragment();
+        defaultTransaction.replace(R.id.content_frame,gameFragment);
+        defaultTransaction.addToBackStack(null);
+        defaultTransaction.commit();
         return;
     }
 
