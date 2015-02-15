@@ -30,7 +30,7 @@
         android:id="@+id/priceText"
         android:textSize="20dp"
         android:layout_toLeftOf="@+id/coin_imageView"
-        android:textColor="#ff4b5dff"
+        android:textColor="@android:color/black"
         />
 
     <ImageView
@@ -49,13 +49,13 @@
         android:layout_toLeftOf="@+id/people_cost_imageview"
         android:layout_below="@id/priceText"
         android:textSize="20dp"
-        android:textColor="#ff4b5dff"
+        android:textColor="@android:color/black"
         />
 
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:background="@drawable/running_man"
+        android:background="@drawable/walking_man"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/coin_imageView"
         android:id="@+id/people_cost_imageview"

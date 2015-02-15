@@ -62,8 +62,6 @@ public class WelcomeActivity extends Activity {
             editor.putInt("POPULATION", initialPopulation);
             editor.putInt("CREDITS", 100);
             editor.commit();
-
-
         }
 
 
