@@ -59,105 +59,74 @@ public class AttackEngine {
     }
 
     public double generateSeverity(){
-        return randomGen.nextInt(4);
+        return randomGen.nextInt(4) + 1;
     }
 
     //called post-attack
-    public void updateDB(int farmsDestroyed, int fortsDestroyed, int housesDestroyed, int newPopulation, double severity){
-
-        /*** Gets a string based on attack type to  be used for the dialog ***/
-        String attackType = "";
-        System.out.println("I'm attempting damage");
-        System.out.println(farmsDestroyed + " " + fortsDestroyed + " " + housesDestroyed);
-        datasource.open();
-        ArrayList<Building> objectLocs = datasource.getObjectsOwned();
-        boolean farmsDone = true;
-        if (farmsDestroyed > 0){
-            farmsDone = false;
-            attackType = "Farms Removed";
-        }
-        boolean fortsDone = true;
-        if (fortsDestroyed > 0){
-            fortsDone = false;
-            attackType = "Forts Removed";
-        }
-        boolean housesDone = true;
-        if (housesDestroyed > 0){
-            housesDone = false;
-            attackType = "Houses Removed";
-        }
-
-        //If none of the above are attacked, must be people
-        int farm = 0;
-        int fort = 0;
-        int house = 0;
-        System.out.println(farmsDone);
-        System.out.println(fortsDone);
-        System.out.println(housesDone);
-        ArrayList<Building> toRemove = new ArrayList<Building>();
-        for (Building b: objectLocs){
-            if (farmsDone == false){
-                if (b.type.equals("farm")) {
-                    toRemove.add(b);
-                    farm++;
-                    if (farm == farmsDestroyed) {
-                        farmsDone = true;
-                    }
-                }
-
-            }
-            if (fortsDone == false){
-                if (b.type.equals("fort")) {
-                    toRemove.add(b);
-                    fort++;
-                    if (fort == fortsDestroyed) {
-                        fortsDone = true;
-                    }
-                }
-
-            }
-            if (housesDone == false){
-                if (b.type.equals("house")) {
-                    toRemove.add(b);
-                    house++;
-                    if (house == housesDestroyed) {
-                        housesDone = true;
-                    }
-                }
-
-            }
-            if (farmsDone && fortsDone && housesDone){
-                break;
-            }
-        }
-        System.out.println("I'm removing these buildings");
-        System.out.println(toRemove);
-        for (Building b: toRemove){
-            datasource.removeObject(b.xcoord, b.ycoord);
-        }
-        System.out.println("new object counts");
-        int[] test = datasource.getObjectCounts();
-        System.out.println(Arrays.toString(test));
-        datasource.printObjectDB();
-        datasource.close();
+    public void updateDB(int toRemove, int type,  double severity) {
         String pref_file_key = activity.getString(R.string.preference_file_key);
         SharedPreferences sharedPrefs = activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
-        mEditor.putInt("POPULATION", newPopulation);
-        int attacks = sharedPrefs.getInt("ATTACKS",0)-1;
-        mEditor.putInt("ATTACKS",attacks);
+        int attacks = sharedPrefs.getInt("ATTACKS", 0) - 1;
+        mEditor.putInt("ATTACKS", attacks);
         mEditor.commit();
+        if (toRemove == 0) {
+            showAttackDialog(0, "You survived the attack with no casualties", (int) severity);
+            return;
 
-        //If we remove no buildings, we must have removed some number of people
-        if (toRemove.size()==0){
-            if (population != newPopulation) {
-                showAttackDialog(population-newPopulation,"People Removed", (int) severity);
-            }else{
-                showAttackDialog(0,"You survived the attack with no casualties", (int)  severity);
-            }
-        }else{
-            showAttackDialog(toRemove.size(),attackType, (int) severity);
         }
+        String typeString = "";
+        //atttack on people, no database connection required
+        if (type == 3) {
+            typeString = "people";
+            int population = sharedPrefs.getInt("POPULATION", 0);
+            showAttackDialog(toRemove, typeString, (int) severity);
+            mEditor.putInt("POPULATION", population - toRemove);
+            mEditor.commit();
+            return;
+        }
+        //attack on buildings, database connection required
+        else {
+            boolean removalDone = false;
+
+            int removed = 0;
+            if (type == 0) {
+                typeString = "farm";
+            } else if (type == 1) {
+                typeString = "fort";
+            } else if (type == 2) {
+                typeString = "house";
+            }
+            datasource.open();
+            ArrayList<Building> objectLocs = datasource.getObjectsOwned();
+            ArrayList<Building> removeList = new ArrayList<Building>();
+            for (Building b : objectLocs) {
+                if (removalDone == false) {
+                    if (b.type.equals(typeString)) {
+                        removeList.add(b);
+                        removed++;
+                        if (removed == toRemove) {
+                            removalDone = true;
+                        }
+                    }
+                }
+                if (removalDone) {
+                    break;
+                }
+            }
+            System.out.println("I'm removing these buildings");
+            System.out.println(removeList);
+            for (Building b : removeList) {
+                datasource.removeObject(b.xcoord, b.ycoord);
+            }
+            System.out.println("new object counts");
+            int[] test = datasource.getObjectCounts();
+            System.out.println(Arrays.toString(test));
+            datasource.printObjectDB();
+            datasource.close();
+            showAttackDialog(toRemove, typeString, (int) severity);
+        }
+
 
     }
 
@@ -180,68 +149,72 @@ public class AttackEngine {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle("Oh No!");
             String message;
-            if (attackType.contains("Farms")){
+            String suffix = "";
+            if (attackType.contains("farm")){
+                suffix = "farms removed.";
                 if (severity == 1) {
                     message = activity.getString(R.string.farm1);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.farm2);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.farm3);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.farm4);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.farm5);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
-            }else if (attackType.contains("Houses")){
+            }else if (attackType.contains("house")){
                 if (severity == 1) {
+                    suffix = "houses removed.";
                     message = activity.getString(R.string.houses1);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.houses2);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.houses3);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.houses4);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.houses5);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
             }else{
+                suffix = "forts removed.";
                 if (severity == 1) {
                     message = activity.getString(R.string.fort1);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.fort2);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.fort3);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.fort4);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.fort5);
-                    builder.setMessage(message + " You had: " + size + " " + attackType);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
             }
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -312,8 +285,8 @@ public class AttackEngine {
             itemDamaged = itemDamaged - (itemDamaged * percentage);
             System.out.println("Item damaged after attack " + itemDamaged);
 
-            //population must be at least 1
-            if (type == 3){
+            //population, farms, and houses must be at least 1
+            if ((type == 0)||(type == 2)||(type == 3)){
                 if ((int)itemDamaged == 0){
                     itemDamaged = 1;
                 }
@@ -326,12 +299,8 @@ public class AttackEngine {
             }
 
             postAttack[type] = (int)itemDamaged;
-            int farmsDamaged = objectsOwned[0] - postAttack[0];
-            int fortsDamaged = objectsOwned[1] - postAttack[1];
-            int housesDamaged = objectsOwned[2] - postAttack[2];
-            int newPopulation = postAttack[3];
-            severity = severity + 1;
-            this.updateDB(farmsDamaged, fortsDamaged, housesDamaged, newPopulation, severity);
+            int toRemove = objectsOwned[type] - postAttack[type];
+            this.updateDB(toRemove, type, severity);
             objectsOwned[type] = postAttack[type];
         }
 
