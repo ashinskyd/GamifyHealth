@@ -267,7 +267,9 @@ public class AttackEngine {
             //rounding down ensures that you always lose at least one fort per fort attack
 
             postAttack[1] = (int)fortsOwned;
-
+            int toRemove = objectsOwned[type] - postAttack[type];
+            this.updateDB(toRemove, type, severity);
+            objectsOwned[type] = postAttack[type];
         }
 
         else {
@@ -286,22 +288,22 @@ public class AttackEngine {
             System.out.println("Item damaged after attack " + itemDamaged);
 
             //population, farms, and houses must be at least 1
-            if ((type == 0)||(type == 2)||(type == 3)){
-                if ((int)itemDamaged == 0){
-                    itemDamaged = 1;
-                }
+        if ((type == 0)||(type == 2)||(type == 3)){
+            if ((int)itemDamaged == 0){
+                itemDamaged = 1;
             }
-            //it's not possible to have negative farms, forts, or houses
-            else{
-                if ((int)itemDamaged < 0){
-                    itemDamaged = 0;
-                }
+        }
+        //it's not possible to have negative farms, forts, or houses
+        else{
+            if ((int)itemDamaged < 0){
+                itemDamaged = 0;
             }
+        }
 
-            postAttack[type] = (int)itemDamaged;
-            int toRemove = objectsOwned[type] - postAttack[type];
-            this.updateDB(toRemove, type, severity);
-            objectsOwned[type] = postAttack[type];
+        postAttack[type] = (int)itemDamaged;
+        int toRemove = objectsOwned[type] - postAttack[type];
+        this.updateDB(toRemove, type, severity);
+        objectsOwned[type] = postAttack[type];
         }
 
     }
