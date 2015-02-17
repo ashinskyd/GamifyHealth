@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.cs400.gamifyhealth.DataEntryFragment"
-    android:background="#ffd7ffba">
+   >
 <RelativeLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
