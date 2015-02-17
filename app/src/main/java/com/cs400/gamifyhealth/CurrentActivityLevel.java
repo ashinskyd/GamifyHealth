@@ -29,6 +29,7 @@ public class CurrentActivityLevel extends Activity {
     private SeekBarAdapter mAdapter;
     private Button coninueButton;
     private Map<String,Integer> currentLevel;
+    private UnitConverter converter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class CurrentActivityLevel extends Activity {
         }
         mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row,activityList);
         mListView.setAdapter(mAdapter);
+        converter = new UnitConverter();
     }
 
     @Override
@@ -150,7 +152,6 @@ public class CurrentActivityLevel extends Activity {
                     mSeekBar.setProgress(mSeekBar.getProgress()+1);
                 }
             });
-
             mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 //Listens for seekbar sliding
                 @Override
@@ -183,18 +184,21 @@ public class CurrentActivityLevel extends Activity {
                 }
             });
 
-            //Adds the proper unit to the progress view
-            if (activityList.get(position).contains("_REP")){
+            //String parsing for our layout
+            if (activityList.get(position).contains("_REP")) {
                 progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Reps"));
-            }else if (activityList.get(position).contains("_TIM")){
-                progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Hours"));
-            }else {
+            } else if (activityList.get(position).contains("_TIM")) {
+                String displayString = converter.convertUnit(mSeekBar.getProgress(), "TIM");
+                progress.setText(displayString);
+            } else {
                 if (activityList.get(position).contains("_DTA-T")) {
-                    progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Hours"));
-                }else if(activityList.get(position).toString().contains("Swimming")){
+                    String displayString = converter.convertUnit(mSeekBar.getProgress(), "DTA-T");
+                    progress.setText(displayString);
+                }else if(activityList.get(position).contains("Swimming")){
                     progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Laps"));
-                }else{
-                    progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Miles"));
+                } else{
+                    String displayString = converter.convertUnit(mSeekBar.getProgress(), "DTA-D");
+                    progress.setText(displayString);
                 }
             }
             return convertView;

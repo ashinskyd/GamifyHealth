@@ -22,10 +22,10 @@
         android:paddingBottom="10dp"
         android:id="@+id/seekBar" />
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +35,8 @@
             android:gravity="left"
             android:id="@+id/oldValuetextView"
             android:editable="false"
-            android:textColor="#ff4ca6cc"/>
+            android:textColor="#ff4ca6cc"
+            android:layout_alignParentLeft="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,8 +45,8 @@
             android:layout_weight="10"
             android:textSize="15dp"
             android:gravity="center"
-            android:id="@+id/deltatextView" />
-
+            android:id="@+id/deltatextView"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,9 +57,8 @@
             android:layout_weight="10"
             android:textSize="15dp"
             android:textColor="#ff4ca6cc"
-            />
-
-    </LinearLayout>
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"

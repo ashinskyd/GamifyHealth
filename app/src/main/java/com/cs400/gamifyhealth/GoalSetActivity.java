@@ -198,7 +198,8 @@ public class GoalSetActivity extends Activity {
             convertView = inflater.inflate(R.layout.seekbar_row2, parent, false);
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             EditText eT = (EditText) convertView.findViewById(R.id.editText2);
-
+            Button minusButton = (Button) convertView.findViewById(R.id.minus_button);
+            Button plusButton = (Button) convertView.findViewById(R.id.plus_button);
             //Android Recycle Problem: If the user scrolls up/down, we need to re-populate the editText based on what they previously enter
             if (goalTimeEditTextMap.get(activitySet.get(position))!=null){
                 eT.setText(goalTimeEditTextMap.get(activitySet.get(position)).getText().toString());
@@ -257,6 +258,20 @@ public class GoalSetActivity extends Activity {
                 delta.setTextColor(Color.parseColor("#ff0000"));
             }
 
+            plusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sb.setProgress(sb.getProgress()+1);
+                }
+            });
+
+            minusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sb.setProgress(sb.getProgress()-1);
+                }
+            });
+
             //When the seekbar is changed, we update the UI Accordingly
             //We also update our Map<> so that we have a record of each activity and its goal
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -282,17 +297,17 @@ public class GoalSetActivity extends Activity {
                     if (activitySet.get(position).contains("_REP")) {
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
                     } else if (activitySet.get(position).contains("_TIM")) {
-                        progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
+                        String displayString = converter.convertUnit(sb.getProgress(),"TIM");
+                        progress.setText(displayString);
                     } else {
                         if (activitySet.get(position).contains("_DTA-T")) {
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        } else if (activitySet.get(position).contains("_DTA-D")) {
-                           if (activitySet.get(position).contains("Swimming")){
-                               progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
-                           }else{
-                               progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
-                           }
-
+                            String displayString = converter.convertUnit(sb.getProgress(),"DTA-T");
+                            progress.setText(displayString);
+                        }else if(activitySet.get(position).contains("Swimming")){
+                            progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                        } else{
+                            String displayString = converter.convertUnit(sb.getProgress(),"DTA-D");
+                            progress.setText(displayString);
                         }
                     }
                 }

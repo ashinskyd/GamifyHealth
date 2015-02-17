@@ -21,12 +21,10 @@ public class UnitConverter {
             }
         }
         else if (type.equals("DTA-D")) {
-            int miles = quantity / 4;
-            double qMiles = (quantity % 4) * .25;
-            displayString = miles + "";
-            if (qMiles != 0) {
-                displayString += qMiles;
-            }
+            float miles = quantity / 4.0f;
+
+            displayString = Float.toString(miles);
+
             displayString += " mi";
         }
         else {
