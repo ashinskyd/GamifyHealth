@@ -211,7 +211,7 @@ public class GoalSetActivity extends Activity {
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
 
             //Set the user's current level in the layout and set the text of the layout to correspond
-            oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)));
+
             if (activitySet.get(position).toString().contains("_REP")){
                 sb.setMax(500);
             }else if (activitySet.get(position).toString().contains("_TIM")){
@@ -229,34 +229,12 @@ public class GoalSetActivity extends Activity {
                     }
                 }
             }
-            if (activitySet.get(position).contains("_REP")) {
-                oldValue.setText(oldValue.getText().toString().concat(" Reps"));
-            } else if (activitySet.get(position).contains("_TIM")) {
-                oldValue.setText(oldValue.getText().toString().concat(" Hours"));
-            } else {
-                if (activitySet.get(position).contains("_DTA-T")) {
-                    oldValue.setText(oldValue.getText().toString().concat(" Hours"));
-                } else if (activitySet.get(position).contains("_DTA-D")) {
-                    if (activitySet.get(position).contains("Swimming")){
-                        oldValue.setText(oldValue.getText().toString().concat(" Laps"));
-                    }else{
-                        oldValue.setText(oldValue.getText().toString().concat(" Miles"));
-                    }
-                }
-            }
+
             title.setText(activitySet.get(position).split("_")[0]);
             if (goalLevelMap.get(activitySet.get(position))!= null) {
                 sb.setProgress(goalLevelMap.get(activitySet.get(position)));
             }
             int delt = sb.getProgress()-activitySetLevels.get(position);
-            if (delt>=0){
-                delta.setText("+".concat(Integer.toString(delt)));
-                delta.setTextColor(Color.parseColor("#A4C739"));
-
-            }else{
-                delta.setText("-".concat(Integer.toString(delt)));
-                delta.setTextColor(Color.parseColor("#ff0000"));
-            }
 
             plusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -285,29 +263,33 @@ public class GoalSetActivity extends Activity {
                     //Puts the data in our map
                     goalLevelMap.put(activitySet.get(position), seekBar.getProgress());
                     int delt = sb.getProgress()-activitySetLevels.get(position);
-                    if (delt>=0){
-                        delta.setText("+".concat(Integer.toString(delt)));
-                        delta.setTextColor(Color.parseColor("#A4C739"));
-
-                    }else{
-                        delta.setText("-".concat(Integer.toString(delt)));
-                        delta.setTextColor(Color.parseColor("#ff0000"));
-                    }
-
                     if (activitySet.get(position).contains("_REP")) {
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
+                        delta.setText("+".concat(Integer.toString(delt)));
+                        delta.setTextColor(Color.parseColor("#A4C739"));
                     } else if (activitySet.get(position).contains("_TIM")) {
                         String displayString = converter.convertUnit(sb.getProgress(),"TIM");
                         progress.setText(displayString);
+                        String deltaString = "+ "+converter.convertUnit(delt,"TIM");
+                        delta.setText(deltaString);
+                        delta.setTextColor(Color.parseColor("#A4C739"));
                     } else {
                         if (activitySet.get(position).contains("_DTA-T")) {
                             String displayString = converter.convertUnit(sb.getProgress(),"DTA-T");
                             progress.setText(displayString);
+                            String deltaString = "+ "+converter.convertUnit(delt,"DTA-T");
+                            delta.setText(deltaString);
+                            delta.setTextColor(Color.parseColor("#A4C739"));
                         }else if(activitySet.get(position).contains("Swimming")){
                             progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                            delta.setText("+".concat(Integer.toString(delt)));
+                            delta.setTextColor(Color.parseColor("#A4C739"));
                         } else{
                             String displayString = converter.convertUnit(sb.getProgress(),"DTA-D");
                             progress.setText(displayString);
+                            String deltaString = "+ "+converter.convertUnit(delt,"DTA-D");
+                            delta.setText(deltaString);
+                            delta.setTextColor(Color.parseColor("#A4C739"));
                         }
                     }
                 }
@@ -324,18 +306,39 @@ public class GoalSetActivity extends Activity {
             //String parsing for our layout
             if (activitySet.get(position).contains("_REP")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
+                delta.setText("+".concat(Integer.toString(delt)));
+                delta.setTextColor(Color.parseColor("#A4C739"));
+                oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position))+ " Reps");
             } else if (activitySet.get(position).contains("_TIM")) {
                 String displayString = converter.convertUnit(sb.getProgress(),"TIM");
                 progress.setText(displayString);
+                String deltaString = "+ "+converter.convertUnit(delt,"TIM");
+                delta.setText(deltaString);
+                delta.setTextColor(Color.parseColor("#A4C739"));
+                String currentLevel = converter.convertUnit(activitySetLevels.get(position),"TIM");
+                oldValue.setText("Cur: "+currentLevel);
             } else {
                 if (activitySet.get(position).contains("_DTA-T")) {
                     String displayString = converter.convertUnit(sb.getProgress(),"DTA-T");
                     progress.setText(displayString);
+                    String deltaString = "+ "+converter.convertUnit(delt,"DTA-T");
+                    delta.setText(deltaString);
+                    delta.setTextColor(Color.parseColor("#A4C739"));
+                    String currentLevel = converter.convertUnit(activitySetLevels.get(position),"DTA-T");
+                    oldValue.setText("Cur: "+currentLevel);
                 }else if(activitySet.get(position).contains("Swimming")){
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                    delta.setText("+".concat(Integer.toString(delt)));
+                    delta.setTextColor(Color.parseColor("#A4C739"));
+                    oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)).concat(" Laps"));
                 } else{
                     String displayString = converter.convertUnit(sb.getProgress(),"DTA-D");
                     progress.setText(displayString);
+                    String deltaString = "+ "+converter.convertUnit(delt,"DTA-D");
+                    delta.setText(deltaString);
+                    delta.setTextColor(Color.parseColor("#A4C739"));
+                    String currentLevel = converter.convertUnit(activitySetLevels.get(position),"DTA-D");
+                    oldValue.setText("Cur: "+currentLevel);
                 }
             }
 
