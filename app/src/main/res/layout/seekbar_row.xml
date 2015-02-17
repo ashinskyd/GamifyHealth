@@ -22,13 +22,42 @@
         android:paddingBottom="10dp"
         android:id="@+id/seekBar" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/progressTextView"
-        android:textSize="15dp"
-        android:textColor="#ff4ca6cc"
-         />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:id="@+id/minus_button"
+            android:singleLine="false"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:background="#ff7ac8cc"
+            android:textColor="#ffffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/progressTextView"
+            android:textSize="15dp"
+            android:textColor="#ff4ca6cc"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:id="@+id/plus_button"
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:textSize="30dp"
+            android:background="#ff7ac8cc"
+            android:textColor="#ffffffff" />
+    </RelativeLayout>
+
 </LinearLayout>

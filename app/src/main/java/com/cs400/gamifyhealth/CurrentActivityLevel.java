@@ -110,7 +110,8 @@ public class CurrentActivityLevel extends Activity {
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
             String temp = activityList.get(position).split("_")[0];
-
+            Button minusButton = (Button) convertView.findViewById(R.id.minus_button);
+            Button plusButon = (Button) convertView.findViewById(R.id.plus_button);
             //Sets the scale of the seekbar based on the specific type of activity
             if (activityList.get(position).toString().contains("_REP")){
                 mSeekBar.setMax(500);
@@ -135,6 +136,21 @@ public class CurrentActivityLevel extends Activity {
             if(currentLevel.get(activityList.get(position))!=null){
                 mSeekBar.setProgress(currentLevel.get(activityList.get(position)));
             }
+
+            minusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mSeekBar.setProgress(mSeekBar.getProgress()-1);
+                }
+            });
+
+            plusButon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mSeekBar.setProgress(mSeekBar.getProgress()+1);
+                }
+            });
+
             mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 //Listens for seekbar sliding
                 @Override
