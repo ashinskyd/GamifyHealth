@@ -43,6 +43,7 @@ public class GoalSetActivity extends Activity {
     private SharedPreferences sharedPrefs;
     private SeekBarAdapter mAdapter;
     private Button continueButton;
+    private UnitConverter converter;
 
     //Array of all activities user selected from sharedPrefs
     private ArrayList<String> activitySet;
@@ -82,6 +83,9 @@ public class GoalSetActivity extends Activity {
 
         mAdapter = new SeekBarAdapter(getApplicationContext(),R.layout.seekbar_row2,activitySet);
         mListView.setAdapter(mAdapter);
+
+        converter = new UnitConverter();
+
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +95,7 @@ public class GoalSetActivity extends Activity {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String date = sdf.format(c.getTime());
 
-                //Check that all entries are valid before proceding
+                //Check that all entries are valid before proceeding
                 Boolean proceed = false;
                 proceed = checkEntries();
 
@@ -195,7 +199,7 @@ public class GoalSetActivity extends Activity {
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             EditText eT = (EditText) convertView.findViewById(R.id.editText2);
 
-            //Android Recycle Problem: If the user scrolls up/down ,we need to re-populated the editText based on what they previously enter
+            //Android Recycle Problem: If the user scrolls up/down, we need to re-populate the editText based on what they previously enter
             if (goalTimeEditTextMap.get(activitySet.get(position))!=null){
                 eT.setText(goalTimeEditTextMap.get(activitySet.get(position)).getText().toString());
             }
@@ -205,20 +209,20 @@ public class GoalSetActivity extends Activity {
             final TextView delta = (TextView) convertView.findViewById(R.id.deltatextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
 
-            //Set the users currentLevel in the layout and set the text of the layout to correspond
+            //Set the user's current level in the layout and set the text of the layout to correspond
             oldValue.setText("Cur: "+Integer.toString(activitySetLevels.get(position)));
             if (activitySet.get(position).toString().contains("_REP")){
                 sb.setMax(500);
             }else if (activitySet.get(position).toString().contains("_TIM")){
-                sb.setMax(25);
+                sb.setMax(100);
             }else{
                 if(activitySet.get(position).toString().contains("_DTA-T")){
-                    sb.setMax(25);
+                    sb.setMax(100);
                 }else if(activitySet.get(position).toString().contains("_DTA-D")){
                     if (activitySet.get(position).toString().contains("Swimming")) {
                         sb.setMax(1000);
                     } else if(activitySet.get(position).toString().contains("Running")) {
-                        sb.setMax(50);
+                        sb.setMax(200);
                     } else {
                         sb.setMax(200);
                     }
@@ -306,14 +310,17 @@ public class GoalSetActivity extends Activity {
             if (activitySet.get(position).contains("_REP")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
             } else if (activitySet.get(position).contains("_TIM")) {
-                progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
+                String displayString = converter.convertUnit(sb.getProgress(),"TIM");
+                progress.setText(displayString);
             } else {
                 if (activitySet.get(position).contains("_DTA-T")) {
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
+                    String displayString = converter.convertUnit(sb.getProgress(),"DTA-T");
+                    progress.setText(displayString);
                 }else if(activitySet.get(position).contains("Swimming")){
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
                 } else{
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
+                    String displayString = converter.convertUnit(sb.getProgress(),"DTA-D");
+                    progress.setText(displayString);
                 }
             }
 
