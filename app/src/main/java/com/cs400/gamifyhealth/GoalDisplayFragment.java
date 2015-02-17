@@ -5,6 +5,8 @@ package com.cs400.gamifyhealth;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -107,6 +110,7 @@ public class GoalDisplayFragment extends Fragment {
             TextView weeklyProgressTextView = (TextView) convertView.findViewById(R.id.progressText);
             TextView progressTextView = (TextView) convertView.findViewById(R.id.progress_textview);
 
+
             ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
             Goal g = goalSet.get(position);
@@ -173,16 +177,18 @@ public class GoalDisplayFragment extends Fragment {
             weeklyProgressTextView.setText(ps);
             weeklyGoalTextView.setText(wg);
             finalGoalTextView.setText(fg);
-
-            //TODO: Calculate the percentage then display
-
             int percentage = (int) ((progress/weeklyGoal)*100);
             if (percentage>100){
                 percentage=100;
             }
+            progressTextView.setText(Double.toString(percentage) + "% complete");
             progressBar.setMax(100);
             progressBar.setProgress((int) percentage);
             Log.d("TAG", "PROGRESS: " + percentage);
+            LinearLayout row = (LinearLayout) convertView.findViewById(R.id.goalRow);
+            if (percentage == 100) {
+                progressBar.getProgressDrawable().setColorFilter(0xFFC9FF88, PorterDuff.Mode.SRC_IN);
+            }
             return convertView;
         }
     }

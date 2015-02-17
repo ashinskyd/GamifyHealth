@@ -2,16 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id = "@+id/goalRow"
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
+        android:textStyle="bold"
         android:textSize="15dp"
         android:id="@+id/nameTextView"
         android:textColor="@android:color/black"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Weekly Goal"
+
         android:id="@+id/weeklygoalTextView"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -54,6 +59,7 @@
         android:text="10/100"
         android:id="@+id/progress_textview"
         android:textColor="@android:color/black"
-        android:gravity="center" />
+        android:gravity="center"
+        android:paddingBottom="5dp" />
 
 </LinearLayout>
