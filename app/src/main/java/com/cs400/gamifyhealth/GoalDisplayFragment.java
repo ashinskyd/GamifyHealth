@@ -80,9 +80,6 @@ public class GoalDisplayFragment extends Fragment {
         dataSource.open();
         goalSet = dataSource.getGoals();
         dataSource.close();
-
-
-
         mListView = (ListView) V.findViewById(R.id.goalSetListView);
         mAdapter = new GoalProgressListAdapter(getActivity().getApplicationContext(),R.layout.goal_display_row,goalSet);
         mListView.setAdapter(mAdapter);
@@ -110,7 +107,6 @@ public class GoalDisplayFragment extends Fragment {
             TextView weeklyProgressTextView = (TextView) convertView.findViewById(R.id.progressText);
             TextView progressTextView = (TextView) convertView.findViewById(R.id.progress_textview);
 
-
             ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
             Goal g = goalSet.get(position);
@@ -120,10 +116,18 @@ public class GoalDisplayFragment extends Fragment {
             String type;
             String unit;
             String curU;
+            double finalGoal = g.goalUnit;
+            double weeklyGoal = g.calculateCurrentGoal();
+            dataSource.open();
+            double progress = dataSource.checkGoalProgress(g);
+            dataSource.close();
             if (t.equals("DTA-T")|t.equals("TIM")){
-                 type = types[1];
+                type = types[1];
                 unit = units[1];
                 curU = curUnits[1];
+                finalGoal=finalGoal/4;
+                weeklyGoal = weeklyGoal/4;
+                progress = progress/4;
             }
             else if( t.equals("DTA-R")){
                 type = types[2];
@@ -140,6 +144,9 @@ public class GoalDisplayFragment extends Fragment {
                     type = types[0];
                     unit = units[0];
                     curU = curUnits[0];
+                    finalGoal=finalGoal/4;
+                    weeklyGoal = weeklyGoal/4;
+                    progress = progress/4;
                 }
 
             }
@@ -152,8 +159,8 @@ public class GoalDisplayFragment extends Fragment {
             nameTextview.setText(name);
             String f = this.getContext().getString(R.string.finalgoalstring);
             String w = this.getContext().getString(R.string.weeklygoalstring);
-            double finalGoal = g.goalUnit;
-            double weeklyGoal = g.calculateCurrentGoal();
+
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Date d = null;
             try {
@@ -170,9 +177,7 @@ public class GoalDisplayFragment extends Fragment {
             finalDate.add(Calendar.DAY_OF_MONTH, 7 * g.duration);
             String wg = w + " " +  Double.toString(weeklyGoal) + unit + "by " + sdf.format(weeklyDate.getTime());
             String fg = f + " " +  Double.toString(finalGoal) + unit + "by " + sdf.format(finalDate.getTime());
-            dataSource.open();
-            double progress = dataSource.checkGoalProgress(g);
-            dataSource.close();
+
             String ps = "Progress This Week: " + Double.toString(progress) + curU;
             weeklyProgressTextView.setText(ps);
             weeklyGoalTextView.setText(wg);
@@ -184,11 +189,10 @@ public class GoalDisplayFragment extends Fragment {
             progressTextView.setText(Double.toString(percentage) + "% complete");
             progressBar.setMax(100);
             progressBar.setProgress((int) percentage);
-            Log.d("TAG", "PROGRESS: " + percentage);
-            LinearLayout row = (LinearLayout) convertView.findViewById(R.id.goalRow);
-            if (percentage == 100) {
+            //TODO: Find out why this issn't working
+            /*if (percentage == 100) {
                 progressBar.getProgressDrawable().setColorFilter(0xFFC9FF88, PorterDuff.Mode.SRC_IN);
-            }
+            }*/
             return convertView;
         }
     }

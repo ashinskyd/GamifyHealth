@@ -118,15 +118,15 @@ public class CurrentActivityLevel extends Activity {
             if (activityList.get(position).toString().contains("_REP")){
                 mSeekBar.setMax(500);
             }else if (activityList.get(position).toString().contains("_TIM")){
-                mSeekBar.setMax(25);
+                mSeekBar.setMax(100);
             }else{
                 if(activityList.get(position).toString().contains("_DTA-T")){
-                    mSeekBar.setMax(25);
+                    mSeekBar.setMax(100);
                 }else if(activityList.get(position).toString().contains("_DTA-D")){
                     if (activityList.get(position).toString().contains("Swimming")) {
                         mSeekBar.setMax(1000);
                     } else if(activityList.get(position).toString().contains("Running")) {
-                        mSeekBar.setMax(50);
+                        mSeekBar.setMax(200);
                     } else {
                         mSeekBar.setMax(200);
                     }
@@ -158,19 +158,20 @@ public class CurrentActivityLevel extends Activity {
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     //When progress is changed, update our currentlevel map and adjust the textview to display the value
                     currentLevel.put(activityList.get(position), seekBar.getProgress());
-                    if (activityList.get(position).toString().contains("_REP")) {
+                    if (activityList.get(position).contains("_REP")) {
                         progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Reps"));
-                    } else if (activityList.get(position).toString().contains("_TIM")) {
-                        progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Hours"));
+                    } else if (activityList.get(position).contains("_TIM")) {
+                        String displayString = converter.convertUnit(mSeekBar.getProgress(), "TIM");
+                        progress.setText(displayString);
                     } else {
-                        if (activityList.get(position).toString().contains("_DTA-T")) {
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        } else if (activityList.get(position).toString().contains("_DTA-D")) {
-                            if (activityList.get(position).toString().contains("Swimming")) {
-                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
-                            } else {
-                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
-                            }
+                        if (activityList.get(position).contains("_DTA-T")) {
+                            String displayString = converter.convertUnit(mSeekBar.getProgress(), "DTA-T");
+                            progress.setText(displayString);
+                        }else if(activityList.get(position).contains("Swimming")){
+                            progress.setText(Integer.toString(mSeekBar.getProgress()).concat(" Laps"));
+                        } else{
+                            String displayString = converter.convertUnit(mSeekBar.getProgress(), "DTA-D");
+                            progress.setText(displayString);
                         }
                     }
                 }

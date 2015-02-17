@@ -44,6 +44,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
     private ListView mListView;
     private SeekBarAdapter mAdapter;
     private SharedPreferences sharedPrefs;
+    private UnitConverter converter;
 
     public static DataEntryFragment newInstance(String param1, String param2) {
         //Factory Method to create teh fragment
@@ -80,7 +81,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
         String[] activities = sharedPrefs.getString("ACTIVITIES","").split(",");
         //Gets the relevant activty set from sharedprefs
 
-
+        converter = new UnitConverter();
         String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
         //Gets the prelim level generated at setup
 
@@ -205,19 +206,22 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             final SeekBar sb = (SeekBar) convertView.findViewById(R.id.seekBar);
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
+            Button minusButton = (Button) convertView.findViewById(R.id.minus_button);
+            Button plusButton = (Button) convertView.findViewById(R.id.plus_button);
+
             String temp = activityList.get(position).split("_")[0];
             if (activityList.get(position).toString().contains("_REP")){
                 sb.setMax(500);
             }else if (activityList.get(position).toString().contains("_TIM")){
-                sb.setMax(25);
+                sb.setMax(100);
             }else{
                 if(activityList.get(position).toString().contains("_DTA-T")){
-                    sb.setMax(25);
+                    sb.setMax(100);
                 }else if(activityList.get(position).toString().contains("_DTA-D")){
                     if (activityList.get(position).toString().contains("Swimming")) {
                         sb.setMax(1000);
                     } else if(activityList.get(position).toString().contains("Running")) {
-                        sb.setMax(50);
+                        sb.setMax(200);
                     } else {
                         sb.setMax(200);
                     }
@@ -229,25 +233,40 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             if(currentLevel.get(activityList.get(position))!=null){
                 sb.setProgress(currentLevel.get(activityList.get(position)));
             }
+
+            minusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sb.setProgress(sb.getProgress()-1);
+                }
+            });
+
+            plusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sb.setProgress(sb.getProgress()+1);
+                }
+            });
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 //Listens for seekbar sliding
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     //When progress is changed, update our currentlevel map and adjust the textview to display the value
                     currentLevel.put(activityList.get(position),seekBar.getProgress());
-                    if (activityList.get(position).toString().contains("_REP")){
+                    if (activityList.get(position).contains("_REP")) {
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-                    }else if (activityList.get(position).toString().contains("_TIM")){
-                        progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                    }else{
-                        if(activityList.get(position).toString().contains("_DTA-T")){
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        }else if(activityList.get(position).toString().contains("_DTA-D")){
-                            if (activityList.get(position).toString().contains("Swimming")){
-                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
-                            } else {
-                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
-                            }
+                    } else if (activityList.get(position).contains("_TIM")) {
+                        String displayString = converter.convertUnit(sb.getProgress(),"TIM");
+                        progress.setText(displayString);
+                    } else {
+                        if (activityList.get(position).contains("_DTA-T")) {
+                            String displayString = converter.convertUnit(sb.getProgress(),"DTA-T");
+                            progress.setText(displayString);
+                        }else if(activityList.get(position).contains("Swimming")){
+                            progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                        } else{
+                            String displayString = converter.convertUnit(sb.getProgress(),"DTA-D");
+                            progress.setText(displayString);
                         }
                     }
                 }
@@ -262,17 +281,20 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             });
 
             //Adds the proper unit to the progress view
-            if (activityList.get(position).contains("_REP")){
+            if (activityList.get(position).contains("_REP")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-            }else if (activityList.get(position).contains("_TIM")){
-                progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-            }else {
+            } else if (activityList.get(position).contains("_TIM")) {
+                String displayString = converter.convertUnit(sb.getProgress(),"TIM");
+                progress.setText(displayString);
+            } else {
                 if (activityList.get(position).contains("_DTA-T")) {
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                }else if(activityList.get(position).toString().contains("Swimming")){
+                    String displayString = converter.convertUnit(sb.getProgress(),"DTA-T");
+                    progress.setText(displayString);
+                }else if(activityList.get(position).contains("Swimming")){
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
-                }else{
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
+                } else{
+                    String displayString = converter.convertUnit(sb.getProgress(),"DTA-D");
+                    progress.setText(displayString);
                 }
             }
 

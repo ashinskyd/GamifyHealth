@@ -41,6 +41,7 @@ public class NewCurrentLevelActivity extends Fragment {
     private SeekBarAdapter mAdapter;
     private List<String> repArray;
     private List<String> dtaArray;
+    private UnitConverter converter;
 
     public static NewCurrentLevelActivity newInstance(String param1, String param2) {
         NewCurrentLevelActivity fragment = new NewCurrentLevelActivity();
@@ -81,7 +82,7 @@ public class NewCurrentLevelActivity extends Fragment {
 
             }
         });
-
+        converter = new UnitConverter();
         Bundle b = getArguments();
         addSet = b.getStringArrayList("AddSet");
         addSetCopy = new ArrayList<String>();
@@ -165,6 +166,10 @@ public class NewCurrentLevelActivity extends Fragment {
             TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
             final TextView progress = (TextView) convertView.findViewById(R.id.progressTextView);
             String temp = addSetCopy.get(position).split("_")[0];
+            Button plusButton = (Button) convertView.findViewById(R.id.plus_button);
+            Button minusButton = (Button) convertView.findViewById(R.id.minus_button);
+
+
             if (addSetCopy.get(position).toString().contains("_REP")){
                 sb.setMax(500);
             }else if (addSetCopy.get(position).toString().contains("_TIM")){
@@ -188,25 +193,39 @@ public class NewCurrentLevelActivity extends Fragment {
             if(currentLevel.get(addSetCopy.get(position))!=null){
                 sb.setProgress(currentLevel.get(addSetCopy.get(position)));
             }
+            plusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sb.setProgress(sb.getProgress()+1);
+                }
+            });
+
+            minusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sb.setProgress(sb.getProgress()-1);
+                }
+            });
             sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 //Listens for seekbar sliding
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     //When progress is changed, update our currentlevel map and adjust the textview to display the value
                     currentLevel.put(addSetCopy.get(position),seekBar.getProgress());
-                    if (addSetCopy.get(position).toString().contains("_REP")){
+                    if (addSetCopy.get(position).contains("_REP")) {
                         progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-                    }else if (addSetCopy.get(position).toString().contains("_TIM")){
-                        progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                    }else{
-                        if(addSetCopy.get(position).toString().contains("_DTA-T")){
-                            progress.setText(Integer.toString(seekBar.getProgress()).concat(" Hours"));
-                        }else if(addSetCopy.get(position).toString().contains("_DTA-D")){
-                            if (addSetCopy.get(position).toString().contains("Swimming")){
-                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Laps"));
-                            } else {
-                                progress.setText(Integer.toString(seekBar.getProgress()).concat(" Miles"));
-                            }
+                    } else if (addSetCopy.get(position).contains("_TIM")) {
+                        String displayString = converter.convertUnit(sb.getProgress(),"TIM");
+                        progress.setText(displayString);
+                    } else {
+                        if (addSetCopy.get(position).contains("_DTA-T")) {
+                            String displayString = converter.convertUnit(sb.getProgress(),"DTA-T");
+                            progress.setText(displayString);
+                        }else if(addSetCopy.get(position).contains("Swimming")){
+                            progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
+                        } else{
+                            String displayString = converter.convertUnit(sb.getProgress(),"DTA-D");
+                            progress.setText(displayString);
                         }
                     }
                 }
@@ -221,17 +240,20 @@ public class NewCurrentLevelActivity extends Fragment {
             });
 
             //Adds the proper unit to the progress view
-            if (addSetCopy.get(position).contains("_REP")){
+            if (addSetCopy.get(position).contains("_REP")) {
                 progress.setText(Integer.toString(sb.getProgress()).concat(" Reps"));
-            }else if (addSetCopy.get(position).contains("_TIM")){
-                progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-            }else {
+            } else if (addSetCopy.get(position).contains("_TIM")) {
+                String displayString = converter.convertUnit(sb.getProgress(),"TIM");
+                progress.setText(displayString);
+            } else {
                 if (addSetCopy.get(position).contains("_DTA-T")) {
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Hours"));
-                }else if(addSetCopy.get(position).toString().contains("Swimming")){
+                    String displayString = converter.convertUnit(sb.getProgress(),"DTA-T");
+                    progress.setText(displayString);
+                }else if(addSetCopy.get(position).contains("Swimming")){
                     progress.setText(Integer.toString(sb.getProgress()).concat(" Laps"));
-                }else{
-                    progress.setText(Integer.toString(sb.getProgress()).concat(" Miles"));
+                } else{
+                    String displayString = converter.convertUnit(sb.getProgress(),"DTA-D");
+                    progress.setText(displayString);
                 }
             }
 
