@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -162,6 +163,7 @@ public class GoalDisplayFragment extends Fragment {
 
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            SimpleDateFormat pref = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
             Date d = null;
             try {
                 d = sdf.parse(g.startDate);
@@ -175,8 +177,8 @@ public class GoalDisplayFragment extends Fragment {
             finalDate.setTime(d);
             weeklyDate.add(Calendar.DAY_OF_MONTH, 7 * g.currentWeek);
             finalDate.add(Calendar.DAY_OF_MONTH, 7 * g.duration);
-            String wg = w + " " +  Double.toString(weeklyGoal) + unit + "by " + sdf.format(weeklyDate.getTime());
-            String fg = f + " " +  Double.toString(finalGoal) + unit + "by " + sdf.format(finalDate.getTime());
+            String wg = w + " " +  Double.toString(weeklyGoal) + curU + " by " + pref.format(weeklyDate.getTime());
+            String fg = f + " " +  Double.toString(finalGoal) + unit + "by " + pref.format(finalDate.getTime());
 
             String ps = "Progress This Week: " + Double.toString(progress) + curU;
             weeklyProgressTextView.setText(ps);
@@ -189,10 +191,10 @@ public class GoalDisplayFragment extends Fragment {
             progressTextView.setText(Double.toString(percentage) + "% complete");
             progressBar.setMax(100);
             progressBar.setProgress((int) percentage);
-            //TODO: Find out why this issn't working
-            /*if (percentage == 100) {
+            if (percentage == 100) {
                 progressBar.getProgressDrawable().setColorFilter(0xFFC9FF88, PorterDuff.Mode.SRC_IN);
-            }*/
+            }
+
             return convertView;
         }
     }

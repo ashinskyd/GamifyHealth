@@ -15,10 +15,11 @@ public class UnitConverter {
         if (type.equals("DTA-T") || type.equals("TIM")) {
             int hours = quantity / 4;
             int minutes = (quantity % 4) * 15;
-            displayString = hours + " h";
-            if (minutes != 0) {
-                displayString += " " + minutes + " m";
+            displayString = hours + " h" + " " + minutes;
+            if (minutes == 0) {
+                displayString += " ";
             }
+            displayString += " m";
         }
         else if (type.equals("DTA-D")) {
             float miles = quantity / 4.0f;

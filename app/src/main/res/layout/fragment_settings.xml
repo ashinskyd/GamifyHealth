@@ -2,19 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cs400.gamifyhealth.SettingsFragment">
+    tools:context="com.cs400.gamifyhealth.SettingsFragment"
+    android:background="@android:color/white">
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/relativeLayout" >
+        android:id="@+id/relativeLayout"
+        android:layout_gravity="center">
 
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Enable Safe Mode"
-            android:paddingLeft="5dp"
+            android:paddingLeft="10dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
             android:id="@+id/safe_switch"
             android:layout_toEndOf="@+id/description1_textView"
             android:layout_alignParentTop="true"
@@ -35,13 +39,14 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reset All Data"
+            android:layout_height="30dp"
+            android:text="OK"
+            android:background="#ff7ac8cc"
             android:id="@+id/reset_button"
             android:layout_marginTop="46dp"
             android:layout_below="@+id/description1_textView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignRight="@+id/safe_switch"
+            android:layout_alignEnd="@+id/safe_switch" />
 
 
 
@@ -49,11 +54,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="About"
+            android:background="#ff7ac8cc"
             android:id="@+id/testbutton"
-            android:layout_toEndOf="@+id/reset_button"
-            android:layout_centerVertical="true"
-            android:layout_below="@id/reset_description"
-            android:layout_toRightOf="@+id/reset_button" />
+            android:layout_marginTop="104dp"
+            android:layout_below="@+id/reset_description"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,6 +68,20 @@
             android:id="@+id/reset_description"
             android:paddingLeft="10dp"
             android:layout_below="@+id/reset_button"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Reset All Data"
+            android:textSize="20dp"
+            android:id="@+id/textView"
+            android:paddingLeft="10dp"
+            android:layout_toStartOf="@+id/reset_button"
+            android:textStyle="bold"
+            android:layout_alignBottom="@+id/reset_button"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
