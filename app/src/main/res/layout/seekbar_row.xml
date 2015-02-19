@@ -13,51 +13,56 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20dp" />
 
-    <SeekBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:id="@+id/seekBar" />
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:text="-"
             android:id="@+id/minus_button"
             android:singleLine="false"
-            android:textSize="30dp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:layout_alignParentLeft="true"
             android:background="#ff7ac8cc"
-            android:textColor="#ffffffff" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/progressTextView"
-            android:textSize="15dp"
-            android:textColor="#ff4ca6cc"
-            android:layout_centerHorizontal="true" />
+            android:textColor="#ffffffff"
+            android:layout_centerVertical="true" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:text="+"
             android:id="@+id/plus_button"
             android:textStyle="bold"
-            android:layout_alignParentRight="true"
-            android:textSize="30dp"
+            android:textSize="15sp"
             android:background="#ff7ac8cc"
-            android:textColor="#ffffffff" />
+            android:textColor="#ffffffff"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+
+        <SeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:id="@+id/seekBar"
+            android:layout_toLeftOf="@+id/plus_button"
+            android:layout_toStartOf="@+id/plus_button"
+            android:layout_toRightOf="@+id/minus_button" />
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/progressTextView"
+        android:textSize="15dp"
+        android:textColor="#ff4ca6cc"
+        android:layout_centerHorizontal="true" />
 
 </LinearLayout>
