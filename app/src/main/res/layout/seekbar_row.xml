@@ -51,7 +51,6 @@
             android:paddingBottom="10dp"
             android:id="@+id/seekBar"
             android:layout_toLeftOf="@+id/plus_button"
-            android:layout_toStartOf="@+id/plus_button"
             android:layout_toRightOf="@+id/minus_button" />
     </RelativeLayout>
 
