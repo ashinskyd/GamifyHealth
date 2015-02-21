@@ -107,9 +107,9 @@ public class EarningsEngine {
         builder.show();
     }
 
-    private void showGoalDialog(String goalType){
+    private void showGoalDialog(String goalName){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("You met your weekly " + goalType + " goal!");
+        builder.setTitle("You met your weekly " + goalName + " goal!");
         builder.setMessage("You earned 50 bonus credits!");
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -130,6 +130,7 @@ public class EarningsEngine {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         GregorianCalendar curDate = new GregorianCalendar(Locale.US);
         ArrayList<Goal> candidateGoals = new ArrayList<Goal>();
+        System.out.println("WEEKLY GOAL CHEKC!!!");
         for (Goal goal : g) {
             String startdate = goal.startDate;
             System.out.println("goal date" + goal.startDate);
@@ -150,6 +151,7 @@ public class EarningsEngine {
         for (Goal h: candidateGoals){
             try {
                 boolean[] b = datasource.checkGoal(h);
+                System.out.println("BOOLEANS" + b[0] + b[1]);
                 if (b[0] == true){
 
                     if (b[1] == true){
@@ -159,7 +161,7 @@ public class EarningsEngine {
                         h.goalMet();
                         datasource.removeGoal(h); //removes the copy based on name, type
                         datasource.insertGoal(h);
-                        this.postWeekly(h.type);
+                        this.postWeekly(h.name);
                     }
 
                 }

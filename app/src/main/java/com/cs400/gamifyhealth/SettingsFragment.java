@@ -71,19 +71,6 @@ public class SettingsFragment extends Fragment {
                 startActivity(i);
             }
         });
-
-        Goal g = new Goal("2015-2-13", "Walking","DTA-D", 0, 5, 10 );
-        try {
-            DBConnection dataSource = new DBConnection(getActivity());
-            dataSource.open();
-            dataSource.insertGoal(g);
-            Workout w = new Workout("Walking", 15,"DTA-D");
-            dataSource.insertWorkout(w);
-            dataSource.close();
-        }
-        catch(ParseException e){
-
-        }
         return V;
     }
 
