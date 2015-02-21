@@ -171,6 +171,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             mEditor.commit();
             earningsEngine.postWorkout();
             earningsEngine.updatePop();
+
         }
         FragmentTransaction transaction;
         GameFragment gameFragment = new GameFragment();

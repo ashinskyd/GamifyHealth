@@ -100,7 +100,8 @@ public class GameFragment extends Fragment {
         String gridSizeString = sharedPrefs.getString("GRID_SIZE","4,5");
         gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
         gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
-
+        EarningsEngine earningsEngine = new EarningsEngine(getActivity());
+        earningsEngine.weeklyGoalCheck();
         //Onresuming, update the credits and population and attack if necessary
         credits = sharedPrefs.getInt("CREDITS",1);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
