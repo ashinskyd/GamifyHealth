@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
@@ -92,6 +93,8 @@ public class EditActivitySetFragment extends Fragment {
         addSet = new ArrayList<String>();
 
         getActivity().getActionBar().setTitle("Edit Activities");
+        TextView editString = (TextView) V.findViewById(R.id.edit_activities_description);
+        editString.setText(R.string.edit_activity_string);
         sharedPrefs = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         mEditor = sharedPrefs.edit();
 

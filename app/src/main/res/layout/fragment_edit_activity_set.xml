@@ -13,11 +13,11 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Check All relevant activities: "
-            android:id="@+id/reset_description"
-            android:textSize="25sp"
+            android:id="@+id/edit_activities_description"
+            android:text = "dummy text here"
+            android:textSize="20sp"
             android:paddingTop="10sp"
-            android:paddingBottom="30dp"
+            android:paddingBottom="10dp"
             android:gravity="center_horizontal"
             android:layout_alignParentTop="true"
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:divider="@null"
             android:id="@+id/activityListView"
-            android:layout_below="@+id/reset_description"
+            android:layout_below="@+id/edit_activities_description"
             android:layout_above="@+id/continueButton2" />
             />
 

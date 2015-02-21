@@ -170,6 +170,16 @@ public class GameFragment extends Fragment {
         }
     }
 
+    //updates max population on the game screen after a house has been purchased
+    private void updatePopulationMax(){
+        dataSource.open();
+        peopleCapacity = dataSource.getPopulationCap();
+        dataSource.close();
+        int population = sharedPrefs.getInt("POPULATION",1);
+        peopleCounter = (TextView) getActivity().findViewById(R.id.people_counter);
+        peopleCounter.setText(population+"/"+peopleCapacity);
+    }
+
     //Sets up basic Ui buttons and textviews
     private void initUi(View V) {
         int population = sharedPrefs.getInt("POPULATION",1);
@@ -249,6 +259,7 @@ public class GameFragment extends Fragment {
                             int price = housePrices[iconValue];
                             sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
                             getActivity().getActionBar().setTitle("Game Page");
+                            updatePopulationMax();
 
                         }else if (storeValue.equals("Farm_Store")){
                             tileIcon.setBackground(getActivity().getResources().getDrawable(farmIcons[iconValue]));

@@ -53,7 +53,7 @@ public class NavigationDrawerMain extends FragmentActivity {
         itemTitles[0] = "Game Page";
         itemTitles[1] = "Workout Entry";
         itemTitles[2] = "Edit Activities";
-        itemTitles[3] = "Check Current Goals";
+        itemTitles[3] = "Current Goals";
         itemTitles[4] = "Settings";
 
         setTitle("Gamify your Health");

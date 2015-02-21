@@ -35,6 +35,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View V = inflater.inflate(R.layout.fragment_settings, container, false);
+        getActivity().getActionBar().setTitle("Settings");
         resetButton = (Button) V.findViewById(R.id.reset_button);
          testButton = (Button) V.findViewById(R.id.testbutton);
         safeSwitch = (Switch) V.findViewById(R.id.safe_switch);
