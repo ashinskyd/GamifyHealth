@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="Check all activities you currently do or want to start doing: "
         android:id="@+id/reset_description"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:paddingTop="10sp"
         android:paddingBottom="30dp"
         android:gravity="center_horizontal"
