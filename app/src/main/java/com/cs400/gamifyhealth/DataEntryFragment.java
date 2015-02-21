@@ -170,11 +170,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             mEditor.putString("LAST_WORKOUT", currentDate);
             mEditor.commit();
             earningsEngine.postWorkout();
-            earningsEngine.weeklyGoalCheck();
             earningsEngine.updatePop();
-
-        } else {
-            earningsEngine.weeklyGoalCheck();
         }
         FragmentTransaction transaction;
         GameFragment gameFragment = new GameFragment();
