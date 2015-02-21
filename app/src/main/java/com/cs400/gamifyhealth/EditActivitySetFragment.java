@@ -112,6 +112,12 @@ public class EditActivitySetFragment extends Fragment {
                     transaction.replace(R.id.content_frame, NewCurrentLevelActivity);
                     NewCurrentLevelActivity.setArguments(b);
                     transaction.commit();
+                }else{
+                    FragmentTransaction defaultTransaction = getFragmentManager().beginTransaction();
+                    GameFragment gameFragment = new GameFragment();
+                    defaultTransaction.replace(R.id.content_frame,gameFragment);
+                    defaultTransaction.addToBackStack(null);
+                    defaultTransaction.commit();
                 }
             }
         });

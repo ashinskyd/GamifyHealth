@@ -13,18 +13,50 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20dp" />
 
-    <SeekBar
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:id="@+id/seekBar" />
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="+"
+            android:id="@+id/plus_button"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+
+            android:background="#ff7ac8cc" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="-"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:id="@+id/minus_button"
+            android:layout_centerVertical="true"
+
+            android:layout_alignParentLeft="true"
+            android:background="#ff7ac8cc"
+            android:layout_alignParentStart="false" />
+
+        <SeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:id="@+id/seekBar"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/plus_button"
+            android:layout_toRightOf="@+id/minus_button" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,43 +92,16 @@
             android:layout_alignParentRight="true" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <EditText
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText2"
-            android:hint="Enter Goal Duration (in Weeks): "
-            android:textColorHint="@android:color/black"
-            android:textColor="@android:color/black"
-            android:inputType="number"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"
-            android:id="@+id/plus_button"
-            android:textStyle="bold"
-            android:layout_toRightOf="@+id/editText2"
-            android:textSize="15dp"
-            android:layout_centerVertical="true" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textStyle="bold"
-            android:textSize="15dp"
-            android:layout_toRightOf="@+id/plus_button"
-            android:id="@+id/minus_button"
-            android:layout_centerVertical="true" />
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:hint="Enter Goal Duration (in Weeks): "
+        android:textColorHint="@android:color/black"
+        android:textColor="@android:color/black"
+        android:inputType="number"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
 
 
 </LinearLayout>

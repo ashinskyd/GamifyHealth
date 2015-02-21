@@ -39,6 +39,7 @@ public class WelcomeActivity extends Activity {
             datasource.insertObject("farm", 0, 1, "0");
             datasource.close();
             setContentView(R.layout.activity_welcome);
+            getActionBar().setTitle("FitFrontier");
             continueButton = (Button) findViewById(R.id.continueButton);
             //Sets the continue button to proceed to next step
             //Also changes default animation scheme
