@@ -12,7 +12,7 @@
         android:textSize="20sp"
         android:gravity="center_horizontal"
         android:id="@+id/reset_description"
-        android:paddingBottom="30dp"
+        android:paddingBottom="15dp"
         android:layout_alignParentTop="true"
        />
 

@@ -34,6 +34,7 @@ public class SelectActivities extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.getActionBar().setTitle("Select Activities");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_activities);
         activitiesListView = (ListView) findViewById(R.id.activityListView);
