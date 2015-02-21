@@ -209,19 +209,19 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
 
             String temp = activityList.get(position).split("_")[0];
             if (activityList.get(position).toString().contains("_REP")){
-                sb.setMax(500);
-            }else if (activityList.get(position).toString().contains("_TIM")){
                 sb.setMax(100);
+            }else if (activityList.get(position).toString().contains("_TIM")){
+                sb.setMax(20);
             }else{
                 if(activityList.get(position).toString().contains("_DTA-T")){
-                    sb.setMax(100);
+                    sb.setMax(20);
                 }else if(activityList.get(position).toString().contains("_DTA-D")){
                     if (activityList.get(position).toString().contains("Swimming")) {
-                        sb.setMax(1000);
+                        sb.setMax(200);
                     } else if(activityList.get(position).toString().contains("Running")) {
-                        sb.setMax(200);
+                        sb.setMax(40);
                     } else {
-                        sb.setMax(200);
+                        sb.setMax(40);
                     }
                 }
             }

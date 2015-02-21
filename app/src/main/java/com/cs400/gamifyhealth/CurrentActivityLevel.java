@@ -144,6 +144,8 @@ public class CurrentActivityLevel extends Activity {
                 @Override
                 public void onClick(View view) {
                     mSeekBar.setProgress(mSeekBar.getProgress()-1);
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                 }
             });
 
@@ -151,6 +153,8 @@ public class CurrentActivityLevel extends Activity {
                 @Override
                 public void onClick(View view) {
                     mSeekBar.setProgress(mSeekBar.getProgress()+1);
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                 }
             });
             mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
