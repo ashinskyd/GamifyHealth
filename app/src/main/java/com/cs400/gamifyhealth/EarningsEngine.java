@@ -81,11 +81,11 @@ public class EarningsEngine {
     }
 
     //weekly bonus
-    public void postWeekly(){
+    public void postWeekly(String goalType){
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("CREDITS", sp.getInt("CREDITS", 0) + 50);
         editor.commit();
-        showInfoDialog(50,"Credits");
+        showGoalDialog(goalType);
     }
 
     public void postWorkout(){
@@ -104,6 +104,18 @@ public class EarningsEngine {
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 });
+        builder.show();
+    }
+
+    private void showGoalDialog(String goalType){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("You met your weekly " + goalType + " goal!");
+        builder.setMessage("You earned 50 bonus credits!");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
         builder.show();
     }
 
@@ -147,7 +159,7 @@ public class EarningsEngine {
                         h.goalMet();
                         datasource.removeGoal(h); //removes the copy based on name, type
                         datasource.insertGoal(h);
-                        this.postWeekly();
+                        this.postWeekly(h.type);
                     }
 
                 }

@@ -21,6 +21,7 @@
     <string name="weeklygoalstring">Weekly Goal: </string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_activity_string">Add or remove activities from your current set.</string>
+    <string name="data_entry_string">Enter today\'s workout information.</string>
     <string name="people1">A member of your village contracted and spread itching disease!</string>
     <string name="people2">Boils. Everyone has boils.</string>
     <string name="people3">A traveling prophet has foretold the end is nigh. The villagers are uneasy.</string>
