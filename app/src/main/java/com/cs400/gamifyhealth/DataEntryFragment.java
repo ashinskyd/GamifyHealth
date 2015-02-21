@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -235,12 +236,16 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
                 @Override
                 public void onClick(View view) {
                     sb.setProgress(sb.getProgress()-1);
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                 }
             });
 
             plusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                     sb.setProgress(sb.getProgress()+1);
                 }
             });
