@@ -188,7 +188,7 @@ public class GoalDisplayFragment extends Fragment {
             if (percentage>100){
                 percentage=100;
             }
-            progressTextView.setText(Double.toString(percentage) + "% complete");
+            progressTextView.setText(Integer.toString(percentage) + "% complete");
             progressBar.setMax(100);
             progressBar.setProgress((int) percentage);
             if (percentage == 100) {
