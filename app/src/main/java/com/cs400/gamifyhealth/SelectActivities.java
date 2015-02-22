@@ -81,7 +81,7 @@ public class SelectActivities extends Activity {
                     startActivity(i);
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 }else{
-                    Toast toast = Toast.makeText(getApplicationContext(),"Please Select at least 1 activity",Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please select at least 1 activity",Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -104,7 +104,7 @@ public class SelectActivities extends Activity {
         activityItems.add(new ActivityModel("Soccer",false));
         activityItems.add(new ActivityModel("Football",false));
         activityItems.add(new ActivityModel("Squash",false));
-        activityItems.add(new ActivityModel("Disk",false));
+        activityItems.add(new ActivityModel("Frisbee",false));
         activityItems.add(new ActivityModel("Generic Cardio",false));
 
         activityItems.add(new ActivityModel("Ping Pong",false));

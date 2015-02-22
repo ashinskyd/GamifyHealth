@@ -136,7 +136,7 @@ public class GoalSetActivity extends Activity {
                     startActivity(i);
                 }else{
                     //If theres an input error, we don't proceed but throw a Toast
-                    Toast toast = Toast.makeText(getApplicationContext(),"Please Enter a Duration of at least 4 weeks for each goal",Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please enter a duration of at least 4 weeks for each goal.",Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
