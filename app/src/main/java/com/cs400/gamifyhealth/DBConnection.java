@@ -187,7 +187,7 @@ public class DBConnection{
                 allColumns, null, null, null, null, null);
         cur.moveToFirst();
         if (g.currentWeek > 1){
-            start.add(Calendar.DAY_OF_MONTH, 7 * (g.currentWeek - 1));
+            start.add(Calendar.DAY_OF_MONTH, 7 * (g.currentWeek));
         }
         endDate.add(Calendar.DAY_OF_MONTH, 7 * g.currentWeek);
 
@@ -265,7 +265,7 @@ public class DBConnection{
                 allColumns, null, null, null, null, null);
         cur.moveToFirst();
         if (g.currentWeek > 1){
-            start.add(Calendar.DAY_OF_MONTH, 7 * (g.currentWeek - 1));
+            start.add(Calendar.DAY_OF_MONTH, 7 * (g.currentWeek));
         }
         endDate.add(Calendar.DAY_OF_MONTH, 7 * g.currentWeek);
         while (cur.isAfterLast() == false) {

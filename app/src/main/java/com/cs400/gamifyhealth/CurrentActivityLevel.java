@@ -35,6 +35,7 @@ public class CurrentActivityLevel extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_activity_level);
+        this.getActionBar().setTitle("Current Activity Levels");
         sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         mListView = (ListView) findViewById(R.id.seekBarListView);
         coninueButton = (Button) findViewById(R.id.continueButton2);
@@ -143,6 +144,8 @@ public class CurrentActivityLevel extends Activity {
                 @Override
                 public void onClick(View view) {
                     mSeekBar.setProgress(mSeekBar.getProgress()-1);
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                 }
             });
 
@@ -150,6 +153,8 @@ public class CurrentActivityLevel extends Activity {
                 @Override
                 public void onClick(View view) {
                     mSeekBar.setProgress(mSeekBar.getProgress()+1);
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                 }
             });
             mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

@@ -8,11 +8,11 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Enter Your Weekly Goal Times and Distances and a Duration of At Least 4 Weeks:"
-        android:textSize="25sp"
+        android:text="@string/goal_entry_string2"
+        android:textSize="20sp"
         android:gravity="center_horizontal"
         android:id="@+id/reset_description"
-        android:paddingBottom="30dp"
+        android:paddingBottom="15dp"
         android:layout_alignParentTop="true"
        />
 

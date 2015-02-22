@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -208,19 +209,19 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
 
             String temp = activityList.get(position).split("_")[0];
             if (activityList.get(position).toString().contains("_REP")){
-                sb.setMax(500);
+                sb.setMax(125);
             }else if (activityList.get(position).toString().contains("_TIM")){
-                sb.setMax(100);
+                sb.setMax(25);
             }else{
                 if(activityList.get(position).toString().contains("_DTA-T")){
-                    sb.setMax(100);
+                    sb.setMax(25);
                 }else if(activityList.get(position).toString().contains("_DTA-D")){
                     if (activityList.get(position).toString().contains("Swimming")) {
-                        sb.setMax(1000);
+                        sb.setMax(250);
                     } else if(activityList.get(position).toString().contains("Running")) {
-                        sb.setMax(200);
+                        sb.setMax(75);
                     } else {
-                        sb.setMax(200);
+                        sb.setMax(50);
                     }
                 }
             }
@@ -235,12 +236,16 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
                 @Override
                 public void onClick(View view) {
                     sb.setProgress(sb.getProgress()-1);
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                 }
             });
 
             plusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                     sb.setProgress(sb.getProgress()+1);
                 }
             });

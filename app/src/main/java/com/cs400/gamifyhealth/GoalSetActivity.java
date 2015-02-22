@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -135,7 +136,7 @@ public class GoalSetActivity extends Activity {
                     startActivity(i);
                 }else{
                     //If theres an input error, we don't proceed but throw a Toast
-                    Toast toast = Toast.makeText(getApplicationContext(),"Please Enter a Duration of at least 4 weeks for each goal",Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please enter a duration of at least 4 weeks for each goal.",Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -240,6 +241,8 @@ public class GoalSetActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     sb.setProgress(sb.getProgress()+1);
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                 }
             });
 
@@ -247,6 +250,8 @@ public class GoalSetActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     sb.setProgress(sb.getProgress()-1);
+                    final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                    view.startAnimation(buttonClick);
                 }
             });
 

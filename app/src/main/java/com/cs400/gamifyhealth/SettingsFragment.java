@@ -11,6 +11,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,6 +51,8 @@ public class SettingsFragment extends Fragment {
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                view.startAnimation(buttonClick);
                 FragmentTransaction transaction;
                 AboutFragment aboutFragment = new AboutFragment();
                 transaction = getFragmentManager().beginTransaction();
@@ -62,6 +65,8 @@ public class SettingsFragment extends Fragment {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+                view.startAnimation(buttonClick);
                 getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit().clear().commit();
                 dataSource = new DBConnection(getActivity());
                 dataSource.open();
@@ -69,21 +74,9 @@ public class SettingsFragment extends Fragment {
                 dataSource.close();
                 Intent i = new Intent(getActivity(), WelcomeActivity.class);
                 startActivity(i);
+
             }
         });
-
-        Goal g = new Goal("2015-2-13", "Walking","DTA-D", 0, 5, 10 );
-        try {
-            DBConnection dataSource = new DBConnection(getActivity());
-            dataSource.open();
-            dataSource.insertGoal(g);
-            Workout w = new Workout("Walking", 15,"DTA-D");
-            dataSource.insertWorkout(w);
-            dataSource.close();
-        }
-        catch(ParseException e){
-
-        }
         return V;
     }
 

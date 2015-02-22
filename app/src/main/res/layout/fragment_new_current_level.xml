@@ -14,9 +14,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter Times and Distances: "
-            android:textSize="25sp"
-            android:gravity="center_vertical"
+            android:text="@string/goal_entry_string"
+            android:textSize="20sp"
+            android:gravity="center_vertical|center_horizontal"
             android:id="@+id/reset_description"
             android:paddingBottom="30dp"
             android:layout_alignParentTop="true"
