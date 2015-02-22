@@ -36,7 +36,7 @@ public class FarmStoreFragment extends Fragment {
     private int credits;
     private int population;
     private int[] prices = {20, 38, 54, 68, 80};
-    private int[] thresholds = {1, 15, 30, 45, 60};
+    private int[] thresholds = {1, 10, 20, 30, 40};
 
 
     public static FarmStoreFragment newInstance(String param1, String param2) {

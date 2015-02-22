@@ -52,7 +52,7 @@ public class GameFragment extends Fragment {
     //These are arrays of item prices so we know how much to deduct from a user's credit when they purchase something
     private int[] housePrices = {25, 48, 69, 88, 105};
     private int[] farmPrices = {20, 38, 54, 68, 80};
-    private int[] fortPrices = {50, 95, 135, 170, 200};
+    private int[] fortPrices = {40, 77, 111, 142, 170};
     //These arrays keep track of all the icons we use to inflate our map
     private int[] houseIcons = {R.drawable.house1, R.drawable.house2, R.drawable.house3, R.drawable.house4, R.drawable.house5};
     private int[] farmIcons = {R.drawable.farm1, R.drawable.farm2, R.drawable.farm3, R.drawable.farm4, R.drawable.farm5};

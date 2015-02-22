@@ -38,7 +38,7 @@ public class HouseStoreFragment extends Fragment {
     private int population;
     private boolean [] isSelectable;
     private static int[] prices = {25, 48, 69, 88, 105};
-    private static int[] thresholds = {1, 20, 40, 60, 80, 100};
+    private static int[] thresholds = {1, 15, 30, 45, 60};
     private SharedPreferences sharedPrefs;
 
     public static HouseStoreFragment newInstance(String param1, String param2) {

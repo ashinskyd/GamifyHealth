@@ -37,8 +37,8 @@ public class FortStoreFragment extends Fragment {
     private int population;
     private boolean [] isSelectable;
     private SharedPreferences sharedPrefs;
-    private int[] prices = {50, 95, 135, 170, 200};
-    private int[] thresholds = {1, 25, 50, 75, 100};
+    private int[] prices = {40, 77, 111, 142, 170};
+    private int[] thresholds = {1, 20, 40, 60, 80};
 
     public static FortStoreFragment newInstance(String param1, String param2) {
         FortStoreFragment fragment = new FortStoreFragment();
