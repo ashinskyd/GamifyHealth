@@ -6,8 +6,12 @@ import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +62,10 @@ public class GameFragment extends Fragment {
     private int credits;
     private int zoomCounter;
     private int peopleCapacity;
-
+    private BitmapFactory.Options opts = new BitmapFactory.Options();
+    private Bitmap bitmap;
+    private Drawable d;
+    private Drawable d2;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -66,10 +73,12 @@ public class GameFragment extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
     public GameFragment() {
         // Required empty public constructor
+
     }
 
     @Override
@@ -80,6 +89,13 @@ public class GameFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+        opts.inSampleSize = 3;
+        bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.map, opts);
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.map2, opts);
+        d = new BitmapDrawable(getActivity().getResources(),bitmap);
+        d2 =new BitmapDrawable(getActivity().getResources(),bitmap2);
     }
 
     @Override
@@ -230,12 +246,14 @@ public class GameFragment extends Fragment {
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
         mGrid.removeAllViews();
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = 2;
 
         // Set the map image based on the zoom level
         if (zoomCounter == 0) {
-            mGrid.setBackground(getResources().getDrawable(R.drawable.map));
+            mGrid.setBackground(d);
         } else {
-            mGrid.setBackground(getResources().getDrawable(R.drawable.map2));
+            mGrid.setBackground(d2);
         }
     }
 
