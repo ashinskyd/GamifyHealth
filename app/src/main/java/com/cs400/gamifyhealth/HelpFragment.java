@@ -26,7 +26,7 @@ public class HelpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View V = inflater.inflate(R.layout.fragment_help, container, false);
         WebView webview = (WebView) V.findViewById(R.id.webView);
-        webview.loadUrl("file:///android_asset/About_Text.html");
+        webview.loadUrl("file:///android_asset/helpscreen.html");
         getActivity().getActionBar().setTitle("Help");
         return V;
     }
