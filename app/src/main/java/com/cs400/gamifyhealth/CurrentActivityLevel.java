@@ -35,6 +35,7 @@ public class CurrentActivityLevel extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_activity_level);
+        this.getActionBar().setTitle("Current Activity Levels");
         sharedPrefs = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         mListView = (ListView) findViewById(R.id.seekBarListView);
         coninueButton = (Button) findViewById(R.id.continueButton2);

@@ -102,7 +102,7 @@ public class GameFragment extends Fragment {
         gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
         EarningsEngine earningsEngine = new EarningsEngine(getActivity());
         earningsEngine.weeklyGoalCheck();
-        //Onresuming, update the credits and population and attack if necessary
+        //On resuming, update the credits and population and attack if necessary
         credits = sharedPrefs.getInt("CREDITS",1);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
         zoomCounter = sharedPrefs.getInt("ZOOM_COUNTER",0);
@@ -130,7 +130,7 @@ public class GameFragment extends Fragment {
             getOccupiedIndices(mGrid);
         }
         inflateMap(gameFrameView);
-        //If we are passed a bundle, retrive it
+        //If we are passed a bundle, retrieve it
         //NOTE: This is used to determine if we come from a store or we're just showing the map
         Bundle b = getArguments();
         //Register the listeners if we come from the store
@@ -158,7 +158,7 @@ public class GameFragment extends Fragment {
         if (buildingArrayList.size()>=(gridSize[0]*gridSize[1]-1)){
             gridSize[0]+=4;
             gridSize[1]+=5;
-            zoomCounter = zoomCounter +1;
+            zoomCounter++;
             SharedPreferences.Editor mEditor = sharedPrefs.edit();
             mEditor.putString("GRID_SIZE",Integer.toString(gridSize[0])+","+gridSize[1]).commit();
             mEditor.putInt("ZOOM_COUNTER",zoomCounter);
@@ -230,6 +230,13 @@ public class GameFragment extends Fragment {
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
         mGrid.removeAllViews();
+
+        // Set the map image based on the zoom level
+        if (zoomCounter == 0) {
+            mGrid.setBackground(getResources().getDrawable(R.drawable.map));
+        } else {
+            mGrid.setBackground(getResources().getDrawable(R.drawable.map2));
+        }
     }
 
     /**

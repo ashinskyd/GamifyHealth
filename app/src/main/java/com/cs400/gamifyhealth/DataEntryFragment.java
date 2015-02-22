@@ -219,7 +219,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
                     if (activityList.get(position).toString().contains("Swimming")) {
                         sb.setMax(250);
                     } else if(activityList.get(position).toString().contains("Running")) {
-                        sb.setMax(50);
+                        sb.setMax(75);
                     } else {
                         sb.setMax(50);
                     }
