@@ -73,6 +73,8 @@ public class SettingsFragment extends Fragment {
                 dataSource.createTables();
                 dataSource.close();
                 Intent i = new Intent(getActivity(), WelcomeActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
 
             }
