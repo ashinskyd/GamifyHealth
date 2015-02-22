@@ -76,7 +76,7 @@ public class EarningsEngine {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("POPULATION", pop);
         editor.commit();
-        showInfoDialog(pop,"People");
+        showInfoDialog(growth,"People");
         System.out.println("After population: " + pop);
     }
 
