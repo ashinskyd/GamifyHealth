@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -36,6 +40,10 @@ public class NavigationDrawerMain extends FragmentActivity {
     private FrameLayout mFrame;
     private AttackService attackService;
     public static boolean settingsFragmentLaunched=false;
+    private BitmapFactory.Options opts = new BitmapFactory.Options();
+    private Bitmap bitmap;
+    public static Drawable d;
+    public static Drawable d2;
 
 
     @Override
@@ -73,6 +81,14 @@ public class NavigationDrawerMain extends FragmentActivity {
         );
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.map, opts);
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.map2, opts);
+        d = new BitmapDrawable(getResources(),bitmap);
+        d2 =new BitmapDrawable(getResources(),bitmap2);
 
         //Launch Game fragment by default
         FragmentTransaction defaultTransaction = getFragmentManager().beginTransaction();

@@ -89,13 +89,14 @@ public class GameFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        opts = new BitmapFactory.Options();
+       /* opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
         opts.inSampleSize = 3;
         bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.map, opts);
         Bitmap bitmap2 = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.map2, opts);
         d = new BitmapDrawable(getActivity().getResources(),bitmap);
         d2 =new BitmapDrawable(getActivity().getResources(),bitmap2);
+        */
     }
 
     @Override
@@ -246,14 +247,11 @@ public class GameFragment extends Fragment {
         });
         mGrid = (GridLayout) V.findViewById(R.id.map);
         mGrid.removeAllViews();
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inSampleSize = 2;
-
-        // Set the map image based on the zoom level
+             // Set the map image based on the zoom level
         if (zoomCounter == 0) {
-            mGrid.setBackground(d);
+            mGrid.setBackground(NavigationDrawerMain.d);
         } else {
-            mGrid.setBackground(d2);
+            mGrid.setBackground(NavigationDrawerMain.d2);
         }
     }
 
