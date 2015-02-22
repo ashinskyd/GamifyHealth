@@ -62,10 +62,6 @@ public class GameFragment extends Fragment {
     private int credits;
     private int zoomCounter;
     private int peopleCapacity;
-    private BitmapFactory.Options opts = new BitmapFactory.Options();
-    private Bitmap bitmap;
-    private Drawable d;
-    private Drawable d2;
 
     public static GameFragment newInstance(String param1, String param2) {
         GameFragment fragment = new GameFragment();
@@ -89,14 +85,7 @@ public class GameFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-       /* opts = new BitmapFactory.Options();
-        opts.inPreferredConfig = Bitmap.Config.RGB_565;
-        opts.inSampleSize = 3;
-        bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.map, opts);
-        Bitmap bitmap2 = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.map2, opts);
-        d = new BitmapDrawable(getActivity().getResources(),bitmap);
-        d2 =new BitmapDrawable(getActivity().getResources(),bitmap2);
-        */
+
     }
 
     @Override
