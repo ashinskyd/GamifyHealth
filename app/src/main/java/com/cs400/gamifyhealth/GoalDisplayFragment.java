@@ -42,7 +42,7 @@ public class GoalDisplayFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-    private String []types = {"(Distance)", "(Time)", "(Rate)" , "Reps"};
+    private String []types = {"(Distance)", "(Time)", "(Rate)" };
     private String []units = {" miles per week ", " hours per week ", " min/mile average " , " reps per week "};
     private String []curUnits = {" miles", " hours", " min/mile average" , " reps"};
 
@@ -76,8 +76,6 @@ public class GoalDisplayFragment extends Fragment {
         View V = inflater.inflate(R.layout.fragment_goal_display, container, false);
 
         dataSource = new DBConnection(getActivity());
-        EarningsEngine earningsEngine = new EarningsEngine(getActivity());
-        earningsEngine.weeklyGoalCheck();
         dataSource.open();
         goalSet = dataSource.getGoals();
         dataSource.close();
@@ -105,14 +103,13 @@ public class GoalDisplayFragment extends Fragment {
             TextView finalGoalTextView = (TextView) convertView.findViewById(R.id.finalgoalTextView);
             TextView weeklyProgressTextView = (TextView) convertView.findViewById(R.id.progressText);
             TextView progressTextView = (TextView) convertView.findViewById(R.id.progress_textview);
-
             ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
             Goal g = goalSet.get(position);
             String name = g.name;
 
             String t = g.type;
-            String type;
+            String type = "";
             String unit;
             String curU;
             double finalGoal = g.goalUnit;
@@ -149,12 +146,16 @@ public class GoalDisplayFragment extends Fragment {
                 }
 
             }
+            //reps
             else{
-                type = types[3];
+                weeklyGoal = (int) weeklyGoal;
                 unit = units[3];
                 curU = curUnits[3];
             }
-            name=name+" "+type;
+            //cosmetic adjustment
+            if (t.contains("DTA")){
+                name=name+" "+type;
+            }
             nameTextview.setText(name);
             String f = this.getContext().getString(R.string.finalgoalstring);
             String w = this.getContext().getString(R.string.weeklygoalstring);
@@ -167,7 +168,7 @@ public class GoalDisplayFragment extends Fragment {
                 d = sdf.parse(g.startDate);
             }
             catch(ParseException e){
-                System.out.println("You broke the date");
+                System.out.println("Malformed date.");
             }
             GregorianCalendar weeklyDate = new GregorianCalendar();
             GregorianCalendar finalDate = new GregorianCalendar();
@@ -175,10 +176,15 @@ public class GoalDisplayFragment extends Fragment {
             finalDate.setTime(d);
             weeklyDate.add(Calendar.DAY_OF_MONTH, 7 * g.currentWeek);
             finalDate.add(Calendar.DAY_OF_MONTH, 7 * g.duration);
-            String wg = w + " " +  Double.toString(weeklyGoal) + curU + " by " + pref.format(weeklyDate.getTime());
-            String fg = f + " " +  Double.toString(finalGoal) + unit + "by " + pref.format(finalDate.getTime());
-
-            String ps = "Progress This Week: " + Double.toString(progress) + curU;
+            String wg = w + " " +  String.format("%.2f", weeklyGoal) + curU + " by " + pref.format(weeklyDate.getTime());
+            String fg = f + " " +  String.format("%.2f", finalGoal) + unit + "by " + pref.format(finalDate.getTime());
+            String ps = "Progress This Week: " + String.format("%.2f", progress) + curU;
+            //reps can only be performed in integer amounts
+            if (t.contains("REP")) {
+                wg = w + " " + Integer.toString((int) weeklyGoal) + curU + " by " + pref.format(weeklyDate.getTime());
+                fg = f + " " + Integer.toString((int) finalGoal) + unit + "by " + pref.format(finalDate.getTime());
+                ps = "Progress This Week: " + Integer.toString((int) progress) + curU;
+            }
             weeklyProgressTextView.setText(ps);
             weeklyGoalTextView.setText(wg);
             finalGoalTextView.setText(fg);
