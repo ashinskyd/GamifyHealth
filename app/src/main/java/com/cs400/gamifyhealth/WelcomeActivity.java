@@ -35,8 +35,8 @@ public class WelcomeActivity extends Activity {
             DBConnection datasource = new DBConnection(this);
             datasource.open();
             datasource.createTables();
-            datasource.insertObject("house", 1, 2, "0");
-            datasource.insertObject("farm", 2, 2, "0");
+            datasource.insertObject("house", 0, 0, "0");
+            datasource.insertObject("farm", 0, 1, "0");
             datasource.close();
             setContentView(R.layout.activity_welcome);
             getActionBar().setTitle("FitFrontier");
@@ -58,6 +58,8 @@ public class WelcomeActivity extends Activity {
             WebView webview = (WebView) findViewById(R.id.welcome_webView);
             webview.loadUrl("file:///android_asset/intro.html");
             //Gives the user a default population and credit amount
+
+
             int initialPopulation = 2;
             SharedPreferences.Editor editor = sharedPrefs.edit();
             editor.putInt("POPULATION", initialPopulation);
