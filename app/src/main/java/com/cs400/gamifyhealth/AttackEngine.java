@@ -54,8 +54,11 @@ public class AttackEngine {
 
 
     public int generateAttackType() {
-        return randomGen.nextInt(4);
-
+        int a = randomGen.nextInt(4);
+        if (a == 1){
+            a = 0;
+        }
+        return a;
     }
 
     public double generateSeverity(){
@@ -173,8 +176,9 @@ public class AttackEngine {
                     builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
             }else if (attackType.contains("house")){
+                suffix = "houses removed.";
                 if (severity == 1) {
-                    suffix = "houses removed.";
+
                     message = activity.getString(R.string.houses1);
                     builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
@@ -245,7 +249,6 @@ public class AttackEngine {
         objectsOwned = datasource.getObjectCounts();
         objectsOwned[3] = population;
         datasource.close();
-        System.out.println(Arrays.toString(objectsOwned));
         int[] postAttack = new int[4];
         for (int i = 0; i<4; i++){
             postAttack[i] = objectsOwned[i];

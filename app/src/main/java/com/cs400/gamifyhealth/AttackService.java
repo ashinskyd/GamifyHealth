@@ -63,9 +63,9 @@ public class AttackService extends Service {
             mEditor.putInt("ATTACKS",attacks+1);
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                            .setContentTitle("Gamify Your Health")
+                            .setContentTitle("FitFrontier")
                             .setSmallIcon(R.drawable.attack_icon)
-                            .setContentText("Your City Has Been Damaged!");
+                            .setContentText("Your city has been damaged!");
             int mNotificationId = 001;
 // Gets an instance of the NotificationManager service
             NotificationManager mNotifyMgr =
@@ -130,7 +130,7 @@ public class AttackService extends Service {
     }
 
     public int genTime() {
-        //return 45*1000;
+        //return 300000;
         return (randomGen.nextInt(840) + 2160) * 60000;
     }
 
