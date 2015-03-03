@@ -170,7 +170,6 @@ public class DBConnection{
         double sum = 0;
         int count = 0;
         String startdate =  g.startDate;
-        System.out.println("goal date" + g.startDate);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date d = null;
         try {
@@ -202,7 +201,6 @@ public class DBConnection{
             }
             GregorianCalendar temp = new GregorianCalendar();
             temp.setTime(td);
-            System.out.println("temp" + temp.toString());
             if (temp.before(endDate) == true|temp.compareTo(endDate) == 0){
                 //adjust for when they have the same date
                 if (temp.after(start) == true| temp.compareTo(start) == 0){

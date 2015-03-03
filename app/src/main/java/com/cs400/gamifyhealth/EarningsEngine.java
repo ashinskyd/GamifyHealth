@@ -22,8 +22,6 @@ import java.util.Locale;
  */
 
 
-//todo: put credits in sharedprefs in such that a way that the value is only re-inserted for first time players
-
 public class EarningsEngine {
     public Activity activity;
     public SharedPreferences sp;
@@ -37,7 +35,7 @@ public class EarningsEngine {
 
 
     //called assuming a goal is completed for good
-    public void updateCredits(Goal g) {
+    public void updateFinalGoal(Goal g) {
         int creditsEarned = g.duration * 10;
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("CREDITS", sp.getInt("CREDITS", 0) + creditsEarned);
@@ -119,6 +117,19 @@ public class EarningsEngine {
         builder.show();
     }
 
+    //amount = 10 * duration
+    private void showGoalCompletedDialog(String goalName, int amount){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("You met your final " + goalName + " goal!");
+        builder.setMessage("You earned " + amount + " credits!");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.show();
+    }
+
     //return credits to add
     //Post messages to the user when they meet weekly goals
     //2. Create new fragment window to prompt to user to add a new goal level when
@@ -130,7 +141,6 @@ public class EarningsEngine {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         GregorianCalendar curDate = new GregorianCalendar(Locale.US);
         ArrayList<Goal> candidateGoals = new ArrayList<Goal>();
-        System.out.println("WEEKLY GOAL CHEKC!!!");
         for (Goal goal : g) {
             String startdate = goal.startDate;
             System.out.println("goal date" + goal.startDate);

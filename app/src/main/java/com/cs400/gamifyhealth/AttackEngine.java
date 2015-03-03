@@ -178,7 +178,6 @@ public class AttackEngine {
             }else if (attackType.contains("house")){
                 suffix = "houses removed.";
                 if (severity == 1) {
-
                     message = activity.getString(R.string.houses1);
                     builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
