@@ -100,7 +100,7 @@ public class EarningsEngine {
     private void aboveCapacityDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Nice Work!");
-        builder.setMessage("You worked out, but the population is currently greater than the city's capacity. It won't increase until destroyed buildings are replaced.");
+        builder.setMessage("You worked out, but the population is currently greater than the city's capacity.");
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

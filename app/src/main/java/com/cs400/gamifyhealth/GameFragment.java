@@ -6,23 +6,20 @@ import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -99,6 +96,22 @@ public class GameFragment extends Fragment {
         return gameFrameView;
     }
 
+    //check weekly goals at most once a day
+    private void checkGoal(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        String currentDate = dateFormat.format(cal.getTime());
+        String oldDate = sharedPrefs.getString("LAST_GOAL_CHECK"," ");
+        //check goals once more
+        if (!currentDate.equals(oldDate)) {
+            SharedPreferences.Editor mEditor = sharedPrefs.edit();
+            mEditor.putString("LAST_GOAL_CHECK", currentDate);
+            mEditor.commit();
+            EarningsEngine earningsEngine = new EarningsEngine(getActivity());
+            earningsEngine.weeklyGoalCheck();
+        }
+    }
+
     @Override
     public void onResume(){
         super.onResume();
@@ -106,9 +119,8 @@ public class GameFragment extends Fragment {
         String gridSizeString = sharedPrefs.getString("GRID_SIZE","4,5");
         gridSize[0] = Integer.parseInt(gridSizeString.split(",")[0]);
         gridSize[1] = Integer.parseInt(gridSizeString.split(",")[1]);
-        //EarningsEngine earningsEngine = new EarningsEngine(getActivity());
-        //earningsEngine.weeklyGoalCheck();
-        //On resuming, update the credits and population and attack if necessary
+
+            //On resuming, update the credits and population and attack if necessary
         credits = sharedPrefs.getInt("CREDITS",1);
         int attacks = sharedPrefs.getInt("ATTACKS",0);
         zoomCounter = sharedPrefs.getInt("ZOOM_COUNTER",0);
@@ -136,6 +148,8 @@ public class GameFragment extends Fragment {
             getOccupiedIndices(mGrid);
         }
         inflateMap(gameFrameView);
+        //once the map is inflated, do a daily check for completion
+        this.checkGoal();
         //If we are passed a bundle, retrieve it
         //NOTE: This is used to determine if we come from a store or we're just showing the map
         Bundle b = getArguments();
