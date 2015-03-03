@@ -78,10 +78,20 @@ public class GoalDisplayFragment extends Fragment {
         dataSource = new DBConnection(getActivity());
         dataSource.open();
         goalSet = dataSource.getGoals();
+
         dataSource.close();
         mListView = (ListView) V.findViewById(R.id.goalSetListView);
         mAdapter = new GoalProgressListAdapter(getActivity().getApplicationContext(),R.layout.goal_display_row,goalSet);
         mListView.setAdapter(mAdapter);
+        dataSource.open();
+        Goal g = new Goal("2015-02-23","Running","DTA-T",0,2,1);
+        try {
+            dataSource.removeGoal(g);
+            dataSource.insertGoal(g);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dataSource.close();
         return V;
     }
 

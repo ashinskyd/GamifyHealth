@@ -112,12 +112,12 @@ public class EarningsEngine {
     private void showInfoDialog(int amount,String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Nice Work!");
-        builder.setMessage("You had an increase of "+amount+" "+type + ".");
+        builder.setMessage("You had an increase of " + amount + " " + type + ".");
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
         builder.show();
     }
 
@@ -194,6 +194,8 @@ public class EarningsEngine {
 
                     if (b[1] == true){
                         this.updateFinalGoal(h);
+                        datasource.removeGoal(h);
+                        removeActivity(h);
                     }
                     else if (b[1] == false){
                         h.goalMet();
@@ -215,6 +217,30 @@ public class EarningsEngine {
         datasource.close();
     }
 
+    private void removeActivity(Goal h) {
+        String oldActivitiesString = sp.getString("ACTIVITIES",null);
+
+
+        ArrayList<String> newActivitiesArray = new ArrayList<String>();
+        String activity = h.name + "_"+h.type;
+        String[] temp = oldActivitiesString.split(",");
+        for (int i=0;i<temp.length;i++){
+            String temp2 = temp[i];
+            if (temp2.contains("(")){
+                temp2 = temp2.substring(0,temp2.indexOf("(")-1);
+            }
+            if (temp2 != activity){
+                newActivitiesArray.add(temp[i]);
+            }
+        }
+        String newActivitiesString = new String();
+        for (String s: newActivitiesArray){
+            newActivitiesString.concat(s).concat(",");
+        }
+        SharedPreferences.Editor mEditor = sp.edit();
+        mEditor.putString("ACTIVITIES",newActivitiesString);
+        mEditor.commit();
+    }
 
 
 }
