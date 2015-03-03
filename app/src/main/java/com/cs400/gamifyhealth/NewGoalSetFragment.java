@@ -53,6 +53,7 @@ public class NewGoalSetFragment extends Fragment {
     private Map<String,Integer> goalLevelMap;
     private SeekBarAdapter mAdapter;
     private UnitConverter converter;
+    private Bundle b;
 
     public static NewGoalSetFragment newInstance(String param1, String param2) {
         NewGoalSetFragment fragment = new NewGoalSetFragment();
@@ -79,7 +80,7 @@ public class NewGoalSetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View V = inflater.inflate(R.layout.fragment_new_goal_set, container, false);
-        Bundle b = getArguments();
+        b = getArguments();
         converter = new UnitConverter();
         addSet = b.getStringArrayList("ADDED_ACTIVITIES");
 
@@ -115,8 +116,8 @@ public class NewGoalSetFragment extends Fragment {
     }
 
     private void initActivitySets() {
-        String[] activitySetString = sharedPrefs.getString("ACTIVITIES",null).split(",");
-        String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
+        String[] activitySetString = b.getString("ACTIVITIES",null).split(",");
+        String[] activityStartValString = b.getString("Activity_Prelim_Levels",null).split(",");
         int j = 0;
         for (int i=0; i<activitySetString.length; i++){
             if (addSet.contains(activitySetString[i])){
@@ -169,6 +170,10 @@ public class NewGoalSetFragment extends Fragment {
             Log.d("TAG","Exception Caught");
         }
         datasource.close();
+        SharedPreferences.Editor mEditor = sharedPrefs.edit();
+        mEditor.putString("ACTIVITES",b.getString("ACTIVITIES"));
+        mEditor.putString("Activity_Prelim_Levels",b.getString("Activity_Prelim_Levels"));
+        mEditor.commit();
         FragmentTransaction transaction;
         GameFragment gameFragment = new GameFragment();
         transaction = getFragmentManager().beginTransaction();
