@@ -38,6 +38,7 @@ public class DBConnection{
     public static final String W_REP = "reps";
     public static final String W_TYPE = "type";
     private int[] houseCapacities = {4,8,12,16,20};
+    private int[] fortArray = {2, 4, 6, 8, 10};
 
     public DBConnection(Context c) {
         this.helper = new SQLiteHelper(c);
@@ -56,9 +57,9 @@ public class DBConnection{
     public void createTables(){
         this.database.execSQL("drop table if exists workout");
         this.database.execSQL("drop table if exists goals");
-        this.database.execSQL("drop table if exists objects");
+        this.database.execSQL("drop table if exists buildings");
         this.database.execSQL("create table workout( date text not null, name text not null, time int, distance int, rate int, reps int, type text not null);");
-        this.database.execSQL("create table objects( type text not null, xposition int, yposition int, name text not null);");
+        this.database.execSQL("create table buildings( type text not null, xposition int, yposition int, name text not null);");
         this.database.execSQL("create table goals( startDate text not null, name text not null, type text not null, startUnit int, goalUnit int, currentWeek int, currentWeekGoal int, duration int);");
     }
     //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)
@@ -84,14 +85,14 @@ public class DBConnection{
         values.put("xposition", x);
         values.put("yposition", y);
         values.put("name", name);
-        database.insert("objects", null,
+        database.insert("buildings", null,
                 values);
     }
 
     public int getPopulationCap(){
         String[] allColumns = {"type","xposition", "yposition", "name"};
         int capacity =0;
-        Cursor cursor = database.query("objects",
+        Cursor cursor = database.query("buildings",
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -104,6 +105,21 @@ public class DBConnection{
         return capacity;
     }
 
+    public int getFortFactor(){
+        String[] allColumns = {"type","xposition", "yposition", "name"};
+        int capacity =0;
+        Cursor cursor = database.query("buildings",
+                allColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String type = cursor.getString(0);
+            if (type.equals("fort")){
+                capacity += fortArray[Integer.parseInt(cursor.getString(3))];
+            }
+            cursor.moveToNext();
+        }
+        return capacity;
+    }
 
     //in order for this to work, we must prevent the user from adding to goals of the same name and type
     //ie no two goals of the same thing measuring the same thing at the same time
@@ -319,10 +335,10 @@ public class DBConnection{
 
     //returns a list of objects to owned to the game screen
     //so the player's environment can be reproduced after the game is closed
-    public ArrayList<Building> getObjectsOwned(){
+    public ArrayList<Building> getBuildingsOwned(){
         ArrayList<Building> blist = new ArrayList<Building>();
         String[] allColumns = {"type","xposition", "yposition", "name"};
-        Cursor cursor = database.query("objects",
+        Cursor cursor = database.query("buildings",
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -340,9 +356,9 @@ public class DBConnection{
     }
 
     //object table scheme: type, xposition, yposition
-    public void printObjectDB(){
+    public void printBuildingDB(){
         String[] allColumns = {"type","xposition", "yposition", "name"};
-        Cursor cursor = database.query("objects",
+        Cursor cursor = database.query("buildings",
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -360,7 +376,7 @@ public class DBConnection{
 
     //called by AttackEngine to update DB after an attack
     public void removeObject(int x, int y){
-        String command = "delete from objects where xposition = " + x + " and yposition = " + y + " ;";
+        String command = "delete from buildings where xposition = " + x + " and yposition = " + y + " ;";
         database.execSQL(command);
     }
     //make a call to the DB that returns player objects as an array of ints representing counts the order farms, forts, houses
@@ -373,7 +389,7 @@ public class DBConnection{
         int fortCount = 0;
         int houseCount = 0;
         String[] allColumns = {"type","xposition", "yposition", "name"};
-        Cursor cursor = database.query("objects",
+        Cursor cursor = database.query("buildings",
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -391,17 +407,17 @@ public class DBConnection{
 
             cursor.moveToNext();
         }
-        int[] objects = new int[4];
-        objects[0] = farmCount;
-        objects[1] = fortCount;
-        objects[2] = houseCount;
+        int[] buildings = new int[4];
+        buildings[0] = farmCount;
+        buildings[1] = fortCount;
+        buildings[2] = houseCount;
         // make sure to close the cursor
         System.out.println("Printing object counts: ");
         for (int i = 0; i<3; i++){
-            System.out.println(objects[i]);
+            System.out.println(buildings[i]);
         }
         cursor.close();
-        return objects;
+        return buildings;
     }
 
     //REMNANT TESTING CODE, REMOVE?
@@ -490,7 +506,7 @@ public class DBConnection{
 
     //repositions all existing building objects once the table is expanded
     public void expandObjectTable(){
-        String query = "update objects set xposition = xposition + 2,  yposition = yposition + 3 ;";
+        String query = "update buildings set xposition = xposition + 2,  yposition = yposition + 3 ;";
         this.database.execSQL(query);
     }
 

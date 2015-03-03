@@ -14,7 +14,6 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,28 +31,12 @@ public class AttackEngine {
     private int population;
 
 
-    private int[] fortProtectionArray = {2, 4, 6, 8, 10};
-
-
     public AttackEngine(Activity a){
         randomGen = new Random();
         this.activity=a;
         datasource = new DBConnection(this.activity);
 
     }
-
-    public void printObjectsOwned(){
-        System.out.println(Arrays.toString(objectsOwned));
-    }
-
-
-    public int calculateAttackStrength() {
-
-        return randomGen.nextInt(21) + 11;
-
-    }
-
-
 
     public int generateAttackType() {
         int a = randomGen.nextInt(4);
@@ -103,7 +86,7 @@ public class AttackEngine {
                 typeString = "house";
             }
             datasource.open();
-            ArrayList<Building> objectLocs = datasource.getObjectsOwned();
+            ArrayList<Building> objectLocs = datasource.getBuildingsOwned();
             ArrayList<Building> removeList = new ArrayList<Building>();
             for (Building b : objectLocs) {
                 if (removalDone == false) {
@@ -127,7 +110,7 @@ public class AttackEngine {
             System.out.println("new object counts");
             int[] test = datasource.getObjectCounts();
             System.out.println(Arrays.toString(test));
-            datasource.printObjectDB();
+            datasource.printBuildingDB();
             datasource.close();
             showAttackDialog(toRemove, typeString, (int) severity);
         }
@@ -244,23 +227,22 @@ public class AttackEngine {
     public void attack() {
         String pref_file_key = this.activity.getString(R.string.preference_file_key);
         SharedPreferences sharedPrefs = this.activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
-        //ask Andy, how do we access sharedpreferences, store 1 int, help
         population = sharedPrefs.getInt("POPULATION", 1);
         datasource.open();
         objectsOwned = datasource.getObjectCounts();
         objectsOwned[3] = population;
         datasource.close();
         int[] postAttack = new int[4];
-        for (int i = 0; i<4; i++){
+        for (int i = 0; i < 4; i++) {
             postAttack[i] = objectsOwned[i];
         }
         double severity = this.generateSeverity();
 
-        double percentage = (11 + (6.0 * severity))/100.0;
+        double percentage = (11 + (6.0 * severity)) / 100.0;
 
         int type = generateAttackType();
 
-        double fortsOwned = (double)objectsOwned[1];
+        double fortsOwned = (double) objectsOwned[1];
 
         //forts reduce damage done by all types of attacks except those that specifically target forts
 
@@ -270,45 +252,39 @@ public class AttackEngine {
 
             //rounding down ensures that you always lose at least one fort per fort attack
 
-            postAttack[1] = (int)fortsOwned;
+            postAttack[1] = (int) fortsOwned;
             int toRemove = objectsOwned[type] - postAttack[type];
             this.updateDB(toRemove, type, severity);
-            objectsOwned[type] = postAttack[type];
         }
-
         else {
 
+            //get the specific forts to find damage reduction factor
+            datasource.open();
+            int fortFactor = datasource.getFortFactor();
+            datasource.close();
             System.out.println("Attacking non fort to do " + percentage);
 
-            percentage = percentage - (percentage * (fortsOwned / 10));
-
+            percentage = percentage - (fortFactor);
+            if (percentage < 10) {
+                percentage = 10;
+            }
             System.out.println("Reduced percentage " + percentage);
 
 
-            double itemDamaged = (double)objectsOwned[type];
+            double itemDamaged = (double) objectsOwned[type];
             System.out.println("Item damaged" + itemDamaged);
 
             itemDamaged = itemDamaged - (itemDamaged * percentage);
             System.out.println("Item damaged after attack " + itemDamaged);
 
             //population, farms, and houses must be at least 1
-        if ((type == 0)||(type == 2)||(type == 3)){
-            if ((int)itemDamaged == 0){
+            if ((int) itemDamaged == 0) {
                 itemDamaged = 1;
+
+                postAttack[type] = (int) itemDamaged;
+                int toRemove = objectsOwned[type] - postAttack[type];
+                this.updateDB(toRemove, type, severity);
             }
         }
-        //it's not possible to have negative farms, forts, or houses
-        else{
-            if ((int)itemDamaged < 0){
-                itemDamaged = 0;
-            }
-        }
-
-        postAttack[type] = (int)itemDamaged;
-        int toRemove = objectsOwned[type] - postAttack[type];
-        this.updateDB(toRemove, type, severity);
-        objectsOwned[type] = postAttack[type];
-        }
-
     }
 }

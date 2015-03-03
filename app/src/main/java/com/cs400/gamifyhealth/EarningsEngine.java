@@ -5,9 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,7 +52,7 @@ public class EarningsEngine {
 
         DBConnection dataSource = new DBConnection(activity);
         dataSource.open();
-        ArrayList<Building> buildings = dataSource.getObjectsOwned();
+        ArrayList<Building> buildings = dataSource.getBuildingsOwned();
         dataSource.close();
         for (Building b: buildings) {
             if (b.type.equals("house")) {

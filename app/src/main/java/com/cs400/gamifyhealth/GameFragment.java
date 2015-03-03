@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,7 +135,7 @@ public class GameFragment extends Fragment {
         }
         dataSource.open();
         //arraylist of all the users buildings
-        buildingArrayList = dataSource.getObjectsOwned();
+        buildingArrayList = dataSource.getBuildingsOwned();
         peopleCapacity = dataSource.getPopulationCap();
         dataSource.close();
         //Check if we need to resize the map before initializing the Ui
@@ -187,7 +186,7 @@ public class GameFragment extends Fragment {
             //Call to update the x,y position of every building in our database
             dataSource.open();
             dataSource.expandObjectTable();
-            buildingArrayList = dataSource.getObjectsOwned();
+            buildingArrayList = dataSource.getBuildingsOwned();
             dataSource.close();
         }
     }
@@ -282,7 +281,7 @@ public class GameFragment extends Fragment {
                             tileIcon.setBackground(getActivity().getResources().getDrawable(houseIcons[iconValue]));
                             dataSource.open();
                             dataSource.insertObject("house", xCoord, yCoord, Integer.toString(iconValue));
-                            dataSource.printObjectDB();
+                            dataSource.printBuildingDB();
                             dataSource.close();
                             int price = housePrices[iconValue];
                             sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
@@ -293,7 +292,7 @@ public class GameFragment extends Fragment {
                             tileIcon.setBackground(getActivity().getResources().getDrawable(farmIcons[iconValue]));
                             dataSource.open();
                             dataSource.insertObject("farm", xCoord, yCoord, Integer.toString(iconValue));
-                            dataSource.printObjectDB();
+                            dataSource.printBuildingDB();
                             dataSource.close();
                             int price = farmPrices[iconValue];
                             sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
@@ -303,7 +302,7 @@ public class GameFragment extends Fragment {
                             tileIcon.setBackground(getActivity().getResources().getDrawable(fortIcons[iconValue]));
                             dataSource.open();
                             dataSource.insertObject("fort", xCoord, yCoord, Integer.toString(iconValue));
-                            dataSource.printObjectDB();
+                            dataSource.printBuildingDB();
                             dataSource.close();
                             int price = fortPrices[iconValue];
                             sharedPrefs.edit().putInt("CREDITS", credits-price).commit();
