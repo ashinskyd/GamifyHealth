@@ -40,19 +40,18 @@ public class EarningsEngine {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("CREDITS", sp.getInt("CREDITS", 0) + creditsEarned);
         editor.commit();
+        this.showGoalCompletedDialog(g.type, creditsEarned);
 
     }
 
+//updates population proportional to growth rate and capacity after a workout is entered
     public void updatePop() {
-
-        // Use database to determine population growth rate and capacity
         int[] houseCapacities = {4,8,12,16,20};
         int[] farmGrowths = {1,2,3,4,5};
         int pop = sp.getInt("POPULATION", 1);
         int popCap = 0;
         int growth = 0;
-
-        System.out.println("Before population: "+pop);
+        int newPop = 0;
 
         DBConnection dataSource = new DBConnection(activity);
         dataSource.open();
@@ -65,17 +64,22 @@ public class EarningsEngine {
                 growth += farmGrowths[Integer.parseInt(b.name)];
             }
         }
-        System.out.println("Popcap, growth = "+popCap+" "+growth);
 
         // Update the population with new citizens based on farms, if it doesn't exceed capacity
         if (pop < popCap) {
-            pop = Math.min(pop + growth, popCap);
+            newPop = Math.min(pop + growth, popCap);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt("POPULATION", newPop);
+            editor.commit();
+            showInfoDialog(newPop - pop,"People");
         }
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("POPULATION", pop);
-        editor.commit();
-        showInfoDialog(growth,"People");
-        System.out.println("After population: " + pop);
+        else if(pop == popCap){
+            maxPopDialog();
+        }
+        //population is above capacity
+        else{
+            aboveCapacityDialog();
+        }
     }
 
     //weekly bonus
@@ -93,15 +97,39 @@ public class EarningsEngine {
         showInfoDialog(10,"Credits");
     }
 
+    private void aboveCapacityDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Nice Work!");
+        builder.setMessage("You worked out, but the population is currently greater than the city's capacity. It won't increase until destroyed buildings are replaced.");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.show();
+    }
+
     private void showInfoDialog(int amount,String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Nice Work!");
-        builder.setMessage("You had an increase of: "+amount+" "+type);
+        builder.setMessage("You had an increase of "+amount+" "+type + ".");
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 });
+        builder.show();
+    }
+
+    private void maxPopDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Nice Work!");
+        builder.setMessage("You worked out, but your city is filled to capacity.");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
         builder.show();
     }
 
@@ -165,7 +193,7 @@ public class EarningsEngine {
                 if (b[0] == true){
 
                     if (b[1] == true){
-                        //IMPLEMENT GOAL REMOVAL FROM GUI LATER
+                        this.updateFinalGoal(h);
                     }
                     else if (b[1] == false){
                         h.goalMet();
@@ -175,7 +203,7 @@ public class EarningsEngine {
                     }
 
                 }
-                else if (b[1] == false){
+                else if (b[0] == false){
                     h.goalNotMet();
                     datasource.removeGoal(h); //removes the copy based on name, type
                     datasource.insertGoal(h);
@@ -184,7 +212,6 @@ public class EarningsEngine {
                 e.printStackTrace();
             }
         }
-        datasource.printGoalDB();
         datasource.close();
     }
 
