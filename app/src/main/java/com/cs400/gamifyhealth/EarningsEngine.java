@@ -40,7 +40,7 @@ public class EarningsEngine {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("CREDITS", sp.getInt("CREDITS", 0) + creditsEarned);
         editor.commit();
-        this.showGoalCompletedDialog(g.type, creditsEarned);
+        this.showGoalCompletedDialog(g.name, creditsEarned);
 
     }
 

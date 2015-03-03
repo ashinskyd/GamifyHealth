@@ -170,6 +170,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
             SharedPreferences.Editor mEditor = sharedPrefs.edit();
             mEditor.putString("LAST_WORKOUT", currentDate);
             mEditor.commit();
+            earningsEngine.weeklyGoalCheck();
             earningsEngine.postWorkout();
             earningsEngine.updatePop();
 
