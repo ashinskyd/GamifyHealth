@@ -33,7 +33,6 @@ public class AttackEngine {
 
 
     public AttackEngine(Activity a){
-        System.out.println("Attack engine doing something");
         randomGen = new Random();
         this.activity=a;
         datasource = new DBConnection(this.activity);
