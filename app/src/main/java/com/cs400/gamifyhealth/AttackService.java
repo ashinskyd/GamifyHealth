@@ -126,7 +126,7 @@ public class AttackService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
+
     }
 
     public int genTime() {
