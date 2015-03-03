@@ -32,6 +32,9 @@ public class AttackEngine {
     private int population;
 
 
+    private int[] fortProtectionArray = {2, 4, 6, 8, 10};
+
+
     public AttackEngine(Activity a){
         randomGen = new Random();
         this.activity=a;
