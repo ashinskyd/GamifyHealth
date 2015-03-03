@@ -68,6 +68,8 @@ public class SettingsFragment extends Fragment {
                 final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
                 view.startAnimation(buttonClick);
                 getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit().clear().commit();
+                Intent service = new Intent(getActivity(), AttackService.class);
+                getActivity().stopService(service);
                 dataSource = new DBConnection(getActivity());
                 dataSource.open();
                 dataSource.createTables();
