@@ -117,7 +117,6 @@ public class NewCurrentLevelActivity extends Fragment {
     }
 
     private void addCurrentLevels() {
-        SharedPreferences.Editor editor = sharedPrefs.edit();
         StringBuilder activities = new StringBuilder();
         activities.append(sharedPrefs.getString("ACTIVITIES", ""));
         StringBuilder preselectedCurrentLevels = new StringBuilder();
@@ -126,14 +125,12 @@ public class NewCurrentLevelActivity extends Fragment {
         for (String s: addSetCopy){
             activities.append(s).append(",");
             preselectedCurrentLevels.append(currentLevel.get(s)).append(",");
-            Log.d("TAGE","HERE: "+preselectedCurrentLevels);
         }
-        editor.putString("ACTIVITIES",activities.toString());
-        editor.putString("Activity_Prelim_Levels",preselectedCurrentLevels.toString());
-        editor.commit();
         //Pass the goal set fragment our new activity set
         Bundle b = new Bundle();
         b.putStringArrayList("ADDED_ACTIVITIES",addSetCopy);
+        b.putString("ACTIVITIES",activities.toString());
+        b.putString("Activity_Prelim_Levels",preselectedCurrentLevels.toString());
         FragmentTransaction transaction;
         NewGoalSetFragment goalSetFragment = new NewGoalSetFragment();
         transaction = getFragmentManager().beginTransaction();
@@ -174,15 +171,15 @@ public class NewCurrentLevelActivity extends Fragment {
             if (addSetCopy.get(position).toString().contains("_REP")){
                 sb.setMax(500);
             }else if (addSetCopy.get(position).toString().contains("_TIM")){
-                sb.setMax(25);
+                sb.setMax(100);
             }else{
                 if(addSetCopy.get(position).toString().contains("_DTA-T")){
-                    sb.setMax(25);
+                    sb.setMax(100);
                 }else if(addSetCopy.get(position).toString().contains("_DTA-D")){
                     if (addSetCopy.get(position).toString().contains("Swimming")) {
                         sb.setMax(1000);
                     } else if(addSetCopy.get(position).toString().contains("Running")) {
-                        sb.setMax(50);
+                        sb.setMax(200);
                     } else {
                         sb.setMax(200);
                     }
