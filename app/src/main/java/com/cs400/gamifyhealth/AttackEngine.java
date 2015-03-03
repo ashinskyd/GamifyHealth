@@ -105,7 +105,7 @@ public class AttackEngine {
             System.out.println("I'm removing these buildings");
             System.out.println(removeList);
             for (Building b : removeList) {
-                datasource.removeObject(b.xcoord, b.ycoord);
+                datasource.removeBuilding(b.xcoord, b.ycoord);
             }
             System.out.println("new object counts");
             int[] test = datasource.getObjectCounts();

@@ -373,7 +373,7 @@ public class DBConnection{
     }
 
     //called by AttackEngine to update DB after an attack
-    public void removeObject(int x, int y){
+    public void removeBuilding(int x, int y){
         String command = "delete from buildings where xposition = " + x + " and yposition = " + y + " ;";
         database.execSQL(command);
     }
@@ -408,7 +408,6 @@ public class DBConnection{
         buildings[1] = fortCount;
         buildings[2] = houseCount;
         // make sure to close the cursor
-        System.out.println("Printing object counts: ");
         for (int i = 0; i<3; i++){
             System.out.println(buildings[i]);
         }
@@ -501,7 +500,7 @@ public class DBConnection{
     }
 
     //repositions all existing building objects once the table is expanded
-    public void expandObjectTable(){
+    public void expandBuildingTable(){
         String query = "update buildings set xposition = xposition + 2,  yposition = yposition + 3 ;";
         this.database.execSQL(query);
     }

@@ -185,7 +185,7 @@ public class GameFragment extends Fragment {
             mEditor.commit();
             //Call to update the x,y position of every building in our database
             dataSource.open();
-            dataSource.expandObjectTable();
+            dataSource.expandBuildingTable();
             buildingArrayList = dataSource.getBuildingsOwned();
             dataSource.close();
         }
