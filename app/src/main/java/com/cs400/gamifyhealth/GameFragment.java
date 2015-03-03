@@ -163,7 +163,7 @@ public class GameFragment extends Fragment {
             RegisterListeners("Farm_Store", b.getInt("FARM_VALUE"));
         }
         else if (b!=null && b.getBoolean("FORT_STORE")){
-            getActivity().getActionBar().setTitle("Select a position to place farm");
+            getActivity().getActionBar().setTitle("Select a position to place fort");
             RegisterListeners("Fort_Store" , b.getInt("FORT_VALUE"));
         }
         else{
