@@ -21,11 +21,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Date;
 
-//population and credits are stored in sharedpreferences
-//objects like
+
 public class DBConnection{
-    //TODO: Implement rate so that rate is in Min/Mile so that rate goal is getting smaller
-    //done
+
     private SQLiteHelper helper;
     private SQLiteDatabase database;
 
@@ -242,8 +240,8 @@ public class DBConnection{
 
 
     //returns a pair of booleans
-    //first is the weekly goal met?
-    //second is the goal completed?
+    //first: is the weekly goal met
+    //second: is the goal completed
     public boolean[] checkGoal(Goal g)throws ParseException{
         String[] allColumns = {W_DATE,W_NAME, W_TIME, W_DIST,
                 W_RAT, W_REP, W_TYPE};
@@ -379,11 +377,9 @@ public class DBConnection{
         String command = "delete from buildings where xposition = " + x + " and yposition = " + y + " ;";
         database.execSQL(command);
     }
-    //make a call to the DB that returns player objects as an array of ints representing counts the order farms, forts, houses
-    //then the 4th spot in the array becomes the population stored in shared prefs
-    //TODO: adjust this to compensate for different types of items of the same class
-    //for example yuen-hsi's mansion and a hut are both of type house
 
+
+    //make a call to the DB that returns player objects as an array of ints representing counts the order farms, forts, houses
     public int[] getObjectCounts(){
         int farmCount = 0;
         int fortCount = 0;
