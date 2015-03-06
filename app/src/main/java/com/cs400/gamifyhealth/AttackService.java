@@ -131,8 +131,8 @@ public class AttackService extends Service {
     }
 
     public int genTime() {
-        return 15000;
-        //return (randomGen.nextInt(840) + 2160) * 60000;
+       // return 15000;
+       return (randomGen.nextInt(840) + 2160) * 60000;
     }
 
     @Override
