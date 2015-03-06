@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:text="About"
             android:background="#ff7ac8cc"
-            android:id="@+id/testbutton"
+            android:id="@+id/aboutButton"
             android:layout_marginTop="104dp"
             android:layout_below="@+id/reset_description"
             android:layout_centerHorizontal="true" />

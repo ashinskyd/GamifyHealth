@@ -14,6 +14,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +53,7 @@ public class AttackEngine {
 
     //called post-attack
     public void updateDB(int toRemove, int type,  double severity) {
+
         String pref_file_key = activity.getString(R.string.preference_file_key);
         SharedPreferences sharedPrefs = activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
@@ -120,6 +122,7 @@ public class AttackEngine {
 
     //Displays a dialog with a simple message anytime a user's city is attacked
     private void showAttackDialog(int size, String attackType, int severity) {
+
         if (size==0){
             //If we attack people, but don't have any to remove, just display a notice
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -158,6 +161,28 @@ public class AttackEngine {
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.farm5);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                }
+            }else if(attackType.contains("people")){
+                suffix = "people removed.";
+                if (severity == 1) {
+                    message = activity.getString(R.string.people1);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                }
+                if (severity == 2){
+                    message = activity.getString(R.string.people2);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                }
+                if (severity == 3){
+                    message = activity.getString(R.string.people3);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                }
+                if (severity == 4){
+                    message = activity.getString(R.string.people4);
+                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                }
+                if (severity == 5){
+                    message = activity.getString(R.string.people5);
                     builder.setMessage(message + " You had: " + size + " " + suffix);
                 }
             }else if (attackType.contains("house")){
@@ -247,7 +272,6 @@ public class AttackEngine {
         //forts reduce damage done by all types of attacks except those that specifically target forts
 
         if (type == 1) {
-
             fortsOwned = fortsOwned - (fortsOwned * percentage);
 
             //rounding down ensures that you always lose at least one fort per fort attack
@@ -278,13 +302,14 @@ public class AttackEngine {
             System.out.println("Item damaged after attack " + itemDamaged);
 
             //population, farms, and houses must be at least 1
-            if ((int) itemDamaged == 0) {
+            if ((int) itemDamaged <= 0 ) {
                 itemDamaged = 1;
-
-                postAttack[type] = (int) itemDamaged;
-                int toRemove = objectsOwned[type] - postAttack[type];
-                this.updateDB(toRemove, type, severity);
             }
+            postAttack[type] = (int) itemDamaged;
+            int toRemove = objectsOwned[type] - postAttack[type];
+            this.updateDB(toRemove, type, severity);
+
         }
+
     }
 }
