@@ -61,7 +61,7 @@ public class AttackEngine {
         mEditor.putInt("ATTACKS", attacks);
         mEditor.commit();
         if (toRemove == 0) {
-            showAttackDialog(0, "You survived the attack with no casualties", (int) severity);
+            showAttackDialog(0, "You survived the attack with no casualties.", (int) severity);
             return;
 
         }
@@ -104,8 +104,6 @@ public class AttackEngine {
                     break;
                 }
             }
-            System.out.println("I'm removing these buildings");
-            System.out.println(removeList);
             for (Building b : removeList) {
                 datasource.removeBuilding(b.xcoord, b.ycoord);
             }
@@ -142,92 +140,112 @@ public class AttackEngine {
             String message;
             String suffix = "";
             if (attackType.contains("farm")){
-                suffix = "farms removed.";
+                if (size == 1) {
+                    suffix = "farm removed.";
+                }
+                else {
+                    suffix = "farms removed.";
+                }
                 if (severity == 1) {
                     message = activity.getString(R.string.farm1);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.farm2);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.farm3);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.farm4);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.farm5);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
             }else if(attackType.contains("people")){
-                suffix = "people removed.";
+                if (size == 1) {
+                    suffix = "person removed.";
+                }
+                else {
+                    suffix = "people removed.";
+                }
                 if (severity == 1) {
                     message = activity.getString(R.string.people1);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.people2);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.people3);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.people4);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.people5);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
             }else if (attackType.contains("house")){
-                suffix = "houses removed.";
+                if (size == 1) {
+                    suffix = "house removed.";
+                }
+                else {
+                    suffix = "people removed.";
+                }
                 if (severity == 1) {
                     message = activity.getString(R.string.houses1);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.houses2);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.houses3);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.houses4);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.houses5);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
             }else{
-                suffix = "forts removed.";
+                if (size == 1) {
+                    suffix = "fort removed.";
+                }
+                else {
+                    suffix = "forts removed.";
+                }
                 if (severity == 1) {
                     message = activity.getString(R.string.fort1);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 2){
                     message = activity.getString(R.string.fort2);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 3){
                     message = activity.getString(R.string.fort3);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 4){
                     message = activity.getString(R.string.fort4);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had " + size + " " + suffix);
                 }
                 if (severity == 5){
                     message = activity.getString(R.string.fort5);
-                    builder.setMessage(message + " You had: " + size + " " + suffix);
+                    builder.setMessage(message + " You had" + size + " " + suffix);
                 }
             }
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -289,8 +307,8 @@ public class AttackEngine {
             System.out.println("Attacking non fort to do " + percentage);
 
             percentage = percentage - (fortFactor);
-            if (percentage < 10) {
-                percentage = 10;
+            if (percentage < 0.10) {
+                percentage = 0.10;
             }
             System.out.println("Reduced percentage " + percentage);
 
@@ -308,7 +326,6 @@ public class AttackEngine {
             postAttack[type] = (int) itemDamaged;
             int toRemove = objectsOwned[type] - postAttack[type];
             this.updateDB(toRemove, type, severity);
-
         }
 
     }

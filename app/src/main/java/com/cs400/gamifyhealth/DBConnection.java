@@ -60,7 +60,7 @@ public class DBConnection{
         this.database.execSQL("create table buildings( type text not null, xposition int, yposition int, name text not null);");
         this.database.execSQL("create table goals( startDate text not null, name text not null, type text not null, startUnit int, goalUnit int, currentWeek int, currentWeekGoal int, duration int);");
     }
-    //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration (IN THAT ORDER!!)
+    //goal table schema: startDate, name, type, startUnit, goalUnit, currentWeek, currentWeekGoal, duration
     public void insertGoal(Goal g) throws ParseException{
         ContentValues values = new ContentValues();
         values.put("startDate", g.startDate);
