@@ -30,10 +30,10 @@ import java.text.ParseException;
 
 
 public class SettingsFragment extends Fragment {
-    private Button resetButton;
+    private static Button resetButton;
     private Switch safeSwitch;
     private Button aboutButton;
-    private DBConnection dataSource;
+    private static DBConnection dataSource;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor mEditor;
 
@@ -93,7 +93,8 @@ public class SettingsFragment extends Fragment {
     }
 
 
-    public class ConfirmDialog extends DialogFragment{
+
+    public static class ConfirmDialog extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
