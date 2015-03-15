@@ -5,6 +5,8 @@ package com.cs400.gamifyhealth;
  */
 public class Building {
 
+    // Building class - stores position, type, and name
+
     public int xcoord;
     public int ycoord;
     public String type;

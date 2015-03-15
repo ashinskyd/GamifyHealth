@@ -58,8 +58,6 @@ public class EditActivitySetFragment extends Fragment {
     private SharedPreferences.Editor mEditor;
 
 
-
-
     public static EditActivitySetFragment newInstance(String param1, String param2) {
         EditActivitySetFragment fragment = new EditActivitySetFragment();
         Bundle args = new Bundle();

@@ -20,6 +20,8 @@ import android.widget.TextView;
 //TODO: fix back stack specifically for this fragment
 public class AboutFragment extends Fragment {
 
+    // About screen for app
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

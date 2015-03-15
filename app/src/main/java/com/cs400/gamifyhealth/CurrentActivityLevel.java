@@ -52,9 +52,9 @@ public class CurrentActivityLevel extends Activity {
             }
         });
         currentLevel = new HashMap<String, Integer>();
-        //Map used to store the key,value of activty-name,Value for every activity
+        //Map used to store the key,value of activity-name,Value for every activity
         activityList = new ArrayList<String>();
-        //Arraylist is gatherd from sharedprefs and holds a master list of all activiteis
+        //Arraylist is gathered from sharedprefs and holds a master list of all activities
         String[] activities = sharedPrefs.getString("ACTIVITIES","").split(",");
         for(int i=0;i<activities.length;i++){
             //Loop puts all activities and a default value of 0 into the loop
@@ -84,7 +84,7 @@ public class CurrentActivityLevel extends Activity {
         }
         SharedPreferences.Editor mEditor = sharedPrefs.edit();
         /*
-        *@ACTIVITIES: the sharedprefs string of all the activites: "Running (Time)_DTA-T,Ping-Pong_REP..."
+        *@ACTIVITIES: the sharedprefs string of all the activities: "Running (Time)_DTA-T,Ping-Pong_REP..."
         *@Activity_Prelim_Levels: the sharedprefs string of the preliminary fitness level
          */
         mEditor.putString("ACTIVITIES",names.toString());
@@ -134,7 +134,7 @@ public class CurrentActivityLevel extends Activity {
                 }
             }
             title.setText(temp);
-            //Required to set some text before proceding to avoid a null ptr
+            //Required to set some text before proceeding to avoid a null ptr
             progress.setText("HI");
             if(currentLevel.get(activityList.get(position))!=null){
                 mSeekBar.setProgress(currentLevel.get(activityList.get(position)));

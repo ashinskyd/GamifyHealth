@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 
 
-//This is our App's entryPoint and starts the main setup process
+//This is our app's entry point and starts the main setup process
 public class WelcomeActivity extends Activity {
     private Button continueButton;
 
@@ -66,34 +66,5 @@ public class WelcomeActivity extends Activity {
             editor.putInt("CREDITS", 100);
             editor.commit();
         }
-
-
-        /*Workout w = new Workout("Running", 5, "DTA-D");
-        Workout d = new Workout("Walking", 10, "DTA-T");
-        */
-
-
-
-        /*datasource.insertWorkout(w);
-
-        datasource.insertWorkout(d);
-        datasource.checkWorkoutDB();
-        Goal g = new Goal("2015-01-10", "Running","DTA-D", 0, 10, 4 );
-        Goal g2 = new Goal("2015-01-10", "Walking","DTA-D", 0, 5, 10 );
-        try {
-            datasource.insertGoal(g);
-            datasource.insertGoal(g2);
-        }
-        catch (ParseException e){
-            System.out.println("parse error");
-        }
-        datasource.printGoalDB();
-        //write try catch for thing
-        try {
-            datasource.checkGoal(g);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
-
     }
-   }
+}
