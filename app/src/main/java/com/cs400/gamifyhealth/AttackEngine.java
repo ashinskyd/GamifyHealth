@@ -81,7 +81,7 @@ public class AttackEngine {
 
         }
         String typeString = "";
-        //atttack on people, no database connection required
+        //attack on people, no database connection required
         if (type == 3) {
             typeString = "people";
             int population = sharedPrefs.getInt("POPULATION", 0);
@@ -242,9 +242,10 @@ public class AttackEngine {
 
 
     public void attack() {
+
+        // Calculate results of attack
         String pref_file_key = this.activity.getString(R.string.preference_file_key);
         SharedPreferences sharedPrefs = this.activity.getSharedPreferences(pref_file_key, Context.MODE_PRIVATE);
-        //ask Andy, how do we access sharedpreferences, store 1 int, help
         population = sharedPrefs.getInt("POPULATION", 1);
         datasource.open();
         objectsOwned = datasource.getObjectCounts();

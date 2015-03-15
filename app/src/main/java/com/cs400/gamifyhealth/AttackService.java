@@ -141,7 +141,7 @@ public class AttackService extends Service {
     }
 
     //Logs the most recent remaining time in shared prefs
-    //Need this because the OS can suspend/restart a service and we need to know at what point this occured
+    //Need this because the OS can suspend/restart a service and we need to know at what point this occurred
     private void logTime() {
         mEditor.putLong("REMAINING_TIME",remainingTime);
         mEditor.putLong("LOGGED_TIME",recentTime);

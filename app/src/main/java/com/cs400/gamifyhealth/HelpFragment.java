@@ -16,6 +16,8 @@ import android.webkit.WebView;
  */
 public class HelpFragment extends Fragment {
 
+    // Simple fragment to display help screen when "?" button is tapped
+
 
     public HelpFragment() {
     }

@@ -4,6 +4,9 @@ package com.cs400.gamifyhealth;
  * Created by Yuen Hsi on 11/15/2014.
  */
 public class Goal {
+
+    // Goal object, for use in goal tracking
+
     public String startDate;
     public String name;
     public String type;

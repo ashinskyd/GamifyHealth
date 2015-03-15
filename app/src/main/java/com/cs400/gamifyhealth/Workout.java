@@ -4,6 +4,9 @@ package com.cs400.gamifyhealth;
  * Created by Erin on 11/10/2014.
  */
 public class Workout {
+
+    // Workout object for entry into database
+
     private String name;
     private int unit;
     private String type;

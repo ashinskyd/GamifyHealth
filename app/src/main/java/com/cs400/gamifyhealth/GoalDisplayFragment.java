@@ -32,6 +32,9 @@ import java.util.Locale;
 
 
 public class GoalDisplayFragment extends Fragment {
+
+    // Fragment for goal display screen
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -106,6 +109,9 @@ public class GoalDisplayFragment extends Fragment {
         }
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
+            // Inflate and display goal progress bars
+
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.goal_display_row, parent, false);
             TextView nameTextview =  (TextView) convertView.findViewById(R.id.nameTextView);

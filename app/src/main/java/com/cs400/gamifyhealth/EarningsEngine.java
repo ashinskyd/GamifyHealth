@@ -23,6 +23,9 @@ import java.util.Locale;
 
 
 public class EarningsEngine {
+
+    // Calculates player rewards (population and gold increases) when appropriate
+
     public Activity activity;
     public SharedPreferences sp;
 
@@ -218,8 +221,9 @@ public class EarningsEngine {
     }
 
     private void removeActivity(Goal h) {
-        String oldActivitiesString = sp.getString("ACTIVITIES",null);
 
+        // Removes an activity from user's set
+        String oldActivitiesString = sp.getString("ACTIVITIES",null);
 
         ArrayList<String> newActivitiesArray = new ArrayList<String>();
         String activity = h.name + "_"+h.type;

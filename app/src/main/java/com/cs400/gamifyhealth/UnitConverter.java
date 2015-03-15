@@ -11,6 +11,8 @@ public class UnitConverter {
     }
 
     public String convertUnit(int quantity, String type) {
+
+        // Converts raw numerical goal/workout data to be displayed to user
         String displayString = "";
         if (type.equals("DTA-T") || type.equals("TIM")) {
             int hours = quantity / 4;

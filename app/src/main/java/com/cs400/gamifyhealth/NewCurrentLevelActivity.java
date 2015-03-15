@@ -122,7 +122,7 @@ public class NewCurrentLevelActivity extends Fragment {
         activities.append(sharedPrefs.getString("ACTIVITIES", ""));
         StringBuilder preselectedCurrentLevels = new StringBuilder();
         preselectedCurrentLevels.append(sharedPrefs.getString("Activity_Prelim_Levels",""));
-        //Log.d("TAG","Levels: "+preselectedCurrentLevels.toString());
+
         for (String s: addSetCopy){
             activities.append(s).append(",");
             preselectedCurrentLevels.append(currentLevel.get(s)).append(",");

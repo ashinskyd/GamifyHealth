@@ -39,7 +39,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
     private Map<String,Integer> currentLevel;
     //Map records the activty,value for all activities and their values
     private ArrayList<Integer> activitySetLevels;
-    //Used to store the levels for intermediete processing
+    //Used to store the levels for intermediate processing
 
     //Our layout objects
     private ListView mListView;
@@ -80,7 +80,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
         sharedPrefs = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
         String[] activities = sharedPrefs.getString("ACTIVITIES","").split(",");
-        //Gets the relevant activty set from sharedprefs
+        //Gets the relevant activity set from sharedprefs
 
         converter = new UnitConverter();
         String[] activityStartValString = sharedPrefs.getString("Activity_Prelim_Levels",null).split(",");
@@ -127,7 +127,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
 
     @Override
     public void onDialogPositiveClick() {
-        //Listener implementation-Upon confirmationm we do some processing
+        //Listener implementation-Upon confirmation we do some processing
         ArrayList<Workout> workoutArray = new ArrayList<Workout>();
         //Array of workout objects
 
@@ -226,7 +226,7 @@ public class DataEntryFragment extends Fragment implements WorkoutDialogFragment
                 }
             }
             title.setText(temp);
-            //Required to set some text before proceding to avoid a null ptr
+            //Required to set some text before proceeding to avoid a null ptr
             progress.setText("HI");
             if(currentLevel.get(activityList.get(position))!=null){
                 sb.setProgress(currentLevel.get(activityList.get(position)));

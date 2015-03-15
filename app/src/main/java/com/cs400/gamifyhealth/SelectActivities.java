@@ -87,7 +87,7 @@ public class SelectActivities extends Activity {
             }
         });
 
-        //initialize the array of activity types to every possible activty
+        //initialize the array of activity types to every possible activity
         activityItems = new ArrayList<ActivityModel>();
         activityItems.add(new ActivityModel("Running (Time)", false));
         activityItems.add(new ActivityModel("Running (Distance)", false));
@@ -144,7 +144,7 @@ public class SelectActivities extends Activity {
         }
     }
 
-    //Checks that the user has selected at least 1 activty before proceeding
+    //Checks that the user has selected at least 1 activity before proceeding
     private boolean canProceed() {
         for (ActivityModel activityModel: activityItems){
             if (activityModel.isChecked){
