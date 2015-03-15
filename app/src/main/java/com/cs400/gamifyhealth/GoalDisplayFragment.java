@@ -2,25 +2,17 @@ package com.cs400.gamifyhealth;
 
 
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+
 
 
 public class GoalDisplayFragment extends Fragment {
@@ -82,8 +75,6 @@ public class GoalDisplayFragment extends Fragment {
         mListView = (ListView) V.findViewById(R.id.goalSetListView);
         mAdapter = new GoalProgressListAdapter(getActivity().getApplicationContext(),R.layout.goal_display_row,goalSet);
         mListView.setAdapter(mAdapter);
-        dataSource.open();
-        dataSource.close();
         return V;
     }
 
