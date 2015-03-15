@@ -26,7 +26,7 @@ import java.text.ParseException;
 public class SettingsFragment extends Fragment {
     private Button resetButton;
     private Switch safeSwitch;
-    private Button testButton;
+    private Button aboutButton;
     private DBConnection dataSource;
 
     public SettingsFragment() {
@@ -40,7 +40,7 @@ public class SettingsFragment extends Fragment {
         View V = inflater.inflate(R.layout.fragment_settings, container, false);
         getActivity().getActionBar().setTitle("Settings");
         resetButton = (Button) V.findViewById(R.id.reset_button);
-         testButton = (Button) V.findViewById(R.id.testbutton);
+        aboutButton = (Button) V.findViewById(R.id.aboutButton);
         safeSwitch = (Switch) V.findViewById(R.id.safe_switch);
         TextView desc = (TextView) V.findViewById(R.id.description1_textView);
         TextView resetDesc = (TextView) V.findViewById(R.id.reset_description);
@@ -48,7 +48,7 @@ public class SettingsFragment extends Fragment {
         String descText = this.getActivity().getString(R.string.safe_mode_description);
         desc.setText(descText);
         resetDesc.setText(resetText);
-        testButton.setOnClickListener(new View.OnClickListener() {
+        aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
