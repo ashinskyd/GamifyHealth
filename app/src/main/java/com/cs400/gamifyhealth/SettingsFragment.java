@@ -24,9 +24,6 @@ import java.text.ParseException;
 
 
 public class SettingsFragment extends Fragment {
-
-    // Fragment for Settings screen
-
     private Button resetButton;
     private Switch safeSwitch;
     private Button testButton;

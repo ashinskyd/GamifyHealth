@@ -59,7 +59,8 @@ public class AttackService extends Service {
     //Posts a notification of an attack
     private void postAttack(Context context) {
         int attacks = sharedPrefs.getInt("ATTACKS",0);
-        if (attacks<3){
+        boolean safeMode = sharedPrefs.getBoolean("Safe_Mode",false);
+        if (attacks<3 && !safeMode){
             mEditor.putInt("ATTACKS",attacks+1);
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
@@ -126,12 +127,12 @@ public class AttackService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
+
     }
 
     public int genTime() {
-        //return 300000;
-        return (randomGen.nextInt(840) + 2160) * 60000;
+       // return 15000;
+       return (randomGen.nextInt(840) + 2160) * 60000;
     }
 
     @Override
